@@ -16,6 +16,7 @@ import 'package:salespulse/providers/panier_provider.dart';
 import 'package:salespulse/services/categ_api.dart';
 import 'package:salespulse/services/stocks_api.dart';
 import 'package:salespulse/utils/app_size.dart';
+import 'package:salespulse/views/categories/categories_view.dart';
 
 class StocksView extends StatefulWidget {
   const StocksView({super.key});
@@ -573,7 +574,12 @@ class _StocksViewState extends State<StocksView> {
               onPressed: () {
                 _addStokcs(context);
               },
-              child: const Icon(Icons.add, size: AppSizes.iconLarge))
+              child: const Icon(Icons.add, size: AppSizes.iconLarge)),
+               ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CategoriesView()));
+              },
+              child: const Icon(Icons.category, size: AppSizes.iconLarge)),
         ],
       ),
     );

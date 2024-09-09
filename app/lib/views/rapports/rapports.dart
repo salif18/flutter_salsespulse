@@ -69,19 +69,23 @@ class _RapportViewState extends State<RapportView> {
   Widget build(BuildContext context) {
     //benefice total
     beneficeTotal() {
-      return filteredArticles.map((article) {
-        return ((article.prixVente - article.prixAchat) * article.qty);
-      }).reduce((a, b) => a + b);
+      if (filteredArticles.isEmpty) return 0;
+      return filteredArticles
+          .map((article) =>
+              (article.prixVente - article.prixAchat) * article.qty)
+          .reduce((a, b) => a + b);
     }
 
     //quantite total de produit
     int nombreTotalDeProduit() {
+      if (filteredArticles.isEmpty) return 0;
       return filteredArticles.map((a) => a.qty).reduce((a, b) => a + b);
     }
 
     //somme total
     //calcule somme total
     sommeTotal() {
+      if (filteredArticles.isEmpty) return 0;
       return filteredArticles
           .map((x) => x.prixVente * x.qty)
           .reduce((a, b) => a + b);
@@ -149,8 +153,7 @@ class _RapportViewState extends State<RapportView> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Text(
-                      "Erreur lors du chargement des produits : ${snapshot.error}");
+                  return Text("Erreur : ${snapshot.error}");
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Text("Aucun produit disponible.");
                 } else {
@@ -293,7 +296,7 @@ class _RapportViewState extends State<RapportView> {
                                 Container(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    article.prixAchat.toStringAsFixed(2),
+                                    "${article.prixAchat.toStringAsFixed(2)} XOF",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                     ),
@@ -304,7 +307,7 @@ class _RapportViewState extends State<RapportView> {
                                 Container(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    article.prixVente.toStringAsFixed(2),
+                                    "${article.prixVente.toStringAsFixed(2)} XOF",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                     ),
@@ -326,7 +329,7 @@ class _RapportViewState extends State<RapportView> {
                                 Container(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    somme.toStringAsFixed(2),
+                                   "${somme.toStringAsFixed(2)} XOF",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                     ),
@@ -337,7 +340,7 @@ class _RapportViewState extends State<RapportView> {
                                 Container(
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
-                                    benefices.toStringAsFixed(2),
+                                    "${benefices.toStringAsFixed(2)} XOF",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                     ),
@@ -354,8 +357,16 @@ class _RapportViewState extends State<RapportView> {
               },
             ),
             Container(
-                padding: const EdgeInsets.all(8),
-                height: 200,
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    width: 1,
+                    color: const Color.fromARGB(255, 207, 212, 233)
+                  )
+                ),
+                
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -374,7 +385,7 @@ class _RapportViewState extends State<RapportView> {
                           Text(DateFormat("dd MMM yyyy").format(selectedDate),
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontMedium,
-                                  color: Colors.red)),
+                                  )),
                           IconButton(
                               onPressed: () {
                                 _printReceipt(context, filteredArticles);
@@ -399,7 +410,8 @@ class _RapportViewState extends State<RapportView> {
                             Text(nombreTotalDeProduit().toString(),
                                 style: GoogleFonts.roboto(
                                     fontSize: AppSizes.fontMedium,
-                                    color: Colors.red))
+                                    fontWeight: FontWeight.bold
+                              ))
                           ],
                         ),
                         Row(
@@ -412,7 +424,8 @@ class _RapportViewState extends State<RapportView> {
                             Text("${sommeTotal().toString()} XOF",
                                 style: GoogleFonts.roboto(
                                     fontSize: AppSizes.fontMedium,
-                                    color: Colors.green))
+                                    fontWeight: FontWeight.bold
+                            ))
                           ],
                         ),
                         Row(
@@ -425,7 +438,8 @@ class _RapportViewState extends State<RapportView> {
                             Text("${beneficeTotal().toString()} XOF",
                                 style: GoogleFonts.roboto(
                                     fontSize: AppSizes.fontMedium,
-                                    color: Colors.blue))
+                                    fontWeight: FontWeight.bold
+                              ))
                           ],
                         )
                       ],
@@ -447,6 +461,7 @@ class _RapportViewState extends State<RapportView> {
     //somme total
     //calcule somme total
     sommeTotal() {
+      if (rapport.isEmpty) return 0;
       return rapport.map((x) => x.prixVente * x.qty).reduce((a, b) => a + b);
     }
 
@@ -475,7 +490,9 @@ class _RapportViewState extends State<RapportView> {
                     pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
               ),
               pw.SizedBox(height: 10),
-              pw.Text("Rapport du: $date", style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold)),
+              pw.Text("Rapport du: $date",
+                  style: pw.TextStyle(
+                      fontSize: 12, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 10),
               // ignore: deprecated_member_use
               pw.Table.fromTextArray(
