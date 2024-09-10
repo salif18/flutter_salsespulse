@@ -133,7 +133,7 @@ class _StocksViewState extends State<StocksView> {
         "userId": userId,
         "nom": _nameController.text,
         "image": _articleImage != null ? await MultipartFile.fromFile(_articleImage!.path,
-            filename: _articleImage!.path.split("/").last) :null,
+            filename: _articleImage!.path.split("/").last) :"",
         "categories": _categoryController,
         "prix_achat": _prixAchatController.text,
         "prix_vente": _prixVenteController.text,
@@ -921,6 +921,19 @@ class _StocksViewState extends State<StocksView> {
                       Navigator.pop(context);
                     },
                     child: Text("modifier",
+                        style: GoogleFonts.roboto(
+                            fontSize: AppSizes.fontMedium,
+                            color: Colors.white)),
+                  ),
+                  const SizedBox(height: 20),
+                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 240, 27, 27),
+                        minimumSize: const Size(400, 50)),
+                    onPressed: () {
+                      _removeArticles(article);
+                    },
+                    child: Text("Supprimer",
                         style: GoogleFonts.roboto(
                             fontSize: AppSizes.fontMedium,
                             color: Colors.white)),
