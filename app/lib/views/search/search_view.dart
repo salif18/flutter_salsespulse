@@ -106,7 +106,7 @@ Future<void> _getProducts() async {
       if(res.statusCode == 200){
         setState(() {
             articles =
-        (body["articles"] as List).map((json)=> StocksModel.fromJson(json)).toList();
+        (body["produits"] as List).map((json)=> StocksModel.fromJson(json)).toList();
         });
     
       }
