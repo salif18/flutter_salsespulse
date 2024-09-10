@@ -18,6 +18,7 @@ import 'package:salespulse/services/stocks_api.dart';
 import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/categories/categories_view.dart';
 import 'package:salespulse/views/fournisseurs/fournisseurs_view.dart';
+import 'package:salespulse/views/search/search_view.dart';
 
 class StocksView extends StatefulWidget {
   const StocksView({super.key});
@@ -580,7 +581,9 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>const SearchPage()));
+              },
               child: const Icon(Icons.search, size: AppSizes.iconLarge)),
           ElevatedButton(
               onPressed: () {
