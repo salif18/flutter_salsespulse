@@ -17,6 +17,7 @@ import 'package:salespulse/services/categ_api.dart';
 import 'package:salespulse/services/stocks_api.dart';
 import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/categories/categories_view.dart';
+import 'package:salespulse/views/fournisseurs/fournisseurs_view.dart';
 
 class StocksView extends StatefulWidget {
   const StocksView({super.key});
@@ -25,7 +26,11 @@ class StocksView extends StatefulWidget {
   State<StocksView> createState() => _StocksViewState();
 }
 
-class _StocksViewState extends State<StocksView> {
+class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => false;
+
   ServicesStocks api = ServicesStocks();
   ServicesCategories apiCatego = ServicesCategories();
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
@@ -47,22 +52,7 @@ class _StocksViewState extends State<StocksView> {
   final _stockController = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadProducts(); // Charger les produits au démarrage
-    _getCategories();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _prixAchatController.dispose();
-    _prixVenteController.dispose();
-    _stockController.dispose();
-    _streamController.close(); // Fermer le StreamController pour éviter les fuites de mémoire
-    super.dispose();
-  }
+  
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
   Future<void> _loadProducts() async {
@@ -96,10 +86,6 @@ class _StocksViewState extends State<StocksView> {
           _listCategories = (body["results"] as List)
               .map((json) => CategoriesModel.fromJson(json))
               .toList();
-          //     _listCategories.insert(
-          // 0,
-          // CategoriesModel(id: "",userId: "",name: 'Tous') // Ajout de l'option "Tous"
-          //     );
         });
       }
     } catch (e) {
@@ -214,7 +200,32 @@ class _StocksViewState extends State<StocksView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadProducts(); // Charger les produits au démarrage
+    _getCategories();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _prixAchatController.dispose();
+    _prixVenteController.dispose();
+    _stockController.dispose();
+    _streamController.close(); // Fermer le StreamController pour éviter les fuites de mémoire
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadProducts();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+     super.build(context); // Important pour que AutomaticKeepAliveClientMixin fonctionne
     PanierProvider cartProvider =
         Provider.of<PanierProvider>(context, listen: false);
     void Function(StocksModel, int) addToCart = cartProvider.addToCart;
@@ -516,7 +527,7 @@ class _StocksViewState extends State<StocksView> {
                                             // backgroundColor: const Color.fromARGB(255, 255, 35, 19),
                                             duration:
                                                 const Duration(seconds: 1),
-                                            backgroundColor: Colors.blueAccent,
+                                            backgroundColor: const Color.fromARGB(255, 39, 58, 90),
                                             action: SnackBarAction(
                                               label: "",
                                               onPressed: () {
@@ -566,6 +577,7 @@ class _StocksViewState extends State<StocksView> {
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ElevatedButton(
               onPressed: () {},
@@ -575,11 +587,20 @@ class _StocksViewState extends State<StocksView> {
                 _addStokcs(context);
               },
               child: const Icon(Icons.add, size: AppSizes.iconLarge)),
-               ElevatedButton(
+               ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>const CategoriesView()));
               },
-              child: const Icon(Icons.category, size: AppSizes.iconLarge)),
+              icon: const Icon(Icons.category, size: AppSizes.iconLarge),
+              label: Text("Categories",style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),),
+              ),
+                ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const FournisseurView()));
+              },
+              icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
+              label: Text("Fournisseurs",style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),),
+              ),
         ],
       ),
     );
@@ -928,7 +949,7 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                    ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 240, 27, 27),
+                        backgroundColor: const Color.fromARGB(255, 240, 27, 27),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _removeArticles(article);

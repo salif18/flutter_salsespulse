@@ -117,7 +117,7 @@ class _RapportViewState extends State<RapportView> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     constraints:
-                        const BoxConstraints(maxWidth: 300, minHeight: 30),
+                        const BoxConstraints(maxWidth: 250, minHeight: 30),
                     child: DateTimeFormField(
                       decoration: InputDecoration(
                         hintText: 'Ajouter une date',
@@ -359,6 +359,7 @@ class _RapportViewState extends State<RapportView> {
             Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 height: 150,
+          
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
@@ -367,7 +368,7 @@ class _RapportViewState extends State<RapportView> {
                   )
                 ),
                 
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

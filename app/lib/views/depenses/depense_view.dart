@@ -138,7 +138,7 @@ class _DepensesViewState extends State<DepensesView> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     constraints:
-                        const BoxConstraints(maxWidth: 300, minHeight: 30),
+                        const BoxConstraints(maxWidth: 250, minHeight: 30),
                     child: DateTimeFormField(
                       decoration: InputDecoration(
                         hintText: 'Ajouter une date',
