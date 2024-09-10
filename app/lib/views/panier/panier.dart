@@ -11,7 +11,6 @@ import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/panier/widgets/card_cart.dart';
 import 'package:salespulse/views/panier/widgets/cart_empty.dart';
 
-
 class PanierView extends StatefulWidget {
   const PanierView({super.key});
 

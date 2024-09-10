@@ -40,7 +40,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                 swapAnimationCurve: Curves.linear,
                 BarChartData(
                     minY: 0,
-                    maxY: 400000,
+                    // maxY: 400000,
                     gridData: const FlGridData(show: false),
                     borderData: FlBorderData(show: false),
                     titlesData: myTitlesData(),

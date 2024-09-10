@@ -36,7 +36,7 @@ class LineChartWidget extends StatelessWidget {
                   minX: 0,
                   maxX: 12,
                   minY: 0,
-                  maxY: 400000,
+                  maxY: 10000000,
                   borderData: FlBorderData(show: false),
                   gridData: const FlGridData(show: true),
                   // lineTouchData: myLineTouchData(modelLineData),

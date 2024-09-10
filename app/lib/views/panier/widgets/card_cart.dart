@@ -19,24 +19,28 @@ class _MyCardState extends State<MyCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 100,
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: 80,
-                width: 80,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: widget.item.image.isEmpty
+                    ? DecorationImage(
                         image: NetworkImage(widget.item.image),
-                        fit: BoxFit.contain)),
+                        fit: BoxFit.contain,
+                      )
+                    : null, // Vous pouvez ajouter une image par défaut ici
               ),
-              Expanded(
-                  child: Row(
+            ),
+            Expanded(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
@@ -45,32 +49,29 @@ class _MyCardState extends State<MyCard> {
                       Text(
                         widget.item.nom,
                         style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: const Color(0xff121212)),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: const Color(0xff121212),
+                        ),
                       ),
-                      Text(widget.item.prixVente.toString(),
-                          style: GoogleFonts.roboto(
-                              fontSize: 14, color: const Color(0xff121212)))
+                      Text(
+                        widget.item.prixVente.toString(),
+                        style: GoogleFonts.roboto(
+                          fontSize: 14,
+                          color: const Color(0xff121212),
+                        ),
+                      )
                     ],
                   ),
-                  if (widget.item.stocks < widget.item.qty)
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Text(
-                        "stocks insuffisant",
-                        style: GoogleFonts.roboto(
-                            fontSize: AppSizes.fontSmall, color: Colors.red),
-                      ),
-                    ),
                   Container(
                     height: 50,
                     decoration: BoxDecoration(
+                      color: const Color(0xFF1D1A30),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
                         color: const Color(0xFF1D1A30),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFF1D1A30),
-                        )),
+                      ),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -78,49 +79,82 @@ class _MyCardState extends State<MyCard> {
                           width: 50,
                           alignment: Alignment.center,
                           child: TextButton(
-                              onPressed: () {
-                                Provider.of<PanierProvider>(context,
-                                        listen: false)
+                            onPressed: () {
+                              if (widget.item.qty < widget.item.stocks) {
+                                Provider.of<PanierProvider>(context, listen: false)
                                     .increment(widget.item);
-                              },
-                              child: Text("+",
-                                  style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold))),
+                              } else {
+                                _alertStock(context);
+                              }
+                            },
+                            child: Text(
+                              "+",
+                              style: GoogleFonts.roboto(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                         Container(
                           width: 50,
                           alignment: Alignment.center,
-                          child: Text(widget.item.qty.toString(),
-                              style: GoogleFonts.roboto(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)),
+                          child: Text(
+                            widget.item.qty.toString(),
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                         if (widget.item.qty > 1)
                           Container(
                             alignment: Alignment.center,
                             width: 50,
                             child: TextButton(
-                                onPressed: () {
-                                  Provider.of<PanierProvider>(context,
-                                          listen: false)
-                                      .decrement(widget.item);
-                                },
-                                child: Text("-",
-                                    style: GoogleFonts.roboto(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold))),
-                          )
+                              onPressed: () {
+                                Provider.of<PanierProvider>(context, listen: false)
+                                    .decrement(widget.item);
+                              },
+                              child: Text(
+                                "-",
+                                style: GoogleFonts.roboto(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   )
                 ],
-              ))
-            ],
-          )),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  // Méthode pour afficher une alerte de stock insuffisant
+  void _alertStock(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        "Stock insuffisant",
+        style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+      ),
+      duration: const Duration(milliseconds: 800),
+      backgroundColor: const Color.fromARGB(255, 39, 58, 90),
+      action: SnackBarAction(
+        label: "",
+        onPressed: () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    ));
   }
 }

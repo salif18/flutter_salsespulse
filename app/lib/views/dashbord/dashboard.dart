@@ -214,8 +214,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget _statsWeek(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(5),
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       height: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -245,7 +244,7 @@ class _DashboardViewState extends State<DashboardView> {
                     fontSize: AppSizes.fontMedium, color: Colors.white)),
           ),
           Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(0),
               child: BarChartWidget(
                 data: statsHebdo,
               ))
@@ -256,7 +255,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget _statsStock(BuildContext context) {
     List<StocksModel> filterStocks =
-        stocks.where((stock) => stock.stocks <= 0).toList();
+        stocks.where((stock) => stock.stocks == 0).toList();
 
     return Container(
       margin: const EdgeInsets.all(10),
@@ -707,7 +706,7 @@ class _DashboardViewState extends State<DashboardView> {
                     fontSize: AppSizes.fontMedium, color: Colors.white)),
           ),
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(0),
             child: LineChartWidget(data: statsYear),
           )
         ],
