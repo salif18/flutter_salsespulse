@@ -47,30 +47,40 @@ class _RapportViewState extends State<RapportView> {
   }
 
   Future<void> _loadProducts() async {
-    try {
-      final token = Provider.of<AuthProvider>(context, listen: false).token;
-      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-      final res = await api.getAllVentes(token, userId);
-      final body = jsonDecode(res.body);
-      if (res.statusCode == 200) {
-        final products = (body["results"] as List)
-            .map((json) => VentesModel.fromJson(json))
-            .toList();
+  try {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final res = await api.getAllVentes(token, userId);
+    final body = jsonDecode(res.body);
+
+    if (res.statusCode == 200) {
+      final products = (body["results"] as List)
+          .map((json) => VentesModel.fromJson(json))
+          .toList();
+
+      if (!_streamController.isClosed) {
         _streamController.add(products); // Ajouter les produits au stream
-      } else {
+      }
+    } else {
+      if (!_streamController.isClosed) {
         _streamController.addError("Failed to load products");
       }
-    } catch (e) {
+    }
+  } catch (e) {
+    if (!_streamController.isClosed) {
       _streamController.addError("Error loading products");
     }
   }
+}
 
        //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {  // Vérifier si le widget est monté avant d'appeler setState()
     setState(() {
-      _loadProducts();
+      _loadProducts(); // Rafraîchir les produits
     });
+  }
   }
 
 

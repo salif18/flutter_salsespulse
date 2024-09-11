@@ -38,30 +38,43 @@ class _VenteViewState extends State<VenteView> {
         //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {  // Vérifie que le widget est toujours monté avant de mettre à jour l'état
     setState(() {
       _loadProducts();
     });
   }
+  }
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
-  Future<void> _loadProducts() async {
-    try {
-      final token = Provider.of<AuthProvider>(context, listen: false).token;
-      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-      final res = await api.getAllVentes(token, userId);
-      final body = jsonDecode(res.body);
-      if (res.statusCode == 200) {
-        final products = (body["results"] as List)
-            .map((json) => VentesModel.fromJson(json))
-            .toList();
+ Future<void> _loadProducts() async {
+  try {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final res = await api.getAllVentes(token, userId);
+    final body = jsonDecode(res.body);
+
+    if (res.statusCode == 200) {
+      final products = (body["results"] as List)
+          .map((json) => VentesModel.fromJson(json))
+          .toList();
+
+      if (!_streamController.isClosed) {
         _streamController.add(products); // Ajouter les produits au stream
       } else {
+        print("StreamController is closed, cannot add products.");
+      }
+    } else {
+      if (!_streamController.isClosed) {
         _streamController.addError("Failed to load products");
       }
-    } catch (e) {
+    }
+  } catch (e) {
+    if (!_streamController.isClosed) {
       _streamController.addError("Error loading products");
     }
   }
+}
+
 
   Future<void> _removeArticles(article) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;

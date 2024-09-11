@@ -81,24 +81,35 @@ class _StocksViewState extends State<StocksView> {
   }
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
-  Future<void> _loadProducts() async {
-    try {
-      final token = Provider.of<AuthProvider>(context, listen: false).token;
-      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-      final res = await api.getAllProducts(token, userId);
-      final body = jsonDecode(res.body);
-      if (res.statusCode == 200) {
-        final products = (body["produits"] as List)
-            .map((json) => StocksModel.fromJson(json))
-            .toList();
+ Future<void> _loadProducts() async {
+  try {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final res = await api.getAllProducts(token, userId);
+    final body = jsonDecode(res.body);
+
+    if (res.statusCode == 200) {
+      final products = (body["produits"] as List)
+          .map((json) => StocksModel.fromJson(json))
+          .toList();
+
+      if (!_streamController.isClosed) {
         _streamController.add(products); // Ajouter les produits au stream
       } else {
+        print("StreamController is closed, cannot add products.");
+      }
+    } else {
+      if (!_streamController.isClosed) {
         _streamController.addError("Failed to load products");
       }
-    } catch (e) {
+    }
+  } catch (e) {
+    if (!_streamController.isClosed) {
       _streamController.addError("Error loading products");
     }
   }
+}
+
 
   // OBTENIR LES CATEGORIES API
   Future<void> _getCategories() async {
