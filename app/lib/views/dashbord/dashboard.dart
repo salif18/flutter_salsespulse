@@ -179,34 +179,53 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
+      //rafraichire la page en actualisanst la requete
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      _loadProducts();
+      _loadDepenses();
+    _loadMostCategorie();
+    _loadStatsHebdo();
+    _loadStatsYear();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: drawerKey,
-      drawer: const DrawerWidget(),
-      backgroundColor: const Color(0xff001c30),
-      appBar: AppBarWidget(
-          title: "Tableau de bord",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20))),
-                child: _statsWeek(context)),
-            _statsStock(context),
-            _statsCaisse(context),
-            _statsCaisse1(context),
-            _statsCaisse2(context),
-            _statsAnnuel(context)
-          ],
+    return RefreshIndicator(
+      backgroundColor:Colors.transparent,
+          color: Colors.grey[100],
+       onRefresh: _refresh,
+          displacement: 50,
+      child: Scaffold(
+        key: drawerKey,
+        drawer: const DrawerWidget(),
+        backgroundColor: const Color.fromARGB(255, 223, 223, 223),
+        appBar: AppBarWidget(
+            title: "Tableau de bord",
+            color: const Color(0xff001c30),
+            titleColore: Colors.white,
+            drawerkey: drawerKey),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20))),
+                  child: _statsWeek(context)),
+              _statsStock(context),
+              _statsCaisse(context),
+              _statsCaisse1(context),
+              _statsCaisse2(context),
+              _statsAnnuel(context)
+            ],
+          ),
         ),
       ),
     );
@@ -218,7 +237,7 @@ class _DashboardViewState extends State<DashboardView> {
       height: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xff001c30),
+        // color: const Color(0xff001c30),
         boxShadow: [
           BoxShadow(
             color: const Color.fromARGB(255, 36, 34, 34)
@@ -236,12 +255,14 @@ class _DashboardViewState extends State<DashboardView> {
               padding: const EdgeInsets.all(15),
               child: Text("Hebdomadaire",
                   style: GoogleFonts.roboto(
-                      fontSize: AppSizes.fontMedium, color: Colors.white))),
+                    fontWeight: FontWeight.w600,
+                      fontSize: 18, color: const Color.fromARGB(255, 7, 7, 7)))),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Text("$totalHebdo XOF",
                 style: GoogleFonts.roboto(
-                    fontSize: AppSizes.fontMedium, color: Colors.white)),
+                  fontWeight: FontWeight.w600,
+                    fontSize: 18, color: const Color.fromARGB(255, 10, 10, 10))),
           ),
           Padding(
               padding: const EdgeInsets.all(0),
@@ -680,7 +701,7 @@ class _DashboardViewState extends State<DashboardView> {
       height: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: const Color(0xff001c30),
+        // color: const Color(0xff001c30),
         boxShadow: [
           BoxShadow(
             color: const Color.fromARGB(255, 36, 34, 34)
@@ -698,12 +719,14 @@ class _DashboardViewState extends State<DashboardView> {
               padding: const EdgeInsets.all(15),
               child: Text("Annuel",
                   style: GoogleFonts.roboto(
-                      fontSize: AppSizes.fontMedium, color: Colors.white))),
+                    fontWeight: FontWeight.w600,
+                      fontSize: 18, color: const Color.fromARGB(255, 12, 12, 12)))),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Text("125000 fcfa",
                 style: GoogleFonts.roboto(
-                    fontSize: AppSizes.fontMedium, color: Colors.white)),
+                  fontWeight: FontWeight.w600,
+                    fontSize: 18, color: const Color.fromARGB(255, 5, 5, 5))),
           ),
           Padding(
             padding: const EdgeInsets.all(0),

@@ -27,17 +27,15 @@ class StocksView extends StatefulWidget {
   State<StocksView> createState() => _StocksViewState();
 }
 
-class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMixin {
-
-  @override
-  bool get wantKeepAlive => false;
+class _StocksViewState extends State<StocksView> {
 
   ServicesStocks api = ServicesStocks();
   ServicesCategories apiCatego = ServicesCategories();
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   // Clé Key du formulaire
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  final StreamController<List<StocksModel>> _streamController = StreamController();
+  final StreamController<List<StocksModel>> _streamController =
+      StreamController();
   List<CategoriesModel> _listCategories = [];
   String? _categorieValue;
 
@@ -53,7 +51,34 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
   final _stockController = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addObserver(this);
+    _loadProducts(); // Charger les produits au démarrage
+    _getCategories();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _prixAchatController.dispose();
+    _prixVenteController.dispose();
+    _stockController.dispose();
+    _streamController
+        .close(); // Fermer le StreamController pour éviter les fuites de mémoire
   
+    super.dispose();
+  }
+
+  //rafraichire la page en actualisanst la requete
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      _loadProducts();
+      _getCategories();
+    });
+  }
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
   Future<void> _loadProducts() async {
@@ -119,8 +144,10 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
       FormData formData = FormData.fromMap({
         "userId": userId,
         "nom": _nameController.text,
-        "image": _articleImage != null ? await MultipartFile.fromFile(_articleImage!.path,
-            filename: _articleImage!.path.split("/").last) :"",
+        "image": _articleImage != null
+            ? await MultipartFile.fromFile(_articleImage!.path,
+                filename: _articleImage!.path.split("/").last)
+            : "",
         "categories": _categoryController,
         "prix_achat": _prixAchatController.text,
         "prix_vente": _prixVenteController.text,
@@ -201,410 +228,410 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
   }
 
   @override
-  void initState() {
-    super.initState();
-    _loadProducts(); // Charger les produits au démarrage
-    _getCategories();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _prixAchatController.dispose();
-    _prixVenteController.dispose();
-    _stockController.dispose();
-    _streamController.close(); // Fermer le StreamController pour éviter les fuites de mémoire
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadProducts();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
-     super.build(context); // Important pour que AutomaticKeepAliveClientMixin fonctionne
     PanierProvider cartProvider =
         Provider.of<PanierProvider>(context, listen: false);
     void Function(StocksModel, int) addToCart = cartProvider.addToCart;
 
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Stocks",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-              color: const Color(0xff001c30),
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    "assets/logos/logo3.jpg",
-                    width: 100,
-                    height: 100,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    constraints: const BoxConstraints(
-                      maxWidth: 200,
-                      minHeight: 30,
+    return RefreshIndicator(
+      backgroundColor: Colors.transparent,
+      color: Colors.grey[100],
+      onRefresh: _refresh,
+      displacement: 50,
+      child: Scaffold(
+        backgroundColor: const Color(0xfff0f1f5),
+        appBar: AppBarWidget(
+          title: "Stocks",
+          color: const Color(0xff001c30),
+          titleColore: Colors.white,
+          drawerkey: drawerKey,
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Container(
+                color: const Color(0xff001c30),
+                height: 150,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      "assets/logos/logo3.jpg",
+                      width: 100,
+                      height: 100,
                     ),
-                    child: DropdownButtonFormField<String>(
-                      value: _categorieValue,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: "Categories",
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      constraints: const BoxConstraints(
+                        maxWidth: 200,
+                        minHeight: 30,
                       ),
-                      items: _listCategories.map((categorie) {
-                        return DropdownMenuItem<String>(
-                          value: categorie.name,
-                          child: Text(categorie.name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _categorieValue = value!;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "La catégorie est requise";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            StreamBuilder<List<StocksModel>>(
-              stream: _streamController.stream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text(
-                      "Erreur lors du chargement des produits : ${snapshot.error}");
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text("Aucun produit disponible.");
-                } else {
-                  final articles = snapshot.data!;
-                  final filteredArticles = _categorieValue != null
-                      ? articles
-                          .where((article) =>
-                              article.categories == _categorieValue)
-                          .toList()
-                      : articles;
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      child: DataTable(
-                        columnSpacing: 10,
-                        columns: [
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Photo",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Name",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Categories",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Prix d'achat",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Prix de vente",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Quantités",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Date",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Actions",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        rows: filteredArticles.map((article) {
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: article.image.isEmpty
-                                      ? Image.asset(
-                                          "assets/images/defaultImg.png",
-                                          width: 50,
-                                          height: 50,
-                                        )
-                                      : Image.network(
-                                          article.image,
-                                          width: 50,
-                                          height: 50,
-                                        ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.nom,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.categories,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${article.prixAchat} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${article.prixVente} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.stocks.toString(),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    DateFormat("dd MMM yyyy")
-                                        .format(article.dateAchat),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      if(article.stocks>0)
-                                      IconButton(
-                                        icon: const Icon(
-                                            Icons.add_shopping_cart_rounded,
-                                            color: Colors.blue),
-                                        onPressed: () {
-                                          // Action pour éditer le produit
-                                          addToCart(article, 1);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(
-                                              "Article ajouté",
-                                              style: GoogleFonts.roboto(
-                                                  fontSize: 16),
-                                            ),
-                                            // backgroundColor: const Color.fromARGB(255, 255, 35, 19),
-                                            duration:
-                                                const Duration(seconds: 1),
-                                            backgroundColor: const Color.fromARGB(255, 39, 58, 90),
-                                            action: SnackBarAction(
-                                              label: "",
-                                              onPressed: () {
-                                                ScaffoldMessenger.of(context)
-                                                    .hideCurrentSnackBar();
-                                              },
-                                            ),
-                                          ));
-                                        },
-                                      ),
-                                      if(article.stocks>0)
-                                      IconButton(
-                                        icon: const Icon(Icons.edit,
-                                            color: Color.fromARGB(
-                                                255, 53, 146, 30)),
-                                        onPressed: () {
-                                          // Action pour supprimer le produit
-                                          _editStocks(context, article);
-                                        },
-                                      ),
-                                      if(article.stocks == 0)
-                                      IconButton(
-                                        icon: const Icon(
-                                            Icons.highlight_remove_rounded,
-                                            color: Color.fromARGB(
-                                                255, 255, 67, 67)),
-                                        onPressed: () {
-                                          // Action pour éditer le produit
-                                          _showAlertDelete(context, article);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                      child: DropdownButtonFormField<String>(
+                        value: _categorieValue,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Categories",
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                        ),
+                        items: _listCategories.map((categorie) {
+                          return DropdownMenuItem<String>(
+                            value: categorie.name,
+                            child: Text(categorie.name),
                           );
                         }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _categorieValue = value!;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return "La catégorie est requise";
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                  );
-                }
+                  ],
+                ),
+              ),
+              StreamBuilder<List<StocksModel>>(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text(
+                        "Erreur lors du chargement des produits : ${snapshot.error}");
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text("Aucun produit disponible.");
+                  } else {
+                    final articles = snapshot.data!;
+                    final filteredArticles = _categorieValue != null
+                        ? articles
+                            .where((article) =>
+                                article.categories == _categorieValue)
+                            .toList()
+                        : articles;
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: DataTable(
+                          columnSpacing: 10,
+                          columns: [
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Photo",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Name",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Categories",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Prix d'achat",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Prix de vente",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Quantités",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Date",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Actions",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: filteredArticles.map((article) {
+                            return DataRow(
+                              cells: [
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: article.image.isEmpty
+                                        ? Image.asset(
+                                            "assets/images/defaultImg.png",
+                                            width: 50,
+                                            height: 50,
+                                          )
+                                        : Image.network(
+                                            article.image,
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.nom,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.categories,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${article.prixAchat} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${article.prixVente} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.stocks.toString(),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      DateFormat("dd MMM yyyy")
+                                          .format(article.dateAchat),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      children: [
+                                        if (article.stocks > 0)
+                                          IconButton(
+                                            icon: const Icon(
+                                                Icons.add_shopping_cart_rounded,
+                                                color: Colors.blue),
+                                            onPressed: () {
+                                              // Action pour éditer le produit
+                                              addToCart(article, 1);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(
+                                                  "Article ajouté",
+                                                  style: GoogleFonts.roboto(
+                                                      fontSize: 16),
+                                                ),
+                                                // backgroundColor: const Color.fromARGB(255, 255, 35, 19),
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                backgroundColor:
+                                                    const Color.fromARGB(
+                                                        255, 39, 58, 90),
+                                                action: SnackBarAction(
+                                                  label: "",
+                                                  onPressed: () {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentSnackBar();
+                                                  },
+                                                ),
+                                              ));
+                                            },
+                                          ),
+                                        if (article.stocks > 0)
+                                          IconButton(
+                                            icon: const Icon(Icons.edit,
+                                                color: Color.fromARGB(
+                                                    255, 53, 146, 30)),
+                                            onPressed: () {
+                                              // Action pour supprimer le produit
+                                              _editStocks(context, article);
+                                            },
+                                          ),
+                                        if (article.stocks == 0)
+                                          IconButton(
+                                            icon: const Icon(
+                                                Icons.highlight_remove_rounded,
+                                                color: Color.fromARGB(
+                                                    255, 255, 67, 67)),
+                                            onPressed: () {
+                                              // Action pour éditer le produit
+                                              _showAlertDelete(
+                                                  context, article);
+                                            },
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchPage()));
+                },
+                child: const Icon(Icons.search, size: AppSizes.iconLarge)),
+            ElevatedButton(
+                onPressed: () {
+                  _addStokcs(context);
+                },
+                child: const Icon(Icons.add, size: AppSizes.iconLarge)),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CategoriesView()));
               },
+              icon: const Icon(Icons.category, size: AppSizes.iconLarge),
+              label: Text(
+                "Categories",
+                style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FournisseurView()));
+              },
+              icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
+              label: Text(
+                "Fournisseurs",
+                style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          ElevatedButton(
-              onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>const SearchPage()));
-              },
-              child: const Icon(Icons.search, size: AppSizes.iconLarge)),
-          ElevatedButton(
-              onPressed: () {
-                _addStokcs(context);
-              },
-              child: const Icon(Icons.add, size: AppSizes.iconLarge)),
-               ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CategoriesView()));
-              },
-              icon: const Icon(Icons.category, size: AppSizes.iconLarge),
-              label: Text("Categories",style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),),
-              ),
-                ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const FournisseurView()));
-              },
-              icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
-              label: Text("Fournisseurs",style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),),
-              ),
-        ],
       ),
     );
   }
@@ -950,7 +977,7 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
                             color: Colors.white)),
                   ),
                   const SizedBox(height: 20),
-                   ElevatedButton(
+                  ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 240, 27, 27),
                         minimumSize: const Size(400, 50)),
@@ -971,7 +998,7 @@ class _StocksViewState extends State<StocksView> with AutomaticKeepAliveClientMi
     );
   }
 
-   Future<bool?> _showAlertDelete(BuildContext context, article) {
+  Future<bool?> _showAlertDelete(BuildContext context, article) {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {

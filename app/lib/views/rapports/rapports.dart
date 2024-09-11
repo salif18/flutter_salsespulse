@@ -65,6 +65,15 @@ class _RapportViewState extends State<RapportView> {
     }
   }
 
+       //rafraichire la page en actualisanst la requete
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      _loadProducts();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //benefice total
@@ -91,363 +100,369 @@ class _RapportViewState extends State<RapportView> {
           .reduce((a, b) => a + b);
     }
 
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Les rapports",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-              color: const Color(0xff001c30),
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    "assets/logos/logo3.jpg",
-                    width: 100,
-                    height: 100,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    constraints:
-                        const BoxConstraints(maxWidth: 250, minHeight: 30),
-                    child: DateTimeFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Ajouter une date',
-                        hintStyle: GoogleFonts.roboto(fontSize: 20),
-                        fillColor: Colors.grey[100],
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(Icons.calendar_month_rounded,
-                            color: Color.fromARGB(255, 255, 136, 128),
-                            size: 28),
-                      ),
-                      hideDefaultSuffixIcon: true,
-                      mode: DateTimeFieldPickerMode.date,
-                      initialValue: DateTime.now(),
-                      onChanged: (DateTime? value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedDate = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            StreamBuilder<List<VentesModel>>(
-              stream: _streamController.stream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text("Erreur : ${snapshot.error}");
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text("Aucun produit disponible.");
-                } else {
-                  final List<VentesModel> articles = snapshot.data!;
-                  filteredArticles = articles;
-                  // articles.where((article) {
-                  //   // Comparer les dates en ignorant l'heure
-                  //   return DateFormat("dd MMM yyyy")
-                  //           .format(article.dateVente) ==
-                  //       DateFormat("dd MMM yyyy").format(selectedDate);
-                  // }).toList();
-                  // Calculer le bénéfice total
-
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      child: DataTable(
-                        columnSpacing: 10,
-                        columns: [
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Name",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Categories",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Prix d'achat",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Prix de vente",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Quantités",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Somme",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Benefices",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                        rows: filteredArticles.map((article) {
-                          final somme = article.prixVente * article.qty;
-                          final benefices =
-                              somme - (article.prixAchat * article.qty);
-
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.nom,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.categories,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${article.prixAchat.toStringAsFixed(2)} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${article.prixVente.toStringAsFixed(2)} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.qty.toString(),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                   "${somme.toStringAsFixed(2)} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${benefices.toStringAsFixed(2)} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+    return RefreshIndicator(
+     backgroundColor:Colors.transparent,
+          color: Colors.grey[100],
+       onRefresh: _refresh,
+          displacement: 50,
+      child: Scaffold(
+        backgroundColor: const Color(0xfff0f1f5),
+        appBar: AppBarWidget(
+          title: "Les rapports",
+          color: const Color(0xff001c30),
+          titleColore: Colors.white,
+          drawerkey: drawerKey,
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Container(
+                color: const Color(0xff001c30),
                 height: 150,
-          
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1,
-                    color: const Color.fromARGB(255, 207, 212, 233)
-                  )
-                ),
-                
-                width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    Image.asset(
+                      "assets/logos/logo3.jpg",
                       width: 100,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "rapport du",
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium),
+                      height: 100,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      constraints:
+                          const BoxConstraints(maxWidth: 250, minHeight: 30),
+                      child: DateTimeFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Ajouter une date',
+                          hintStyle: GoogleFonts.roboto(fontSize: 20),
+                          fillColor: Colors.grey[100],
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none,
                           ),
-                          Text(DateFormat("dd MMM yyyy").format(selectedDate),
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  )),
-                          IconButton(
-                              onPressed: () {
-                                _printReceipt(context, filteredArticles);
-                              },
-                              icon: const Icon(
-                                Icons.print,
-                                size: AppSizes.iconLarge,
-                              ))
-                        ],
+                          prefixIcon: const Icon(Icons.calendar_month_rounded,
+                              color: Color.fromARGB(255, 255, 136, 128),
+                              size: 28),
+                        ),
+                        hideDefaultSuffixIcon: true,
+                        mode: DateTimeFieldPickerMode.date,
+                        initialValue: DateTime.now(),
+                        onChanged: (DateTime? value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedDate = value;
+                            });
+                          }
+                        },
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: 200,
-                                child: Text("Nbr de produit vendue",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium))),
-                            Text(nombreTotalDeProduit().toString(),
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold
-                              ))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: 200,
-                                child: Text("Total:",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium))),
-                            Text("${sommeTotal().toString()} XOF",
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold
-                            ))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: 200,
-                                child: Text("Benefice",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium))),
-                            Text("${beneficeTotal().toString()} XOF",
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold
-                              ))
-                          ],
-                        )
-                      ],
-                    )
                   ],
-                ))
-          ],
+                ),
+              ),
+              StreamBuilder<List<VentesModel>>(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text("Erreur : ${snapshot.error}");
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text("Aucun produit disponible.");
+                  } else {
+                    final List<VentesModel> articles = snapshot.data!;
+                    filteredArticles = articles;
+                    // articles.where((article) {
+                    //   // Comparer les dates en ignorant l'heure
+                    //   return DateFormat("dd MMM yyyy")
+                    //           .format(article.dateVente) ==
+                    //       DateFormat("dd MMM yyyy").format(selectedDate);
+                    // }).toList();
+                    // Calculer le bénéfice total
+      
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: DataTable(
+                          columnSpacing: 10,
+                          columns: [
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Name",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Categories",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Prix d'achat",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Prix de vente",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Quantités",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Somme",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Container(
+                                padding: const EdgeInsets.all(5),
+                                child: Text(
+                                  "Benefices",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: filteredArticles.map((article) {
+                            final somme = article.prixVente * article.qty;
+                            final benefices =
+                                somme - (article.prixAchat * article.qty);
+      
+                            return DataRow(
+                              cells: [
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.nom,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.categories,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${article.prixAchat.toStringAsFixed(2)} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${article.prixVente.toStringAsFixed(2)} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.qty.toString(),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                     "${somme.toStringAsFixed(2)} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${benefices.toStringAsFixed(2)} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  height: 150,
+            
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 1,
+                      color: const Color.fromARGB(255, 207, 212, 233)
+                    )
+                  ),
+                  
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "rapport du",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium),
+                            ),
+                            Text(DateFormat("dd MMM yyyy").format(selectedDate),
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    )),
+                            IconButton(
+                                onPressed: () {
+                                  _printReceipt(context, filteredArticles);
+                                },
+                                icon: const Icon(
+                                  Icons.print,
+                                  size: AppSizes.iconLarge,
+                                ))
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                  width: 200,
+                                  child: Text("Nbr de produit vendue",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium))),
+                              Text(nombreTotalDeProduit().toString(),
+                                  style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold
+                                ))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                  width: 200,
+                                  child: Text("Total:",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium))),
+                              Text("${sommeTotal().toString()} XOF",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold
+                              ))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                  width: 200,
+                                  child: Text("Benefice",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium))),
+                              Text("${beneficeTotal().toString()} XOF",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold
+                                ))
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );
