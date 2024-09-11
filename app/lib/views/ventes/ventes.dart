@@ -9,6 +9,7 @@ import 'package:salespulse/models/ventes_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/vente_api.dart';
 import 'package:salespulse/utils/app_size.dart';
+import 'package:salespulse/views/populaires/populaire_view.dart';
 
 class VenteView extends StatefulWidget {
   const VenteView({super.key});
@@ -128,6 +129,13 @@ class _VenteViewState extends State<VenteView> {
                       width: 100,
                       height: 100,
                     ),
+                    IconButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const PopulaireView()));
+                    }, 
+                    color: Colors.red,
+                    tooltip: "Les plus achetés",
+                    icon: const Icon(Icons.workspace_premium, size:35)
+                    )
                   ],
                 ),
               ),
