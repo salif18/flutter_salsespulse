@@ -21,7 +21,8 @@ class _VenteViewState extends State<VenteView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   ServicesVentes api = ServicesVentes();
 
-  final StreamController<List<VentesModel>> _streamController = StreamController();
+  final StreamController<List<VentesModel>> _streamController =
+      StreamController();
 
   @override
   void initState() {
@@ -31,50 +32,51 @@ class _VenteViewState extends State<VenteView> {
 
   @override
   void dispose() {
-    _streamController.close(); // Fermer le StreamController pour éviter les fuites de mémoire
+    _streamController
+        .close(); // Fermer le StreamController pour éviter les fuites de mémoire
     super.dispose();
   }
 
-        //rafraichire la page en actualisanst la requete
+  //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {  // Vérifie que le widget est toujours monté avant de mettre à jour l'état
-    setState(() {
-      _loadProducts();
-    });
-  }
+    if (mounted) {
+      // Vérifie que le widget est toujours monté avant de mettre à jour l'état
+      setState(() {
+        _loadProducts();
+      });
+    }
   }
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
- Future<void> _loadProducts() async {
-  try {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-    final res = await api.getAllVentes(token, userId);
-    final body = jsonDecode(res.body);
+  Future<void> _loadProducts() async {
+    try {
+      final token = Provider.of<AuthProvider>(context, listen: false).token;
+      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+      final res = await api.getAllVentes(token, userId);
+      final body = jsonDecode(res.body);
 
-    if (res.statusCode == 200) {
-      final products = (body["results"] as List)
-          .map((json) => VentesModel.fromJson(json))
-          .toList();
+      if (res.statusCode == 200) {
+        final products = (body["results"] as List)
+            .map((json) => VentesModel.fromJson(json))
+            .toList();
 
-      if (!_streamController.isClosed) {
-        _streamController.add(products); // Ajouter les produits au stream
+        if (!_streamController.isClosed) {
+          _streamController.add(products); // Ajouter les produits au stream
+        } else {
+          print("StreamController is closed, cannot add products.");
+        }
       } else {
-        print("StreamController is closed, cannot add products.");
+        if (!_streamController.isClosed) {
+          _streamController.addError("Failed to load products");
+        }
       }
-    } else {
+    } catch (e) {
       if (!_streamController.isClosed) {
-        _streamController.addError("Failed to load products");
+        _streamController.addError("Error loading products");
       }
-    }
-  } catch (e) {
-    if (!_streamController.isClosed) {
-      _streamController.addError("Error loading products");
     }
   }
-}
-
 
   Future<void> _removeArticles(article) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
@@ -98,20 +100,20 @@ class _VenteViewState extends State<VenteView> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      backgroundColor:Colors.transparent,
-          color: Colors.grey[100],
-       onRefresh: _refresh,
-          displacement: 50,
-      child: Scaffold(
-        backgroundColor: const Color(0xfff0f1f5),
-        appBar: AppBarWidget(
-          title: "Liste des ventes",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey,
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(0xfff0f1f5),
+      appBar: AppBarWidget(
+        title: "Liste des ventes",
+        color: const Color(0xff001c30),
+        titleColore: Colors.white,
+        drawerkey: drawerKey,
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
@@ -141,7 +143,7 @@ class _VenteViewState extends State<VenteView> {
                     return const Text("Aucun produit disponible.");
                   } else {
                     final List<VentesModel> articles = snapshot.data!;
-                   
+
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
@@ -189,7 +191,7 @@ class _VenteViewState extends State<VenteView> {
                                 ),
                               ),
                             ),
-                            
+
                             DataColumn(
                               label: Container(
                                 padding: const EdgeInsets.all(5),
@@ -320,12 +322,11 @@ class _VenteViewState extends State<VenteView> {
                                     child: Row(
                                       children: [
                                         Text(
-                                       "Annuler",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                         color: Colors.blue
-                                      ),
-                                    ),
+                                          "Annuler",
+                                          style: GoogleFonts.roboto(
+                                              fontSize: AppSizes.fontSmall,
+                                              color: Colors.blue),
+                                        ),
                                         IconButton(
                                           icon: const Icon(
                                               Icons.move_down_outlined,
@@ -334,7 +335,6 @@ class _VenteViewState extends State<VenteView> {
                                             _showAlertDelete(context, article);
                                           },
                                         ),
-                                    
                                       ],
                                     ),
                                   ),
@@ -361,8 +361,8 @@ class _VenteViewState extends State<VenteView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Annulation de vente"),
-          content:
-              const Text("Êtes-vous sûr de vouloir annuler la vente et retourner cet article dans vos stocks ?"),
+          content: const Text(
+              "Êtes-vous sûr de vouloir annuler la vente et retourner cet article dans vos stocks ?"),
           actions: <Widget>[
             TextButton(
               onPressed: () => _removeArticles(article),

@@ -194,42 +194,77 @@ class ServicesPanier {
   }
 
   //message en cas de succès!
-  Future<void> showSnackBarSuccessPersonalized(
-      BuildContext context, String message) {
-    final panierProvider = Provider.of<PanierProvider>(context, listen: false);
+ Future<void> showSnackBarSuccessPersonalized(
+    BuildContext context, String message) {
+  final panierProvider = Provider.of<PanierProvider>(context, listen: false);
 
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Ajouter une réception'),
-          content: Text(
-            message,
-            style: GoogleFonts.aBeeZee(
-                fontSize: AppSizes.fontLarge, color: Colors.green),
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(child: Text('Réception',style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge),)),
+        contentPadding: const EdgeInsets.all(20.0), // Padding autour du contenu
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0), // Arrondi des coins
+        ),
+        content: SizedBox(
+          width: 300, // Largeur fixe pour le dialogue
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Pour ajuster la hauteur en fonction du contenu
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 100, // Largeur de l'image
+                height: 100, // Hauteur de l'image
+                child: Image.asset("assets/logos/succes1.jpg"),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                message,
+                style: GoogleFonts.aBeeZee(
+                    fontSize: AppSizes.fontLarge, color: Colors.green),
+                textAlign: TextAlign.center, // Centrer le texte
+              ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                panierProvider.clearCart();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Retour'),
-            ),
-            IconButton(
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
                 onPressed: () {
-                  _printReceipt(context);
+                  panierProvider.clearCart();
+                  Navigator.of(context).pop();
                 },
-                icon: const Icon(
-                  Icons.print_rounded,
-                  size: AppSizes.iconLarge,
-                  color: Colors.blue,
-                ))
-          ],
-        );
-      },
-    );
-  }
+                child: Container(
+                  width: 100,
+                  height: 40,
+                 
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.black,
+                  ),
+                  
+                  child: Center(child:Text('Retour',style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),))),
+              ),
+               IconButton(
+              onPressed: () {
+                _printReceipt(context);
+              },
+              icon: const Icon(
+                Icons.print_rounded,
+                size: AppSizes.iconHyperLarge,
+                color: Colors.blue,
+              ))
+            ],
+          ),
+         
+        ],
+      );
+    },
+  );
+}
 
   Future<void> _printReceipt(BuildContext context) async {
     final pdf = pw.Document();

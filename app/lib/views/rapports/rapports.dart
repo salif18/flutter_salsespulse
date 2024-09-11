@@ -47,42 +47,42 @@ class _RapportViewState extends State<RapportView> {
   }
 
   Future<void> _loadProducts() async {
-  try {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-    final res = await api.getAllVentes(token, userId);
-    final body = jsonDecode(res.body);
+    try {
+      final token = Provider.of<AuthProvider>(context, listen: false).token;
+      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+      final res = await api.getAllVentes(token, userId);
+      final body = jsonDecode(res.body);
 
-    if (res.statusCode == 200) {
-      final products = (body["results"] as List)
-          .map((json) => VentesModel.fromJson(json))
-          .toList();
+      if (res.statusCode == 200) {
+        final products = (body["results"] as List)
+            .map((json) => VentesModel.fromJson(json))
+            .toList();
 
-      if (!_streamController.isClosed) {
-        _streamController.add(products); // Ajouter les produits au stream
+        if (!_streamController.isClosed) {
+          _streamController.add(products); // Ajouter les produits au stream
+        }
+      } else {
+        if (!_streamController.isClosed) {
+          _streamController.addError("Failed to load products");
+        }
       }
-    } else {
+    } catch (e) {
       if (!_streamController.isClosed) {
-        _streamController.addError("Failed to load products");
+        _streamController.addError("Error loading products");
       }
-    }
-  } catch (e) {
-    if (!_streamController.isClosed) {
-      _streamController.addError("Error loading products");
     }
   }
-}
 
-       //rafraichire la page en actualisanst la requete
+  //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {  // Vérifier si le widget est monté avant d'appeler setState()
-    setState(() {
-      _loadProducts(); // Rafraîchir les produits
-    });
+    if (mounted) {
+      // Vérifier si le widget est monté avant d'appeler setState()
+      setState(() {
+        _loadProducts(); // Rafraîchir les produits
+      });
+    }
   }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,20 +110,20 @@ class _RapportViewState extends State<RapportView> {
           .reduce((a, b) => a + b);
     }
 
-    return RefreshIndicator(
-     backgroundColor:Colors.transparent,
-          color: Colors.grey[100],
-       onRefresh: _refresh,
-          displacement: 50,
-      child: Scaffold(
-        backgroundColor: const Color(0xfff0f1f5),
-        appBar: AppBarWidget(
-          title: "Les rapports",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey,
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(0xfff0f1f5),
+      appBar: AppBarWidget(
+        title: "Les rapports",
+        color: const Color(0xff001c30),
+        titleColore: Colors.white,
+        drawerkey: drawerKey,
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
@@ -190,7 +190,7 @@ class _RapportViewState extends State<RapportView> {
                     //       DateFormat("dd MMM yyyy").format(selectedDate);
                     // }).toList();
                     // Calculer le bénéfice total
-      
+
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
@@ -291,7 +291,7 @@ class _RapportViewState extends State<RapportView> {
                             final somme = article.prixVente * article.qty;
                             final benefices =
                                 somme - (article.prixAchat * article.qty);
-      
+
                             return DataRow(
                               cells: [
                                 DataCell(
@@ -353,7 +353,7 @@ class _RapportViewState extends State<RapportView> {
                                   Container(
                                     padding: const EdgeInsets.all(5),
                                     child: Text(
-                                     "${somme.toStringAsFixed(2)} XOF",
+                                      "${somme.toStringAsFixed(2)} XOF",
                                       style: GoogleFonts.roboto(
                                         fontSize: AppSizes.fontMedium,
                                       ),
@@ -380,102 +380,92 @@ class _RapportViewState extends State<RapportView> {
                   }
                 },
               ),
-             
             ],
           ),
         ),
-        bottomNavigationBar: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  height: 150,
-            
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: const Color.fromARGB(255, 207, 212, 233)
-                    )
-                  ),
-                  
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      bottomNavigationBar: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          height: 150,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                  width: 1, color: const Color.fromARGB(255, 207, 212, 233))),
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Rapport du",
+                      style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                    ),
+                    Text(DateFormat("dd MMM yyyy").format(selectedDate),
+                        style: GoogleFonts.roboto(
+                          fontSize: AppSizes.fontMedium,
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          _printReceipt(context, filteredArticles);
+                        },
+                        icon: const Icon(
+                          Icons.print,
+                          size: AppSizes.iconLarge,
+                        ))
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
                       SizedBox(
-                        width: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Rapport du",
+                          width: 200,
+                          child: Text("Nbr de produit vendue",
                               style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium),
-                            ),
-                            Text(DateFormat("dd MMM yyyy").format(selectedDate),
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    )),
-                            IconButton(
-                                onPressed: () {
-                                  _printReceipt(context, filteredArticles);
-                                },
-                                icon: const Icon(
-                                  Icons.print,
-                                  size: AppSizes.iconLarge,
-                                ))
-                          ],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                  width: 200,
-                                  child: Text("Nbr de produit vendue",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: AppSizes.fontMedium))),
-                              Text(nombreTotalDeProduit().toString(),
-                                  style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                      fontWeight: FontWeight.bold
-                                ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                  width: 200,
-                                  child: Text("Total:",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: AppSizes.fontMedium))),
-                              Text("${sommeTotal().toString()} XOF",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                      fontWeight: FontWeight.bold
-                              ))
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                  width: 200,
-                                  child: Text("Benefice",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: AppSizes.fontMedium))),
-                              Text("${beneficeTotal().toString()} XOF",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontMedium,
-                                      fontWeight: FontWeight.bold
-                                ))
-                            ],
-                          )
-                        ],
-                      )
+                                  fontSize: AppSizes.fontMedium))),
+                      Text(nombreTotalDeProduit().toString(),
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium,
+                              fontWeight: FontWeight.bold))
                     ],
-                  )) ,
-      ),
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 200,
+                          child: Text("Total:",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium))),
+                      Text("${sommeTotal().toString()} XOF",
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium,
+                              fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: 200,
+                          child: Text("Benefice",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium))),
+                      Text("${beneficeTotal().toString()} XOF",
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium,
+                              fontWeight: FontWeight.bold))
+                    ],
+                  )
+                ],
+              )
+            ],
+          )),
     );
   }
 

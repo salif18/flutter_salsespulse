@@ -28,7 +28,6 @@ class StocksView extends StatefulWidget {
 }
 
 class _StocksViewState extends State<StocksView> {
-
   ServicesStocks api = ServicesStocks();
   ServicesCategories apiCatego = ServicesCategories();
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
@@ -67,7 +66,7 @@ class _StocksViewState extends State<StocksView> {
     _stockController.dispose();
     _streamController
         .close(); // Fermer le StreamController pour éviter les fuites de mémoire
-  
+
     super.dispose();
   }
 
@@ -81,35 +80,34 @@ class _StocksViewState extends State<StocksView> {
   }
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
- Future<void> _loadProducts() async {
-  try {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-    final res = await api.getAllProducts(token, userId);
-    final body = jsonDecode(res.body);
+  Future<void> _loadProducts() async {
+    try {
+      final token = Provider.of<AuthProvider>(context, listen: false).token;
+      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+      final res = await api.getAllProducts(token, userId);
+      final body = jsonDecode(res.body);
 
-    if (res.statusCode == 200) {
-      final products = (body["produits"] as List)
-          .map((json) => StocksModel.fromJson(json))
-          .toList();
+      if (res.statusCode == 200) {
+        final products = (body["produits"] as List)
+            .map((json) => StocksModel.fromJson(json))
+            .toList();
 
-      if (!_streamController.isClosed) {
-        _streamController.add(products); // Ajouter les produits au stream
+        if (!_streamController.isClosed) {
+          _streamController.add(products); // Ajouter les produits au stream
+        } else {
+          print("StreamController is closed, cannot add products.");
+        }
       } else {
-        print("StreamController is closed, cannot add products.");
+        if (!_streamController.isClosed) {
+          _streamController.addError("Failed to load products");
+        }
       }
-    } else {
+    } catch (e) {
       if (!_streamController.isClosed) {
-        _streamController.addError("Failed to load products");
+        _streamController.addError("Error loading products");
       }
-    }
-  } catch (e) {
-    if (!_streamController.isClosed) {
-      _streamController.addError("Error loading products");
     }
   }
-}
-
 
   // OBTENIR LES CATEGORIES API
   Future<void> _getCategories() async {
@@ -244,20 +242,20 @@ class _StocksViewState extends State<StocksView> {
         Provider.of<PanierProvider>(context, listen: false);
     void Function(StocksModel, int) addToCart = cartProvider.addToCart;
 
-    return RefreshIndicator(
-      backgroundColor: Colors.transparent,
-      color: Colors.grey[100],
-      onRefresh: _refresh,
-      displacement: 50,
-      child: Scaffold(
-        backgroundColor: const Color(0xfff0f1f5),
-        appBar: AppBarWidget(
-          title: "Stocks",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey,
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(0xfff0f1f5),
+      appBar: AppBarWidget(
+        title: "Stocks",
+        color: const Color(0xff001c30),
+        titleColore: Colors.white,
+        drawerkey: drawerKey,
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
@@ -598,51 +596,51 @@ class _StocksViewState extends State<StocksView> {
             ],
           ),
         ),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchPage()));
-                },
-                child: const Icon(Icons.search, size: AppSizes.iconLarge)),
-            ElevatedButton(
-                onPressed: () {
-                  _addStokcs(context);
-                },
-                child: const Icon(Icons.add, size: AppSizes.iconLarge)),
-            ElevatedButton.icon(
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          ElevatedButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const CategoriesView()));
+                        builder: (context) => const SearchPage()));
               },
-              icon: const Icon(Icons.category, size: AppSizes.iconLarge),
-              label: Text(
-                "Categories",
-                style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
-              ),
-            ),
-            ElevatedButton.icon(
+              child: const Icon(Icons.search, size: AppSizes.iconLarge)),
+          ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const FournisseurView()));
+                _addStokcs(context);
               },
-              icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
-              label: Text(
-                "Fournisseurs",
-                style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
-              ),
+              child: const Icon(Icons.add, size: AppSizes.iconLarge)),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CategoriesView()));
+            },
+            icon: const Icon(Icons.category, size: AppSizes.iconLarge),
+            label: Text(
+              "Categories",
+              style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
             ),
-          ],
-        ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FournisseurView()));
+            },
+            icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
+            label: Text(
+              "Fournisseurs",
+              style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
+            ),
+          ),
+        ],
       ),
     );
   }

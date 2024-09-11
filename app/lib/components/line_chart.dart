@@ -28,6 +28,15 @@ class LineChartWidget extends StatelessWidget {
           padding: const EdgeInsets.only(right: 25),
           decoration: BoxDecoration(
               color: const Color(0xFF292D4E),
+               boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 29, 28, 28)
+                .withOpacity(0.5), // Couleur de l'ombre
+            spreadRadius: 2, // Taille de la diffusion de l'ombre
+            blurRadius: 8, // Flou de l'ombre
+            offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+          ),
+        ],
               borderRadius: BorderRadius.circular(20)),
           child: LineChart(
               duration: const Duration(milliseconds: 750),

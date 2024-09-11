@@ -65,7 +65,9 @@ class _DashboardViewState extends State<DashboardView> {
       if (res.statusCode == 200) {
         // Ajouter les produits au stream
         setState(() {
-          stocks = body["produits"];
+          stocks = (body["produits"] as List)
+            .map((json) => StocksModel.fromJson(json))
+            .toList();
           totalAchatOfAchat = body["totalAchatOfAchat"];
         });
       } else {
@@ -179,36 +181,35 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-      //rafraichire la page en actualisanst la requete
+  //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       _loadProducts();
       _loadDepenses();
-    _loadMostCategorie();
-    _loadStatsHebdo();
-    _loadStatsYear();
+      _loadMostCategorie();
+      _loadStatsHebdo();
+      _loadStatsYear();
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      backgroundColor:Colors.transparent,
-          color: Colors.grey[100],
-       onRefresh: _refresh,
-          displacement: 50,
-      child: Scaffold(
-        key: drawerKey,
-        drawer: const DrawerWidget(),
-        backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-        appBar: AppBarWidget(
-            title: "Tableau de bord",
-            color: const Color(0xff001c30),
-            titleColore: Colors.white,
-            drawerkey: drawerKey),
-        body: SingleChildScrollView(
+    return Scaffold(
+      key: drawerKey,
+      drawer: const DrawerWidget(),
+      backgroundColor: const Color.fromARGB(255, 223, 223, 223),
+      appBar: AppBarWidget(
+          title: "Tableau de bord",
+          color: const Color(0xff001c30),
+          titleColore: Colors.white,
+          drawerkey: drawerKey),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -255,14 +256,16 @@ class _DashboardViewState extends State<DashboardView> {
               padding: const EdgeInsets.all(15),
               child: Text("Hebdomadaire",
                   style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w600,
-                      fontSize: 18, color: const Color.fromARGB(255, 7, 7, 7)))),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: const Color.fromARGB(255, 7, 7, 7)))),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Text("$totalHebdo XOF",
                 style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w600,
-                    fontSize: 18, color: const Color.fromARGB(255, 10, 10, 10))),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: const Color.fromARGB(255, 10, 10, 10))),
           ),
           Padding(
               padding: const EdgeInsets.all(0),
@@ -275,8 +278,8 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Widget _statsStock(BuildContext context) {
-    List<StocksModel> filterStocks =
-        stocks.where((stock) => stock.stocks == 0).toList();
+   List<StocksModel> filterStocks = 
+    stocks.where((product) => product.stocks == 0).toList();
 
     return Container(
       margin: const EdgeInsets.all(10),
@@ -643,7 +646,7 @@ class _DashboardViewState extends State<DashboardView> {
             margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: const Color(0xffff7c60),
+              color: const Color(0xFF292D4E),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -701,16 +704,7 @@ class _DashboardViewState extends State<DashboardView> {
       height: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        // color: const Color(0xff001c30),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 36, 34, 34)
-                .withOpacity(0.2), // Couleur de l'ombre
-            spreadRadius: 2, // Taille de la diffusion de l'ombre
-            blurRadius: 8, // Flou de l'ombre
-            offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
-          ),
-        ],
+        color: const Color.fromARGB(255, 223, 223, 223),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -719,19 +713,18 @@ class _DashboardViewState extends State<DashboardView> {
               padding: const EdgeInsets.all(15),
               child: Text("Annuel",
                   style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w600,
-                      fontSize: 18, color: const Color.fromARGB(255, 12, 12, 12)))),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: const Color.fromARGB(255, 12, 12, 12)))),
           Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Text("125000 fcfa",
                 style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.w600,
-                    fontSize: 18, color: const Color.fromARGB(255, 5, 5, 5))),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: const Color.fromARGB(255, 5, 5, 5))),
           ),
-          Padding(
-            padding: const EdgeInsets.all(0),
-            child: LineChartWidget(data: statsYear),
-          )
+          LineChartWidget(data: statsYear),
         ],
       ),
     );

@@ -45,42 +45,43 @@ class _DepensesViewState extends State<DepensesView> {
     super.dispose();
   }
 
-       //rafraichire la page en actualisanst la requete
+  //rafraichire la page en actualisanst la requete
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {  // Vérifier si le widget est monté avant d'appeler setState()
-    setState(() {
-      _loadProducts(); // Rafraîchir les produits
-    });
-  }
+    if (mounted) {
+      // Vérifier si le widget est monté avant d'appeler setState()
+      setState(() {
+        _loadProducts(); // Rafraîchir les produits
+      });
+    }
   }
 
   Future<void> _loadProducts() async {
-  try {
-    final token = Provider.of<AuthProvider>(context, listen: false).token;
-    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
-    final res = await api.getAllDepenses(token, userId);
-    final body = jsonDecode(res.body);
+    try {
+      final token = Provider.of<AuthProvider>(context, listen: false).token;
+      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+      final res = await api.getAllDepenses(token, userId);
+      final body = jsonDecode(res.body);
 
-    if (res.statusCode == 200) {
-      final depenses = (body["results"] as List)
-          .map((json) => DepensesModel.fromJson(json))
-          .toList();
+      if (res.statusCode == 200) {
+        final depenses = (body["results"] as List)
+            .map((json) => DepensesModel.fromJson(json))
+            .toList();
 
-      if (!_streamController.isClosed) {
-        _streamController.add(depenses); // Ajouter les dépenses au stream
+        if (!_streamController.isClosed) {
+          _streamController.add(depenses); // Ajouter les dépenses au stream
+        }
+      } else {
+        if (!_streamController.isClosed) {
+          _streamController.addError("Failed to load depenses");
+        }
       }
-    } else {
+    } catch (e) {
       if (!_streamController.isClosed) {
-        _streamController.addError("Failed to load depenses");
+        _streamController.addError("Error loading depenses");
       }
-    }
-  } catch (e) {
-    if (!_streamController.isClosed) {
-      _streamController.addError("Error loading depenses");
     }
   }
-}
 
   // Envoie des donnees vers le server
   Future<void> _sendNewDepenseToServer() async {
@@ -112,20 +113,20 @@ class _DepensesViewState extends State<DepensesView> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-       backgroundColor:Colors.transparent,
-          color: Colors.grey[100],
-       onRefresh: _refresh,
-          displacement: 50,
-      child: Scaffold(
-        backgroundColor: const Color(0xfff0f1f5),
-        appBar: AppBarWidget(
-          title: "Les Depenses",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey,
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: const Color(0xfff0f1f5),
+      appBar: AppBarWidget(
+        title: "Les Depenses",
+        color: const Color(0xff001c30),
+        titleColore: Colors.white,
+        drawerkey: drawerKey,
+      ),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -226,11 +227,13 @@ class _DepensesViewState extends State<DepensesView> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 15),
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -267,15 +270,15 @@ class _DepensesViewState extends State<DepensesView> {
             ],
           ),
         ),
-        floatingActionButton: ElevatedButton(
-            onPressed: () {
-              _addDepenses(context);
-            },
-            child: const Icon(
-              Icons.add,
-              size: AppSizes.iconLarge,
-            )),
       ),
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            _addDepenses(context);
+          },
+          child: const Icon(
+            Icons.add,
+            size: AppSizes.iconLarge,
+          )),
     );
   }
 
@@ -299,7 +302,7 @@ class _DepensesViewState extends State<DepensesView> {
                   const SizedBox(height: 20),
                   const SizedBox(height: 20),
                   TextFormField(
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.number,
                     controller: _montantController,
                     decoration: const InputDecoration(
                         labelText: "Somme depensée",
@@ -314,7 +317,7 @@ class _DepensesViewState extends State<DepensesView> {
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _motifController,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                         labelText: "Motif du depense",
                         border: OutlineInputBorder()),
