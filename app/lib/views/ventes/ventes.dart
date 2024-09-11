@@ -122,13 +122,16 @@ class _VenteViewState extends State<VenteView> {
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image.asset(
-                      "assets/logos/logo3.jpg",
-                      width: 100,
-                      height: 100,
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Image.asset(
+                    //     "assets/logos/logo3.jpg",
+                    //     width: 100,
+                    //     height: 100,
+                    //   ),
+                    // ),
                     IconButton(onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> const PopulaireView()));
                     }, 

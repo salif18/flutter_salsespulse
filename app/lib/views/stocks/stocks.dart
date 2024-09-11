@@ -263,13 +263,16 @@ class _StocksViewState extends State<StocksView> {
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image.asset(
-                      "assets/logos/logo3.jpg",
-                      width: 100,
-                      height: 100,
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Image.asset(
+                    //     "assets/images/f.jpg",
+                    //     width: 100,
+                    //     height: 100,
+                    //   ),
+                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
@@ -309,7 +312,6 @@ class _StocksViewState extends State<StocksView> {
                   ],
                 ),
               ),
-              
               StreamBuilder<List<StocksModel>>(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {
@@ -603,6 +605,8 @@ class _StocksViewState extends State<StocksView> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
               onPressed: () {
                 Navigator.push(
                     context,
@@ -611,11 +615,15 @@ class _StocksViewState extends State<StocksView> {
               },
               child: const Icon(Icons.search, size: AppSizes.iconLarge)),
           ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
               onPressed: () {
                 _addStokcs(context);
               },
               child: const Icon(Icons.add, size: AppSizes.iconLarge)),
           ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
             onPressed: () {
               Navigator.push(
                   context,
@@ -629,6 +637,8 @@ class _StocksViewState extends State<StocksView> {
             ),
           ),
           ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
             onPressed: () {
               Navigator.push(
                   context,

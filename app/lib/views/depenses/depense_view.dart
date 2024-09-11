@@ -206,15 +206,17 @@ class _DepensesViewState extends State<DepensesView> {
                     } else {
                       final List<DepensesModel> depenses = snapshot.data!;
                       // Filtrer les articles par la date sélectionnée
-                      filteredDepenses = depenses.where((article) {
-                        return article.date.year == selectedDate.year &&
-                            article.date.month == selectedDate.month &&
-                            article.date.day == selectedDate.day;
-                      }).toList();
+                      filteredDepenses = selectedDate == null
+                          ? depenses
+                          : depenses.where((article) {
+                              return article.date.year == selectedDate.year &&
+                                  article.date.month == selectedDate.month &&
+                                  article.date.day == selectedDate.day;
+                            }).toList();
                       return ListView.builder(
                         shrinkWrap: true, // Pour éviter un overflow
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: selectedDate == null ? depenses.length:filteredDepenses.length,
+                        itemCount: filteredDepenses.length,
                         itemBuilder: (BuildContext context, int index) {
                           DepensesModel depenses = snapshot.data![index];
                           return Container(

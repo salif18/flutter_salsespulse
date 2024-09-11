@@ -316,10 +316,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 fontSize: AppSizes.fontMedium,
                                 color: Colors.white),
                           )),
-                      subtitle: FittedBox(
+                         subtitle: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            stock.id.categories,
+                           "catego: ${stock.id.categories}",
                             style: GoogleFonts.roboto(
                                 fontSize: AppSizes.fontMedium,
                                 color: Colors.white),
@@ -488,7 +488,7 @@ class _DashboardViewState extends State<DashboardView> {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       "$revenu XOF",
-                      style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                      style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium,fontWeight:FontWeight.bold , color: revenu < 0? Colors.red : Colors.black),
                     ),
                   ),
                   const SizedBox(width: 25),

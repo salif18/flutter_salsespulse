@@ -131,13 +131,13 @@ class _RapportViewState extends State<RapportView> {
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image.asset(
-                      "assets/logos/logo3.jpg",
-                      width: 100,
-                      height: 100,
-                    ),
+                    // Image.asset(
+                    //   "assets/logos/logo3.jpg",
+                    //   width: 100,
+                    //   height: 100,
+                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints:
@@ -158,7 +158,7 @@ class _RapportViewState extends State<RapportView> {
                         ),
                         hideDefaultSuffixIcon: true,
                         mode: DateTimeFieldPickerMode.date,
-                        initialValue: DateTime.now(),
+                        initialValue: null,
                         onChanged: (DateTime? value) {
                           if (value != null) {
                             setState(() {
@@ -184,11 +184,14 @@ class _RapportViewState extends State<RapportView> {
                     final List<VentesModel> articles = snapshot.data!;
 
                     // Filtrer les articles par la date sélectionnée
-                    filteredArticles = articles.where((article) {
-                      return article.dateVente.year == selectedDate.year &&
-                          article.dateVente.month == selectedDate.month &&
-                          article.dateVente.day == selectedDate.day;
-                    }).toList();
+                    filteredArticles = selectedDate == null
+                        ? articles
+                        : articles.where((article) {
+                            return article.dateVente.year ==
+                                    selectedDate.year &&
+                                article.dateVente.month == selectedDate.month &&
+                                article.dateVente.day == selectedDate.day;
+                          }).toList();
 
                     // Vérifier s'il y a des articles filtrés
                     if (filteredArticles.isEmpty) {

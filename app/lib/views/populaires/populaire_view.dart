@@ -110,7 +110,6 @@ class _PopulaireViewState extends State<PopulaireView> {
                   ],
                 ),
               ),
-              const SizedBox(height: 50),
               StreamBuilder<List<ProduitBestVendu>>(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {
