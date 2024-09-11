@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:salespulse/components/app_bar.dart';
@@ -309,9 +308,30 @@ class _DashboardViewState extends State<DashboardView> {
                   itemBuilder: (context, index) {
                     final stock = populaireVente[index];
                     return ListTile(
-                      title: FittedBox(fit: BoxFit.scaleDown,child: Text(stock.id.nom,style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
-                      subtitle: FittedBox(fit:BoxFit.scaleDown,child: Text(stock.id.categories,style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
-                      trailing: FittedBox(fit: BoxFit.scaleDown,child: Text(stock.totalVendu.toString(),style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
+                      title: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            stock.id.nom,
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                color: Colors.white),
+                          )),
+                      subtitle: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            stock.id.categories,
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                color: Colors.white),
+                          )),
+                      trailing: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            stock.totalVendu.toString(),
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                color: Colors.white),
+                          )),
                     );
                   },
                 ),
@@ -326,11 +346,11 @@ class _DashboardViewState extends State<DashboardView> {
               child: filterStocks.isEmpty
                   ? Center(
                       child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text("Aucun stock manquant",
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium)),
-                      ))
+                      fit: BoxFit.scaleDown,
+                      child: Text("Aucun stock manquant",
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium)),
+                    ))
                   : Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -418,327 +438,384 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget _statsCaisse(BuildContext context) {
     int revenu = beneficeTotal - depenseTotal;
-    return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xfff0f1f5),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 36, 34, 34)
-                .withOpacity(0.2), // Couleur de l'ombre
-            spreadRadius: 2, // Taille de la diffusion de l'ombre
-            blurRadius: 8, // Flou de l'ombre
-            offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
-          ),
-        ],
-      ),
-      width: MediaQuery.of(context).size.width,
-      height: 100,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Icon(Icons.line_axis_rounded,
-                      size: AppSizes.iconLarge,
-                      color: Color.fromARGB(255, 20, 151, 3))),
-              Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    "Etat de caisse",
-                    style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
-                  ))
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: Row(
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
+        width: constraints.maxWidth,
+        decoration: BoxDecoration(
+          color: const Color(0xfff0f1f5),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 36, 34, 34)
+                  .withOpacity(0.2), // Couleur de l'ombre
+              spreadRadius: 2, // Taille de la diffusion de l'ombre
+              blurRadius: 8, // Flou de l'ombre
+              offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+            ),
+          ],
+        ),
+        height: 100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Text(
-                  "$revenu XOF",
-                  style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
-                ),
-                const SizedBox(width: 25),
-                revenu > 0
-                    ? const Icon(
-                        Icons.arrow_upward_rounded,
-                        size: AppSizes.fontLarge,
-                        color: Colors.blue,
-                      )
-                    : const Icon(
-                        Icons.arrow_downward_outlined,
-                        size: AppSizes.fontLarge,
-                        color: Colors.red,
-                      )
+                const Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Icon(Icons.line_axis_rounded,
+                        size: AppSizes.iconLarge,
+                        color: Color.fromARGB(255, 20, 151, 3))),
+                Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Etat de caisse",
+                        style:
+                            GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                      ),
+                    ))
               ],
             ),
-          )
-        ],
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "$revenu XOF",
+                      style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  revenu > 0
+                      ? const Icon(
+                          Icons.arrow_upward_rounded,
+                          size: AppSizes.fontLarge,
+                          color: Colors.blue,
+                        )
+                      : const Icon(
+                          Icons.arrow_downward_outlined,
+                          size: AppSizes.fontLarge,
+                          color: Colors.red,
+                        )
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Widget _statsCaisse1(BuildContext context) {
     int prixGlobalAchat = totalAchatOfAchat + totalAchatOfVente;
 
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xfff764ba),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 36, 34, 34)
-                      .withOpacity(0.2), // Couleur de l'ombre
-                  spreadRadius: 2, // Taille de la diffusion de l'ombre
-                  blurRadius: 8, // Flou de l'ombre
-                  offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        margin: const EdgeInsets.all(8.0),
+        width: constraints.maxWidth,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xfff764ba),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 36, 34, 34)
+                          .withOpacity(0.2), // Couleur de l'ombre
+                      spreadRadius: 2, // Taille de la diffusion de l'ombre
+                      blurRadius: 8, // Flou de l'ombre
+                      offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            width: 180,
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(Icons.monetization_on,
-                            size: AppSizes.iconLarge,
-                            color: Color.fromARGB(255, 255, 230, 1))),
+                    Row(
+                      children: [
+                        const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(Icons.monetization_on,
+                                size: AppSizes.iconLarge,
+                                color: Color.fromARGB(255, 255, 230, 1))),
+                        Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Prix d'achat",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    color: Colors.white),
+                              ),
+                            ))
+                      ],
+                    ),
                     Padding(
-                        padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
                         child: Text(
-                          "Prix d'achat",
+                          "$prixGlobalAchat XOF",
                           style: GoogleFonts.roboto(
                               fontSize: AppSizes.fontMedium,
                               color: Colors.white),
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    "$prixGlobalAchat XOF",
-                    style: GoogleFonts.roboto(
-                        fontSize: AppSizes.fontMedium, color: Colors.white),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xffffffff),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 36, 34, 34)
-                      .withOpacity(0.2), // Couleur de l'ombre
-                  spreadRadius: 2, // Taille de la diffusion de l'ombre
-                  blurRadius: 8, // Flou de l'ombre
-                  offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+            Flexible(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 36, 34, 34)
+                          .withOpacity(0.2), // Couleur de l'ombre
+                      spreadRadius: 2, // Taille de la diffusion de l'ombre
+                      blurRadius: 8, // Flou de l'ombre
+                      offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            width: 180,
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                width: 180,
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(
-                          Icons.attach_money_outlined,
-                          size: AppSizes.iconLarge,
-                          color: Color.fromARGB(255, 16, 230, 23),
-                        )),
+                    Row(
+                      children: [
+                        const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.attach_money_outlined,
+                              size: AppSizes.iconLarge,
+                              color: Color.fromARGB(255, 16, 230, 23),
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Prix de vente",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium),
+                              ),
+                            ))
+                      ],
+                    ),
                     Padding(
-                        padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
                         child: Text(
-                          "Prix de vente",
+                          "$venteTotal XOF",
                           style:
                               GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    "$venteTotal XOF",
-                    style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _statsCaisse2(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xff2f80ed),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 36, 34, 34)
-                      .withOpacity(0.2), // Couleur de l'ombre
-                  spreadRadius: 2, // Taille de la diffusion de l'ombre
-                  blurRadius: 8, // Flou de l'ombre
-                  offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
-                ),
-              ],
-            ),
-            width: 180,
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(
-                          Icons.monetization_on,
-                          size: AppSizes.iconLarge,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(
-                          "Benefices",
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              color: Colors.white),
-                        ))
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    "$beneficeTotal XOF",
-                    style: GoogleFonts.roboto(
-                        fontSize: AppSizes.fontMedium, color: Colors.white),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        margin: const EdgeInsets.all(8.0),
+        width: constraints.maxWidth,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xff2f80ed),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 36, 34, 34)
+                        .withOpacity(0.2), // Couleur de l'ombre
+                    spreadRadius: 2, // Taille de la diffusion de l'ombre
+                    blurRadius: 8, // Flou de l'ombre
+                    offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
                   ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFF292D4E),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 36, 34, 34)
-                      .withOpacity(0.2), // Couleur de l'ombre
-                  spreadRadius: 2, // Taille de la diffusion de l'ombre
-                  blurRadius: 8, // Flou de l'ombre
-                  offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
-                ),
-              ],
-            ),
-            width: 180,
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(Icons.monetization_on,
+                ],
+              ),
+              width: 180,
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.monetization_on,
                             size: AppSizes.iconLarge,
-                            color: Color.fromARGB(255, 255, 17, 0))),
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Benefices",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  color: Colors.white),
+                            ),
+                          ))
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "$beneficeTotal XOF",
+                        style: GoogleFonts.roboto(
+                            fontSize: AppSizes.fontMedium, color: Colors.white),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF292D4E),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 36, 34, 34)
+                          .withOpacity(0.2), // Couleur de l'ombre
+                      spreadRadius: 2, // Taille de la diffusion de l'ombre
+                      blurRadius: 8, // Flou de l'ombre
+                      offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+                    ),
+                  ],
+                ),
+                height: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Icon(Icons.monetization_on,
+                                size: AppSizes.iconLarge,
+                                color: Color.fromARGB(255, 255, 17, 0))),
+                        Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Depenses",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium,
+                                    color: Colors.white),
+                              ),
+                            ))
+                      ],
+                    ),
                     Padding(
-                        padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
                         child: Text(
-                          "Depenses",
+                          "$depenseTotal XOF",
                           style: GoogleFonts.roboto(
                               fontSize: AppSizes.fontMedium,
                               color: Colors.white),
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Text(
-                    "$depenseTotal XOF",
-                    style: GoogleFonts.roboto(
-                        fontSize: AppSizes.fontMedium, color: Colors.white),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _statsAnnuel(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      width: double.infinity,
-      height: 320,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: const Color.fromARGB(255, 223, 223, 223),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text("Annuel",
-                  style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 12, 12, 12)))),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text("125000 fcfa",
-                style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: const Color.fromARGB(255, 5, 5, 5))),
-          ),
-          LineChartWidget(data: statsYear),
-        ],
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        margin: const EdgeInsets.all(5),
+        width: constraints.maxWidth,
+        height: 320,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color.fromARGB(255, 223, 223, 223),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(15),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text("Annuel",
+                      style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: const Color.fromARGB(255, 12, 12, 12))),
+                )),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("125000 fcfa",
+                    style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: const Color.fromARGB(255, 5, 5, 5))),
+              ),
+            ),
+            LineChartWidget(data: statsYear),
+          ],
+        ),
+      );
+    });
   }
 }
