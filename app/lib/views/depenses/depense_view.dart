@@ -22,7 +22,7 @@ class _DepensesViewState extends State<DepensesView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   // Clé Key du formulaire
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  late DateTime selectedDate ;
+  DateTime selectedDate = DateTime.now();
   ServicesDepense api = ServicesDepense();
   final StreamController<List<DepensesModel>> _streamController =
       StreamController();
