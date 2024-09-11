@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:salespulse/components/app_bar.dart';
@@ -66,8 +67,8 @@ class _DashboardViewState extends State<DashboardView> {
         // Ajouter les produits au stream
         setState(() {
           stocks = (body["produits"] as List)
-            .map((json) => StocksModel.fromJson(json))
-            .toList();
+              .map((json) => StocksModel.fromJson(json))
+              .toList();
           totalAchatOfAchat = body["totalAchatOfAchat"];
         });
       } else {
@@ -196,164 +197,172 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: drawerKey,
-      drawer: const DrawerWidget(),
-      backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-      appBar: AppBarWidget(
-          title: "Tableau de bord",
-          color: const Color(0xff001c30),
-          titleColore: Colors.white,
-          drawerkey: drawerKey),
-      body: RefreshIndicator(
-        backgroundColor: Colors.transparent,
-        color: Colors.grey[100],
-        onRefresh: _refresh,
-        displacement: 50,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20))),
-                  child: _statsWeek(context)),
-              _statsStock(context),
-              _statsCaisse(context),
-              _statsCaisse1(context),
-              _statsCaisse2(context),
-              _statsAnnuel(context)
+        key: drawerKey,
+        drawer: const DrawerWidget(),
+        backgroundColor: const Color.fromARGB(255, 223, 223, 223),
+        appBar: AppBarWidget(
+            title: "Tableau de bord",
+            color: const Color(0xff001c30),
+            titleColore: Colors.white,
+            drawerkey: drawerKey),
+        body: RefreshIndicator(
+          backgroundColor: Colors.transparent,
+          color: Colors.grey[100],
+          onRefresh: _refresh,
+          displacement: 50,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20))),
+                    child: _statsWeek(context)),
+              ),
+              SliverToBoxAdapter(child: _statsStock(context)),
+              SliverToBoxAdapter(child: _statsCaisse(context)),
+              SliverToBoxAdapter(child: _statsCaisse1(context)),
+              SliverToBoxAdapter(child: _statsCaisse2(context)),
+              SliverToBoxAdapter(child: _statsAnnuel(context)),
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _statsWeek(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 320,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        // color: const Color(0xff001c30),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 36, 34, 34)
-                .withOpacity(0.2), // Couleur de l'ombre
-            spreadRadius: 2, // Taille de la diffusion de l'ombre
-            blurRadius: 8, // Flou de l'ombre
-            offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text("Hebdomadaire",
-                  style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 7, 7, 7)))),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text("$totalHebdo XOF",
-                style: GoogleFonts.roboto(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: const Color.fromARGB(255, 10, 10, 10))),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(0),
-              child: BarChartWidget(
-                data: statsHebdo,
-              ))
-        ],
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        width: constraints.maxWidth,
+        height: 320,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          // color: const Color(0xff001c30),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 36, 34, 34)
+                  .withOpacity(0.2), // Couleur de l'ombre
+              spreadRadius: 2, // Taille de la diffusion de l'ombre
+              blurRadius: 8, // Flou de l'ombre
+              offset: const Offset(0, 4), // Décalage de l'ombre (x,y)
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(15),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text("Hebdomadaire",
+                      style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: const Color.fromARGB(255, 7, 7, 7))),
+                )),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text("$totalHebdo XOF",
+                    style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: const Color.fromARGB(255, 10, 10, 10))),
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(0),
+                child: BarChartWidget(
+                  data: statsHebdo,
+                ))
+          ],
+        ),
+      );
+    });
   }
 
   Widget _statsStock(BuildContext context) {
-   List<StocksModel> filterStocks = 
-    stocks.where((product) => product.stocks == 0).toList();
+    List<StocksModel> filterStocks =
+        stocks.where((product) => product.stocks == 0).toList();
 
-    return Container(
-      margin: const EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildStatContainer(
-            title: "Les plus achetés",
-            icon: Icons.star_rate_rounded,
-            iconColor: Colors.yellow,
-            backgroundColor: const Color.fromARGB(255, 255, 149, 50),
-            textColor: Colors.white,
-            child: Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: populaireVente.length.clamp(0, 5), // max 4 items
-                itemBuilder: (context, index) {
-                  final stock = populaireVente[index];
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(stock.id.nom,
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              color: Colors.white)),
-                      Text(stock.id.categories,
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              color: Colors.white)),
-                      Text(stock.totalVendu.toString(),
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              color: Colors.white)),
-                    ],
-                  );
-                },
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        width: constraints.maxWidth,
+        margin: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildStatContainer(
+              title: "Les plus achetés",
+              icon: Icons.star_rate_rounded,
+              iconColor: Colors.yellow,
+              backgroundColor: const Color.fromARGB(255, 255, 149, 50),
+              textColor: Colors.white,
+              child: Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: populaireVente.length.clamp(0, 5), // max 4 items
+                  itemBuilder: (context, index) {
+                    final stock = populaireVente[index];
+                    return ListTile(
+                      title: FittedBox(fit: BoxFit.scaleDown,child: Text(stock.id.nom,style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
+                      subtitle: FittedBox(fit:BoxFit.scaleDown,child: Text(stock.id.categories,style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
+                      trailing: FittedBox(fit: BoxFit.scaleDown,child: Text(stock.totalVendu.toString(),style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),)),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          _buildStatContainer(
-            title: "Manque de stock",
-            icon: Icons.hourglass_empty_rounded,
-            iconColor: const Color.fromARGB(255, 236, 40, 40),
-            backgroundColor: const Color(0xfff0f1f5),
-            textColor: const Color.fromARGB(255, 39, 39, 39),
-            child: filterStocks.isEmpty
-                ? Center(
-                    child: Text("Aucun stock manquant",
-                        style:
-                            GoogleFonts.roboto(fontSize: AppSizes.fontMedium)))
-                : Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filterStocks.length.clamp(0, 5), // max 4 items
-                      itemBuilder: (context, index) {
-                        final stock = filterStocks[index];
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(stock.nom,
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium)),
-                            Text(stock.categories,
-                                style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium)),
-                          ],
-                        );
-                      },
+            _buildStatContainer(
+              title: "Manque de stock",
+              icon: Icons.hourglass_empty_rounded,
+              iconColor: const Color.fromARGB(255, 236, 40, 40),
+              backgroundColor: const Color(0xfff0f1f5),
+              textColor: const Color.fromARGB(255, 39, 39, 39),
+              child: filterStocks.isEmpty
+                  ? Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text("Aucun stock manquant",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium)),
+                      ))
+                  : Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount:
+                            filterStocks.length.clamp(0, 5), // max 4 items
+                        itemBuilder: (context, index) {
+                          final stock = filterStocks[index];
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(stock.nom,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium)),
+                              ),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(stock.categories,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium)),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-          ),
-        ],
-      ),
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildStatContainer({
@@ -364,42 +373,45 @@ class _DashboardViewState extends State<DashboardView> {
     required Color textColor,
     Widget? child,
   }) {
-    return Container(
-      width: 180,
-      height: 200,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 36, 34, 34).withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, size: AppSizes.iconLarge, color: iconColor),
-              const SizedBox(width: 10),
-              Text(
-                title,
-                style: GoogleFonts.roboto(
-                  fontSize: AppSizes.fontMedium,
-                  color: textColor,
+    return Flexible(
+      flex: 1,
+      child: Container(
+        // width: 180,
+        height: 200,
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: backgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 36, 34, 34).withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: AppSizes.iconLarge, color: iconColor),
+                const SizedBox(width: 10),
+                Text(
+                  title,
+                  style: GoogleFonts.roboto(
+                    fontSize: AppSizes.fontMedium,
+                    color: textColor,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 25),
-          if (child != null) child,
-        ],
+              ],
+            ),
+            const SizedBox(height: 25),
+            if (child != null) child,
+          ],
+        ),
       ),
     );
   }
