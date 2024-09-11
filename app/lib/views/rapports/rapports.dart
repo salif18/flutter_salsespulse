@@ -380,7 +380,11 @@ class _RapportViewState extends State<RapportView> {
                   }
                 },
               ),
-              Container(
+             
+            ],
+          ),
+        ),
+        bottomNavigationBar: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   height: 150,
             
@@ -403,7 +407,7 @@ class _RapportViewState extends State<RapportView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "rapport du",
+                              "Rapport du",
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontMedium),
                             ),
@@ -470,10 +474,7 @@ class _RapportViewState extends State<RapportView> {
                         ],
                       )
                     ],
-                  ))
-            ],
-          ),
-        ),
+                  )) ,
       ),
     );
   }
