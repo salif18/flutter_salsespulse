@@ -139,6 +139,7 @@ class _VenteViewState extends State<VenteView> {
                   ],
                 ),
               ),
+              
               StreamBuilder<List<VentesModel>>(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {

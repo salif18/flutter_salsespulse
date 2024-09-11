@@ -182,14 +182,19 @@ class _RapportViewState extends State<RapportView> {
                     return const Text("Aucun produit disponible.");
                   } else {
                     final List<VentesModel> articles = snapshot.data!;
-                    filteredArticles = articles;
-                    // articles.where((article) {
-                    //   // Comparer les dates en ignorant l'heure
-                    //   return DateFormat("dd MMM yyyy")
-                    //           .format(article.dateVente) ==
-                    //       DateFormat("dd MMM yyyy").format(selectedDate);
-                    // }).toList();
-                    // Calculer le bénéfice total
+
+                    // Filtrer les articles par la date sélectionnée
+                    filteredArticles = articles.where((article) {
+                      return article.dateVente.year == selectedDate.year &&
+                          article.dateVente.month == selectedDate.month &&
+                          article.dateVente.day == selectedDate.day;
+                    }).toList();
+
+                    // Vérifier s'il y a des articles filtrés
+                    if (filteredArticles.isEmpty) {
+                      return const Text(
+                          "Aucun article trouvé pour la date sélectionnée.");
+                    }
 
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,

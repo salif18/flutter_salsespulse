@@ -22,11 +22,11 @@ class _DepensesViewState extends State<DepensesView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   // Clé Key du formulaire
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  DateTime selectedDate = DateTime.now();
+  late DateTime selectedDate ;
   ServicesDepense api = ServicesDepense();
   final StreamController<List<DepensesModel>> _streamController =
       StreamController();
-
+  List<DepensesModel> filteredDepenses = [];
   final _montantController = TextEditingController();
   final _motifController = TextEditingController();
 
@@ -179,7 +179,7 @@ class _DepensesViewState extends State<DepensesView> {
                         ),
                         hideDefaultSuffixIcon: true,
                         mode: DateTimeFieldPickerMode.date,
-                        initialValue: DateTime.now(),
+                        initialValue: null,
                         onChanged: (DateTime? value) {
                           if (value != null) {
                             setState(() {
@@ -204,10 +204,17 @@ class _DepensesViewState extends State<DepensesView> {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Text("Aucun produit disponible.");
                     } else {
+                      final List<DepensesModel> depenses = snapshot.data!;
+                      // Filtrer les articles par la date sélectionnée
+                      filteredDepenses = depenses.where((article) {
+                        return article.date.year == selectedDate.year &&
+                            article.date.month == selectedDate.month &&
+                            article.date.day == selectedDate.day;
+                      }).toList();
                       return ListView.builder(
                         shrinkWrap: true, // Pour éviter un overflow
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data!.length,
+                        itemCount: selectedDate == null ? depenses.length:filteredDepenses.length,
                         itemBuilder: (BuildContext context, int index) {
                           DepensesModel depenses = snapshot.data![index];
                           return Container(

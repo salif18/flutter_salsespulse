@@ -309,6 +309,7 @@ class _StocksViewState extends State<StocksView> {
                   ],
                 ),
               ),
+              
               StreamBuilder<List<StocksModel>>(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {
