@@ -123,55 +123,53 @@ class _RapportViewState extends State<RapportView> {
         color: Colors.grey[100],
         onRefresh: _refresh,
         displacement: 50,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Image.asset(
-                    //   "assets/logos/logo3.jpg",
-                    //   width: 100,
-                    //   height: 100,
-                    // ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      constraints:
-                          const BoxConstraints(maxWidth: 250, minHeight: 30),
-                      child: DateTimeFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Ajouter une date',
-                          hintStyle: GoogleFonts.roboto(fontSize: 20),
-                          fillColor: Colors.grey[100],
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none,
+                    LayoutBuilder(builder: (context, constraints) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        constraints:
+                            const BoxConstraints(maxWidth: 250, minHeight: 30),
+                        child: DateTimeFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Ajouter une date',
+                            hintStyle: GoogleFonts.roboto(fontSize: 20),
+                            fillColor: Colors.grey[100],
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
+                            prefixIcon: const Icon(Icons.calendar_month_rounded,
+                                color: Color.fromARGB(255, 255, 136, 128),
+                                size: 28),
                           ),
-                          prefixIcon: const Icon(Icons.calendar_month_rounded,
-                              color: Color.fromARGB(255, 255, 136, 128),
-                              size: 28),
+                          hideDefaultSuffixIcon: true,
+                          mode: DateTimeFieldPickerMode.date,
+                          initialValue: null,
+                          onChanged: (DateTime? value) {
+                            if (value != null) {
+                              setState(() {
+                                selectedDate = value;
+                              });
+                            }
+                          },
                         ),
-                        hideDefaultSuffixIcon: true,
-                        mode: DateTimeFieldPickerMode.date,
-                        initialValue: null,
-                        onChanged: (DateTime? value) {
-                          if (value != null) {
-                            setState(() {
-                              selectedDate = value;
-                            });
-                          }
-                        },
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
               ),
-              StreamBuilder<List<VentesModel>>(
+            ),
+            SliverToBoxAdapter(
+              child: StreamBuilder<List<VentesModel>>(
                 stream: _streamController.stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -193,7 +191,6 @@ class _RapportViewState extends State<RapportView> {
                                 article.dateVente.day == selectedDate.day;
                           }).toList();
 
-                    // Vérifier s'il y a des articles filtrés
                     if (filteredArticles.isEmpty) {
                       return const Text(
                           "Aucun article trouvé pour la date sélectionnée.");
@@ -388,18 +385,19 @@ class _RapportViewState extends State<RapportView> {
                   }
                 },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: LayoutBuilder(builder: (context, constraints) {
+        return Container(
+          width: constraints.maxWidth,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           height: 150,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
                   width: 1, color: const Color.fromARGB(255, 207, 212, 233))),
-          width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -409,22 +407,27 @@ class _RapportViewState extends State<RapportView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Rapport du",
-                      style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Rapport du",
+                        style:
+                            GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                      ),
                     ),
-                    Text(DateFormat("dd MMM yyyy").format(selectedDate),
-                        style: GoogleFonts.roboto(
-                          fontSize: AppSizes.fontMedium,
-                        )),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                          DateFormat("dd MMM yyyy").format(selectedDate),
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium)),
+                    ),
                     IconButton(
-                        onPressed: () {
-                          _printReceipt(context, filteredArticles);
-                        },
-                        icon: const Icon(
-                          Icons.print,
-                          size: AppSizes.iconLarge,
-                        ))
+                      onPressed: () {
+                        _printReceipt(context, filteredArticles);
+                      },
+                      icon: const Icon(Icons.print, size: AppSizes.iconLarge),
+                    ),
                   ],
                 ),
               ),
@@ -434,46 +437,72 @@ class _RapportViewState extends State<RapportView> {
                   Row(
                     children: [
                       SizedBox(
-                          width: 200,
-                          child: Text("Nbr de produit vendue",
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium))),
-                      Text(nombreTotalDeProduit().toString(),
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              fontWeight: FontWeight.bold))
+                        width: constraints.maxWidth * 0.40,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Produit ",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium),
+                          ),
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(nombreTotalDeProduit().toString(),
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium)),
+                      ),
                     ],
                   ),
                   Row(
                     children: [
                       SizedBox(
-                          width: 200,
-                          child: Text("Total:",
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium))),
-                      Text("${sommeTotal().toString()} XOF",
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              fontWeight: FontWeight.bold))
+                        width: constraints.maxWidth * 0.40,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Total",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium),
+                          ),
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text("${sommeTotal().toString()} XOF",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium)),
+                      ),
                     ],
                   ),
                   Row(
                     children: [
                       SizedBox(
-                          width: 200,
-                          child: Text("Benefice",
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium))),
-                      Text("${beneficeTotal().toString()} XOF",
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium,
-                              fontWeight: FontWeight.bold))
+                        width: constraints.maxWidth * 0.40,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Benefices",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium),
+                          ),
+                        ),
+                      ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text("${beneficeTotal().toString()} XOF",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium)),
+                      ),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
-          )),
+          ),
+        );
+      }),
     );
   }
 
