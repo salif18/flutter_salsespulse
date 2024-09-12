@@ -65,6 +65,18 @@ class _ViewCustomScrollState extends State<ViewCustomScroll> {
               ),
             ),
           ),
+           SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  width: 100,
+                  height: 100,
+                  color: Color.fromARGB(255, 68, 145, 5),
+                );
+              },
+              childCount: 10,
+            ),
+          ),
         ],
       ),
     );
