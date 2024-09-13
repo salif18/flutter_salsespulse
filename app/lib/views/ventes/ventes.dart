@@ -100,272 +100,244 @@ class _VenteViewState extends State<VenteView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Liste des ventes",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
-      body: RefreshIndicator(
-        backgroundColor: Colors.transparent,
-        color: Colors.grey[100],
-        onRefresh: _refresh,
-        displacement: 50,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                color: const Color(0xff001c30),
-                height: 150,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Image.asset(
-                    //     "assets/logos/logo3.jpg",
-                    //     width: 100,
-                    //     height: 100,
-                    //   ),
-                    // ),
-                    IconButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const PopulaireView()));
-                    }, 
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xfff0f1f5),
+    appBar: AppBarWidget(
+      title: "Liste des ventes",
+      color: const Color(0xff001c30),
+      titleColore: Colors.white,
+      drawerkey: drawerKey,
+    ),
+    body: RefreshIndicator(
+      backgroundColor: Colors.transparent,
+      color: Colors.grey[100],
+      onRefresh: _refresh,
+      displacement: 50,
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              color: const Color(0xff001c30),
+              height: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PopulaireView()));
+                    },
                     color: Colors.orange,
                     tooltip: "Les plus achetés",
-                    icon: const Icon(Icons.workspace_premium, size:35)
-                    )
-                  ],
-                ),
+                    icon: const Icon(Icons.workspace_premium, size: 35),
+                  ),
+                ],
               ),
-              
-              StreamBuilder<List<VentesModel>>(
-                stream: _streamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text(
-                        "Erreur lors du chargement des produits : ${snapshot.error}");
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text("Aucun produit disponible.");
-                  } else {
-                    final List<VentesModel> articles = snapshot.data!;
-
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: DataTable(
-                          columnSpacing: 10,
-                          columns: [
-                            // DataColumn(
-                            //   label: Container(
-                            //     padding: const EdgeInsets.all(5),
-                            //     child: Text(
-                            //       "Photo",
-                            //       style: GoogleFonts.roboto(
-                            //         fontSize: AppSizes.fontMedium,
-                            //         fontWeight: FontWeight.bold,
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Name",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Categories",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Prix de vente",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Quantités",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Date",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Actions",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: articles.map((article) {
-                            return DataRow(
-                              cells: [
-                                // DataCell(
-                                //   Container(
-                                //     padding: const EdgeInsets.all(5),
-                                //     child: article.image.isEmpty
-                                //         ? Image.asset(
-                                //             "assets/images/defaultImg.png",
-                                //             width: 50,
-                                //             height: 50,
-                                //           )
-                                //         : Image.network(
-                                //             article.image,
-                                //             width: 50,
-                                //             height: 50,
-                                //           ),
-                                //   ),
-                                // ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.nom,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.categories,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      "${article.prixVente} XOF",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.qty.toString(),
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      DateFormat("dd MMM yyyy")
-                                          .format(article.dateVente),
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Annuler",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: AppSizes.fontSmall,
-                                              color: Colors.blue),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                              Icons.move_down_outlined,
-                                              color: Colors.blue),
-                                          onPressed: () {
-                                            _showAlertDelete(context, article);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+          StreamBuilder<List<VentesModel>>(
+            stream: _streamController.stream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              } else if (snapshot.hasError) {
+                return SliverFillRemaining(
+                  child: Center(
+                    child: Text("Erreur lors du chargement des produits : ${snapshot.error}"),
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: Text("Aucun produit disponible."),
+                  ),
+                );
+              } else {
+                final List<VentesModel> articles = snapshot.data!;
+
+                return SliverToBoxAdapter(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: DataTable(
+                        columnSpacing: 10,
+                        columns: [
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Name",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Categories",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Prix de vente",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Quantités",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Date",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Actions",
+                                style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        rows: articles.map((article) {
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    article.nom,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontSmall,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    article.categories,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontSmall,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "${article.prixVente} XOF",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontSmall,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    article.qty.toString(),
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontSmall,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    DateFormat("dd MMM yyyy")
+                                        .format(article.dateVente),
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontSmall,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Annuler",
+                                        style: GoogleFonts.roboto(
+                                            fontSize: AppSizes.fontSmall,
+                                            color: Colors.blue),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.move_down_outlined, color: Colors.blue),
+                                        onPressed: () {
+                                          _showAlertDelete(context, article);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Future<bool?> _showAlertDelete(BuildContext context, article) {
     return showDialog<bool>(

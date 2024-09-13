@@ -22,7 +22,7 @@ class _DepensesViewState extends State<DepensesView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   // Clé Key du formulaire
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  DateTime selectedDate = DateTime.now();
+  DateTime? selectedDate ;
   ServicesDepense api = ServicesDepense();
   final StreamController<List<DepensesModel>> _streamController =
       StreamController();
@@ -209,9 +209,9 @@ class _DepensesViewState extends State<DepensesView> {
                       filteredDepenses = selectedDate == null
                           ? depenses
                           : depenses.where((article) {
-                              return article.date.year == selectedDate.year &&
-                                  article.date.month == selectedDate.month &&
-                                  article.date.day == selectedDate.day;
+                              return article.date.year == selectedDate!.year &&
+                                  article.date.month == selectedDate!.month &&
+                                  article.date.day == selectedDate!.day;
                             }).toList();
                       return ListView.builder(
                         shrinkWrap: true, // Pour éviter un overflow

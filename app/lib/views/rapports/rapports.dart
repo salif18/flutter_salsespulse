@@ -26,7 +26,7 @@ class RapportView extends StatefulWidget {
 
 class _RapportViewState extends State<RapportView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now() ;
   ServicesVentes api = ServicesVentes();
   final StreamController<List<VentesModel>> _streamController =
       StreamController();
@@ -182,11 +182,11 @@ class _RapportViewState extends State<RapportView> {
                     final List<VentesModel> articles = snapshot.data!;
 
                     // Filtrer les articles par la date sélectionnée
+                     // Filtrer les articles par la date sélectionnée, sinon afficher tous les articles
                     filteredArticles = selectedDate == null
                         ? articles
                         : articles.where((article) {
-                            return article.dateVente.year ==
-                                    selectedDate.year &&
+                            return article.dateVente.year == selectedDate.year &&
                                 article.dateVente.month == selectedDate.month &&
                                 article.dateVente.day == selectedDate.day;
                           }).toList();

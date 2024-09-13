@@ -46,7 +46,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: const DecorationImage(
-                            image: AssetImage("assets/logos/salespulse.jpg"),
+                            image: AssetImage("assets/logos/logo2.jpg"),
                             fit: BoxFit.contain)),
                   ),
                   Padding(

@@ -255,24 +255,15 @@ class _StocksViewState extends State<StocksView> {
         color: Colors.grey[100],
         onRefresh: _refresh,
         displacement: 50,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Image.asset(
-                    //     "assets/images/f.jpg",
-                    //     width: 100,
-                    //     height: 100,
-                    //   ),
-                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
@@ -312,25 +303,34 @@ class _StocksViewState extends State<StocksView> {
                   ],
                 ),
               ),
-              StreamBuilder<List<StocksModel>>(
-                stream: _streamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text(
-                        "Erreur lors du chargement des produits : ${snapshot.error}");
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text("Aucun produit disponible.");
-                  } else {
-                    final articles = snapshot.data!;
-                    final filteredArticles = _categorieValue != null
-                        ? articles
-                            .where((article) =>
-                                article.categories == _categorieValue)
-                            .toList()
-                        : articles;
-                    return SingleChildScrollView(
+            ),
+            StreamBuilder<List<StocksModel>>(
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Text(
+                        "Erreur lors du chargement des produits : ${snapshot.error}"),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const SliverToBoxAdapter(
+                    child: Text("Aucun produit disponible."),
+                  );
+                } else {
+                  final articles = snapshot.data!;
+                  final filteredArticles = _categorieValue != null
+                      ? articles
+                          .where((article) =>
+                              article.categories == _categorieValue)
+                          .toList()
+                      : articles;
+
+                  return SliverToBoxAdapter(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -544,7 +544,6 @@ class _StocksViewState extends State<StocksView> {
                                                   style: GoogleFonts.roboto(
                                                       fontSize: 16),
                                                 ),
-                                                // backgroundColor: const Color.fromARGB(255, 255, 35, 19),
                                                 duration:
                                                     const Duration(seconds: 1),
                                                 backgroundColor:
@@ -592,12 +591,12 @@ class _StocksViewState extends State<StocksView> {
                           }).toList(),
                         ),
                       ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
       floatingActionButton: Column(

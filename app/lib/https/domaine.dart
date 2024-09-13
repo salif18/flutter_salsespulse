@@ -1,6 +1,6 @@
 class Domaine {
-  static const String domaineURI = "http://10.0.2.2:8080";
-  static const String urlImage = "http://10.0.2.2:8080";
+  static const String domaineURI = "http://10.0.2.2:8080/api";
+  static const String urlImage = "http://10.0.2.2:8080/api";
 }
 
 
@@ -13,8 +13,8 @@ class Domaine {
 
 
 // class Domaine {
-//   static const String domaineURI = "https://smeckdev-salespulse-server.vercel.app";
-//   static const String urlImage = "https://smeckdev-salespulse-server.vercel.app";
+//   static const String domaineURI = "https://smeckdev-salespulse-server.vercel.app/api";
+//   static const String urlImage = "https://smeckdev-salespulse-server.vercel.app/api";
 // }
 
 

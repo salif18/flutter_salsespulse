@@ -141,38 +141,41 @@ Future<void> _getProducts() async {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: searchValue.text.isEmpty
-              ? recentSearches.reversed.map((search) {
-                  return ListTile(
-                    trailing: IconButton(onPressed: (){
-                      _removeRecenteSearch(search);
-                    }, icon: Icon(Icons.highlight_remove_rounded, size:AppSizes.iconLarge, color:Colors.grey[400])),
-                    title: Row(
-                      children: [const Icon(Icons.history,size:AppSizes.iconLarge),
-                      const SizedBox(width: 10),
-                        Text(search,style:GoogleFonts.roboto(fontSize:AppSizes.fontMedium,fontWeight: FontWeight.normal)),
-                      ],
-                    ),
-                    onTap: () {
-                      searchValue.text = search;
-                      searchValue.selection = TextSelection.fromPosition(
-                        TextPosition(offset: searchValue.text.length),
-                      );
-                      _handleSearch(search);
-                    },
-                  );
-                }).toList()
-              : resultOfSearch.isEmpty
-                  ? [Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Text('Aucun résultat trouvé',style:GoogleFonts.roboto(fontSize:AppSizes.fontLarge,)),
-                  )]
-                  : resultOfSearch.map((item) {
-                      return ResultSearch(item: item);
-                    }).toList(),
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+          child: Column(
+            children: searchValue.text.isEmpty
+                ? recentSearches.reversed.map((search) {
+                    return ListTile(
+                      trailing: IconButton(onPressed: (){
+                        _removeRecenteSearch(search);
+                      }, icon: Icon(Icons.highlight_remove_rounded, size:AppSizes.iconLarge, color:Colors.grey[400])),
+                      title: Row(
+                        children: [const Icon(Icons.history,size:AppSizes.iconLarge),
+                        const SizedBox(width: 10),
+                          Text(search,style:GoogleFonts.roboto(fontSize:AppSizes.fontMedium,fontWeight: FontWeight.normal)),
+                        ],
+                      ),
+                      onTap: () {
+                        searchValue.text = search;
+                        searchValue.selection = TextSelection.fromPosition(
+                          TextPosition(offset: searchValue.text.length),
+                        );
+                        _handleSearch(search);
+                      },
+                    );
+                  }).toList()
+                : resultOfSearch.isEmpty
+                    ? [Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Text('Aucun résultat trouvé',style:GoogleFonts.roboto(fontSize:AppSizes.fontLarge,)),
+                    )]
+                    : resultOfSearch.map((item) {
+                        return ResultSearch(item: item);
+                      }).toList(),
+          ),
+        ),]
       ),
     );
   }
