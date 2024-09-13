@@ -82,7 +82,7 @@ class LineChartWidget extends StatelessWidget {
                     getTouchedSpotIndicator:
                         (LineChartBarData barData, List<int> indicators) {
                       return indicators.map((int index) {
-                        final spot = barData.spots[index];
+                        // final spot = barData.spots[index];
                         return TouchedSpotIndicatorData(
                           FlLine(color: Colors.transparent, strokeWidth: 0),
                           FlDotData(show: true),
@@ -93,16 +93,14 @@ class LineChartWidget extends StatelessWidget {
                       // tooltipBgColor: Colors.blueAccent,
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((touchedSpot) {
-                          final month = data[touchedSpot.spotIndex].month;
+                          // final month = data[touchedSpot.spotIndex].month;
                           final year = data[touchedSpot.spotIndex].year;
-                          final totalVentes = data[touchedSpot.spotIndex].totalVentes;
+                          // final totalVentes = data[touchedSpot.spotIndex].totalVentes;
                           final nombreVentes = data[touchedSpot.spotIndex].nombreVentes;
                           return LineTooltipItem(
-                            'Mois: $month\n'
                             'Année: $year\n'
-                            'Nombre de ventes: $nombreVentes\n'
-                            'Total: $totalVentes€',
-                            const TextStyle(color: Colors.white),
+                            'Nombre de produits: $nombreVentes\n',
+                            const TextStyle(color: Color.fromRGBO(255, 167, 51, 1)),
                           );
                         }).toList();
                       },
