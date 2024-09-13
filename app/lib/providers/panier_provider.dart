@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PanierProvider extends ChangeNotifier {
   List<CartItemModel> _cart = [];
   int _total = 0;
+  int _totalArticle = 0;
   bool _isLoading = true;
 
   PanierProvider() {
@@ -17,6 +18,7 @@ class PanierProvider extends ChangeNotifier {
 
   List<CartItemModel> get myCart => _cart;
   int get total => calculateTotal();
+  int get totalArticle => calculateNombreArticel();
   bool get isLoading => _isLoading;
 
   // Add item to cart
@@ -107,6 +109,19 @@ class PanierProvider extends ChangeNotifier {
     }
     return _total;
   }
+
+  // Calculate total price
+  int calculateNombreArticel() {
+    if (_cart.isNotEmpty) {
+      _total = _cart
+          .map((cartItem) => cartItem.qty)
+          .reduce((a, b) => a + b);
+    } else {
+      _total = 0;
+    }
+    return _total;
+  }
+
 
   // Save cart to local storage
   Future<void> saveCartToLocalStorage() async {

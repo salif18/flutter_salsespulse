@@ -126,6 +126,7 @@ class _PanierViewState extends State<PanierView> {
         builder: (context, panierProvider, child) {
           var cart = panierProvider.myCart;
           int total = panierProvider.total;
+          int totalArticle = panierProvider.totalArticle;
           return cart.isEmpty
               ? const SizedBox.shrink()
               : Container(
@@ -186,7 +187,7 @@ class _PanierViewState extends State<PanierView> {
                               ),
                             ),
                             Text(
-                              "${cart.length}",
+                              "${totalArticle}",
                               style: GoogleFonts.roboto(
                                 fontSize: AppSizes.fontSmall,
                                 fontWeight: FontWeight.bold,
