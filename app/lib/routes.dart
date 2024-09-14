@@ -19,22 +19,30 @@ class Routes extends StatefulWidget {
 class _RoutesState extends State<Routes> {
   int _currentIndex = 0;
 
+   Widget _viewNavigate(int index) {
+    switch (index) {
+      case 0:
+        return DashboardView();
+      case 1:
+        return StocksView();
+      case 2:
+        return VenteView();
+      case 3:
+        return RapportView();
+      case 4:
+        return DepensesView();
+      default:
+        return const Center(child: Text("Page not found")); // Par défaut, retourne un message ou une vue vide
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer<AuthProvider>(
       builder: (context, provider, child) {
         // Si le token est présent, afficher les vues de l'application
         if (provider.token.isNotEmpty) {
-          return IndexedStack(
-            index: _currentIndex,
-            children: const [
-              DashboardView(),
-              StocksView(),
-              VenteView(),
-              RapportView(),
-              DepensesView()
-            ],
-          );
+          return _viewNavigate(_currentIndex);
         } else {
           // Si pas de token, afficher la page de connexion
           return const LoginView();

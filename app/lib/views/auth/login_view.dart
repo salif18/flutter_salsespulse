@@ -8,6 +8,7 @@ import 'package:salespulse/routes.dart';
 import 'package:salespulse/services/auth_api.dart';
 import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/auth/registre_view.dart';
+import 'package:salespulse/views/auth/reset_password.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -171,7 +172,9 @@ class _LoginViewState extends State<LoginView> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResetToken()));
+                                },
                                 child: Text(
                                   "Mot de passe oublié ?",
                                   style: GoogleFonts.roboto(

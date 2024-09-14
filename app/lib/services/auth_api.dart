@@ -37,9 +37,8 @@ class ServicesAuth{
   
   }
 
- 
-  //fontion de modification de passeword
-  postUpdatePassword(data, userId) async {
+//fontion de modification de passeword
+  postUpdateUser(data,token, userId) async {
     var uri = "$domaineName/update_password/$userId";
     return await http.post(
       Uri.parse(uri),
@@ -48,13 +47,29 @@ class ServicesAuth{
         "Content-Type": "application/json; charset=UTF-8",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": "Bearer $token"
+      },
+    );
+  }
+ 
+  //fontion de modification de passeword
+  postUpdatePassword(data,token, userId) async {
+    var uri = "$domaineName/reset/update_password/$userId";
+    return await http.post(
+      Uri.parse(uri),
+      body: jsonEncode(data),
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Authorization": "Bearer $token"
       },
     );
   }
 
   //fontion de reinitialisation de password
   postResetPassword(data) async {
-    var uri = "$domaineName/reset_password";
+    var uri = "$domaineName/reset/reset_token";
     return await http.post(
       Uri.parse(uri),
       body: jsonEncode(data),
@@ -68,7 +83,7 @@ class ServicesAuth{
 
   //fontion de validation de mot de password reinitialiser
   postValidatePassword(data) async {
-    var uri = "$domaineName/validate_password";
+    var uri = "$domaineName/reset/reset_valid";
     return await http.post(
       Uri.parse(uri),
       body: jsonEncode(data),
@@ -81,24 +96,12 @@ class ServicesAuth{
   }
 
 
-   //suppression compte
-  deleteUserTokenUserId(token) async {
-    var uri = "$domaineName/delete";
-    return await http.post(Uri.parse(uri), headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-      "Accept": "*/*",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Authorization": "Bearer $token"
-    });
-  }
-
-
   //message en cas de succès!
   void showSnackBarSuccessPersonalized(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message,
           style: GoogleFonts.roboto(fontSize: 16,fontWeight: FontWeight.w400)),
-      backgroundColor: const Color.fromARGB(255, 109, 204, 112),
+      backgroundColor: Color.fromARGB(255, 255, 157, 11),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: "",
