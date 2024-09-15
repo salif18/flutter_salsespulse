@@ -111,6 +111,10 @@ class _DepensesViewState extends State<DepensesView> {
     }
   }
 
+   int _totalFilter(){ 
+     return filteredDepenses.isEmpty ? 0: filteredDepenses.map((article) => article.montants).reduce((a,b)=> a+b);
+   }
+
   @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -156,9 +160,9 @@ Widget build(BuildContext context) {
                                 color: Colors.white),
                           )),
                       Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(left:10 ),
                           child: Text(
-                            "3666666 XOF",
+                            "${_totalFilter()} XOF",
                             style: GoogleFonts.roboto(
                                 fontSize: AppSizes.fontMedium,
                                 fontWeight: FontWeight.bold,
