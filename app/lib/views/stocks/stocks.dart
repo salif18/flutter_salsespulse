@@ -1,6 +1,7 @@
 import 'dart:async'; // Pour StreamController
 import 'dart:convert';
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:date_field/date_field.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/models/categories_model.dart';
 import 'package:salespulse/models/stocks_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
@@ -243,13 +243,8 @@ class _StocksViewState extends State<StocksView> {
     void Function(StocksModel, int) addToCart = cartProvider.addToCart;
 
     return Scaffold(
+      key: drawerKey,
       backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Stocks",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,
         color: Colors.grey[100],
@@ -257,6 +252,18 @@ class _StocksViewState extends State<StocksView> {
         displacement: 50,
         child: CustomScrollView(
           slivers: [
+             SliverAppBar(
+                backgroundColor: const Color(0xff001c30),
+                expandedHeight: 100,
+                pinned: true,
+                floating: true,
+                leading: IconButton(onPressed: (){
+                  drawerKey.currentState!.openDrawer();
+                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                flexibleSpace: FlexibleSpaceBar(
+                  title: AutoSizeText("Stocks",minFontSize: 16,style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
+                ),
+              ),
             SliverToBoxAdapter(
               child: Container(
                 color: const Color(0xff001c30),
@@ -267,7 +274,7 @@ class _StocksViewState extends State<StocksView> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
-                        maxWidth: 200,
+                        maxWidth: 250,
                         minHeight: 30,
                       ),
                       child: DropdownButtonFormField<String>(
@@ -308,17 +315,19 @@ class _StocksViewState extends State<StocksView> {
               stream: _streamController.stream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
+                  return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                );
                 } else if (snapshot.hasError) {
-                  return SliverToBoxAdapter(
-                    child: Text(
-                        "Erreur lors du chargement des produits : ${snapshot.error}"),
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                          "Erreur lors du chargement des produits : ${snapshot.error}"),
+                    ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const SliverToBoxAdapter(
-                    child: Text("Aucun produit disponible."),
+                  return const SliverFillRemaining(
+                    child: Center(child: Text("Aucun produit disponible.")),
                   );
                 } else {
                   final articles = snapshot.data!;

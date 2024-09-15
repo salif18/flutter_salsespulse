@@ -5,7 +5,6 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/models/depenses_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/depense_api.dart';
@@ -112,184 +111,192 @@ class _DepensesViewState extends State<DepensesView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Les Depenses",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
-      body: RefreshIndicator(
-        backgroundColor: Colors.transparent,
-        color: Colors.grey[100],
-        onRefresh: _refresh,
-        displacement: 50,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                color: const Color(0xff001c30),
-                height: 150,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              "Total",
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )),
-                        Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              "3666666 XOF",
-                              style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      constraints:
-                          const BoxConstraints(maxWidth: 250, minHeight: 30),
-                      child: DateTimeFormField(
-                        decoration: InputDecoration(
-                          hintText: 'Ajouter une date',
-                          hintStyle: GoogleFonts.roboto(fontSize: 20),
-                          fillColor: Colors.grey[100],
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none,
-                          ),
-                          prefixIcon: const Icon(Icons.calendar_month_rounded,
-                              color: Color.fromARGB(255, 255, 136, 128),
-                              size: 28),
+Widget build(BuildContext context) {
+  return Scaffold(
+    key: drawerKey,
+    backgroundColor: const Color(0xfff0f1f5),
+    body: RefreshIndicator(
+      backgroundColor: Colors.transparent,
+      color: Colors.grey[100],
+      onRefresh: _refresh,
+      displacement: 50,
+      child: CustomScrollView(
+        slivers: [
+           SliverAppBar(
+                backgroundColor: const Color(0xff001c30),
+                expandedHeight: 100,
+                pinned: true,
+                floating: true,
+                leading: IconButton(onPressed: (){
+                  drawerKey.currentState!.openDrawer();
+                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text("Dépenses",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
+                ),
+              ),
+          SliverToBoxAdapter(
+            child: Container(
+              color: const Color(0xff001c30),
+              height: 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Total",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "3666666 XOF",
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    constraints: const BoxConstraints(maxWidth: 250, minHeight: 30),
+                    child: DateTimeFormField(
+                      decoration: InputDecoration(
+                        hintText: 'Ajouter une date',
+                        hintStyle: GoogleFonts.roboto(fontSize: 20),
+                        fillColor: Colors.grey[100],
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none,
                         ),
-                        hideDefaultSuffixIcon: true,
-                        mode: DateTimeFieldPickerMode.date,
-                        initialValue: null,
-                        onChanged: (DateTime? value) {
-                          if (value != null) {
-                            setState(() {
-                              selectedDate = value;
-                            });
-                          }
-                        },
+                        prefixIcon: const Icon(
+                            Icons.calendar_month_rounded,
+                            color: Color.fromARGB(255, 255, 136, 128),
+                            size: 28),
                       ),
+                      hideDefaultSuffixIcon: true,
+                      mode: DateTimeFieldPickerMode.date,
+                      initialValue: null,
+                      onChanged: (DateTime? value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedDate = value;
+                          });
+                        }
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                child: StreamBuilder<List<DepensesModel>>(
-                  stream: _streamController.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Text("Erreur : ${snapshot.error}");
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Text("Aucun produit disponible.");
-                    } else {
-                      final List<DepensesModel> depenses = snapshot.data!;
-                      // Filtrer les articles par la date sélectionnée
-                      filteredDepenses = selectedDate == null
-                          ? depenses
-                          : depenses.where((article) {
-                              return article.date.year == selectedDate!.year &&
-                                  article.date.month == selectedDate!.month &&
-                                  article.date.day == selectedDate!.day;
-                            }).toList();
-                      return ListView.builder(
-                        shrinkWrap: true, // Pour éviter un overflow
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: filteredDepenses.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          DepensesModel depenses = snapshot.data![index];
-                          return Container(
-                            height: 110,
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: const Border(
-                                bottom: BorderSide(
-                                    color: Color.fromARGB(255, 235, 235, 235)),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              depenses.motifs,
-                                              style: GoogleFonts.roboto(
-                                                fontSize: AppSizes.fontMedium,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            Text(
-                                              "${depenses.montants.toString()} XOF", // Conversion du montant en String
-                                              style: GoogleFonts.roboto(
-                                                fontSize: AppSizes.fontMedium,
-                                                color: Colors.grey[500],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: StreamBuilder<List<DepensesModel>>(
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text("Erreur : ${snapshot.error}");
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text("Aucun produit disponible.");
+                  } else {
+                    final List<DepensesModel> depenses = snapshot.data!;
+                    // Filtrer les articles par la date sélectionnée
+                    filteredDepenses = selectedDate == null
+                        ? depenses
+                        : depenses.where((article) {
+                            return article.date.year == selectedDate!.year &&
+                                article.date.month == selectedDate!.month &&
+                                article.date.day == selectedDate!.day;
+                          }).toList();
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: filteredDepenses.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        DepensesModel depense = filteredDepenses[index];
+                        return Container(
+                          height: 110,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            border: const Border(
+                              bottom: BorderSide(
+                                  color: Color.fromARGB(255, 235, 235, 235)),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            depense.motifs,
+                                            style: GoogleFonts.roboto(
+                                              fontSize: AppSizes.fontMedium,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${depense.montants.toString()} XOF", 
+                                            style: GoogleFonts.roboto(
+                                              fontSize: AppSizes.fontMedium,
+                                              color: Colors.grey[500],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            _addDepenses(context);
-          },
-          child: const Icon(
-            Icons.add,
-            size: AppSizes.iconLarge,
-          )),
-    );
-  }
+    ),
+    floatingActionButton: ElevatedButton(
+      onPressed: () {
+        _addDepenses(context);
+      },
+      child: const Icon(
+        Icons.add,
+        size: AppSizes.iconLarge,
+      ),
+    ),
+  );
+}
+
 
   void _addDepenses(BuildContext context) {
     showModalBottomSheet(

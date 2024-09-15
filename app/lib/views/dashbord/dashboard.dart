@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/components/bar_chart.dart';
 import 'package:salespulse/components/drawer.dart';
 import 'package:salespulse/components/line_chart.dart';
@@ -199,11 +198,6 @@ class _DashboardViewState extends State<DashboardView> {
         key: drawerKey,
         drawer: const DrawerWidget(),
         backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-        appBar: AppBarWidget(
-            title: "Tableau de bord",
-            color: const Color(0xff001c30),
-            titleColore: Colors.white,
-            drawerkey: drawerKey),
         body: RefreshIndicator(
           backgroundColor: Colors.transparent,
           color: Colors.grey[100],
@@ -211,6 +205,18 @@ class _DashboardViewState extends State<DashboardView> {
           displacement: 50,
           child: CustomScrollView(
             slivers: [
+              SliverAppBar(
+                backgroundColor: const Color(0xff001c30),
+                expandedHeight: 100,
+                pinned: true,
+                floating: true,
+                leading: IconButton(onPressed: (){
+                  drawerKey.currentState!.openDrawer();
+                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text("Tableau de bord",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Container(
                     padding: const EdgeInsets.all(10),

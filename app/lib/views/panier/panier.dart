@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/providers/panier_provider.dart';
 import 'package:salespulse/services/panier_api.dart';
@@ -78,11 +77,6 @@ class _PanierViewState extends State<PanierView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-          title: "Panier",
-          color: Colors.white,
-          titleColore: Colors.black,
-          drawerkey: drawerKey),
       body: SafeArea(
         child: Consumer<PanierProvider>(
           builder: (context, panierProvider, child) {

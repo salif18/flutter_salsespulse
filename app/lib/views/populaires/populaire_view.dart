@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/models/stats_categorie_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/stats_api.dart';
@@ -80,12 +79,6 @@ class _PopulaireViewState extends State<PopulaireView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Les Plus vendues",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,
         color: Colors.grey[100],

@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/models/ventes_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/vente_api.dart';
@@ -111,13 +110,8 @@ class _RapportViewState extends State<RapportView> {
     }
 
     return Scaffold(
+      key: drawerKey,
       backgroundColor: const Color(0xfff0f1f5),
-      appBar: AppBarWidget(
-        title: "Les rapports",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,
         color: Colors.grey[100],
@@ -125,6 +119,18 @@ class _RapportViewState extends State<RapportView> {
         displacement: 50,
         child: CustomScrollView(
           slivers: [
+             SliverAppBar(
+                backgroundColor: const Color(0xff001c30),
+                expandedHeight: 100,
+                pinned: true,
+                floating: true,
+                leading: IconButton(onPressed: (){
+                  drawerKey.currentState!.openDrawer();
+                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text("Rapports",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
+                ),
+              ),
             SliverToBoxAdapter(
               child: Container(
                 color: const Color(0xff001c30),

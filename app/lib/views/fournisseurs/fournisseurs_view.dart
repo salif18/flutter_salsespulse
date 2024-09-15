@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:salespulse/components/app_bar.dart';
 import 'package:salespulse/models/fournisseurs_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/fournisseur_api.dart';
@@ -132,12 +131,6 @@ class _FournisseurViewState extends State<FournisseurView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBarWidget(
-        title: "Les Fournisseurs",
-        color: const Color(0xff001c30),
-        titleColore: Colors.white,
-        drawerkey: drawerKey,
-      ),
       body: Container(
         padding: const EdgeInsets.all(15),
         child: StreamBuilder<List<FournisseurModel>>(
