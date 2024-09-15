@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:date_field/date_field.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ import 'package:salespulse/services/stocks_api.dart';
 import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/categories/categories_view.dart';
 import 'package:salespulse/views/fournisseurs/fournisseurs_view.dart';
+import 'package:salespulse/views/panier/panier.dart';
 import 'package:salespulse/views/search/search_view.dart';
 
 class StocksView extends StatefulWidget {
@@ -260,6 +262,53 @@ class _StocksViewState extends State<StocksView> {
                 leading: IconButton(onPressed: (){
                   drawerKey.currentState!.openDrawer();
                 }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                 actions: [
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PanierView(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  FontAwesomeIcons.cartShopping,
+                  size: AppSizes.iconLarge,
+                  color: Colors.white,
+                ),
+              ),
+              Consumer<PanierProvider>(
+                builder: (context, provider, child) {
+                  return FutureBuilder(
+                      future: provider.loadCartFromLocalStorage(),
+                      builder: (context, snaptshot) {
+                        if (provider.myCart.isNotEmpty) {
+                          return Positioned(
+                            left: 30,
+                            bottom: 25,
+                            child: Badge.count(
+                              count: provider.myCart.length,
+                              backgroundColor: Colors.amber,
+                              largeSize: 40 / 2,
+                              textStyle: GoogleFonts.roboto(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      });
+                },
+              ),
+            ],),
+            const SizedBox(width: 20)
+            ],
                 flexibleSpace: FlexibleSpaceBar(
                   title: AutoSizeText("Stocks",minFontSize: 16,style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
                 ),
