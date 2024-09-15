@@ -40,7 +40,13 @@ class _SearchPageState extends State<SearchPage> {
           resultOfSearch = articles
               .where((item) => item.nom
                   .toLowerCase()
-                  .contains(searchValue.text.toLowerCase()))
+                  .contains(searchValue.text.toLowerCase()) ||
+                  item.categories
+                  .toLowerCase()
+                  .contains(searchValue.text.toLowerCase()) ||
+                  item.stocks == searchValue.text ||
+                  item.prixVente == searchValue.text 
+                )
               .toList();
         }
       });

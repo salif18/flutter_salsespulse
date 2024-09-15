@@ -484,6 +484,7 @@ class _StocksViewState extends State<StocksView> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
+                       
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(255, 235, 235, 235),
@@ -494,6 +495,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -510,6 +512,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   constraints: BoxConstraints(
                                     maxWidth: MediaQuery.of(context).size.width,
@@ -529,6 +532,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -545,6 +549,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -561,6 +566,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -577,6 +583,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -593,6 +600,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -609,6 +617,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
+                                   height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
