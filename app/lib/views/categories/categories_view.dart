@@ -101,7 +101,8 @@ class _CategoriesViewState extends State<CategoriesView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const CategoriesView()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CategoriesView()));
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
@@ -115,106 +116,148 @@ class _CategoriesViewState extends State<CategoriesView> {
     }
   }
 
- @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Colors.white,
-    body: CustomScrollView(slivers: [
-      SliverAppBar(
-        backgroundColor: const Color(0xff001c30),
-        expandedHeight: 80,
-        pinned: true,
-        floating: true,
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back_ios_new_outlined,
-                color: Colors.white, size: AppSizes.iconLarge)),
-        flexibleSpace: FlexibleSpaceBar(
-          title: Text(
-            "Liste des catégories",
-            style: GoogleFonts.roboto(
-                fontSize: AppSizes.fontMedium, color: Colors.white),
+  //rafraichire la page en actualisanst la requete
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {
+      // Vérifier si le widget est monté avant d'appeler setState()
+      setState(() {
+        _getCategories(); // Rafraîchir les produits
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          backgroundColor: const Color(0xff001c30),
+          expandedHeight: 80,
+          pinned: true,
+          floating: true,
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios_new_outlined,
+                  color: Colors.white, size: AppSizes.iconLarge)),
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
+              "Liste des catégories",
+              style: GoogleFonts.roboto(
+                  fontSize: AppSizes.fontMedium, color: Colors.white),
+            ),
           ),
         ),
-      ),
-      StreamBuilder<List<CategoriesModel>>(
-        stream: _listCategories.stream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SliverToBoxAdapter(
-              child: const Center(child: CircularProgressIndicator()),
-            );
-          } else if (snapshot.hasError) {
-            return SliverToBoxAdapter(
-              child: const Center(child: Text("Error")),
-            );
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return SliverToBoxAdapter(
-              child: const Center(
-                child: Text("Pas de données disponibles"),
-              ),
-            );
-          } else {
-            return SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  CategoriesModel categorie = snapshot.data![index];
-                  return Dismissible(
-                    key: Key(categorie.id.toString()),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      _removeCategories(categorie.id);
-                    },
-                    confirmDismiss: (direction) async {
-                      return await showRemoveCategorie(context);
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Icon(Icons.delete_outline,
-                              color: Colors.white, size: AppSizes.iconLarge),
-                          SizedBox(width: 50),
-                        ],
-                      ),
-                    ),
+        StreamBuilder<List<CategoriesModel>>(
+          stream: _listCategories.stream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SliverToBoxAdapter(
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            } else if (snapshot.hasError) {
+              return SliverToBoxAdapter(
+                child: Center(
                     child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 235, 235, 235),
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: Color.fromARGB(255, 255, 255, 255)))),
-                      child: ListTile(
-                        title: Text(
-                          categorie.name,
-                          style: GoogleFonts.roboto(
-                              fontSize: AppSizes.fontMedium),
+                  padding: const EdgeInsets.all(8),
+                  height: 120,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            child: Text(
+                              "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium),
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      IconButton(
+                          onPressed: () {
+                            _refresh();
+                          },
+                          icon: Icon(Icons.refresh_outlined,
+                              size: AppSizes.iconLarge))
+                    ],
+                  ),
+                )),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return SliverToBoxAdapter(
+                child: const Center(
+                  child: Text("Pas de données disponibles"),
+                ),
+              );
+            } else {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    CategoriesModel categorie = snapshot.data![index];
+                    return Dismissible(
+                      key: Key(categorie.id.toString()),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        _removeCategories(categorie.id);
+                      },
+                      confirmDismiss: (direction) async {
+                        return await showRemoveCategorie(context);
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(Icons.delete_outline,
+                                color: Colors.white, size: AppSizes.iconLarge),
+                            SizedBox(width: 50),
+                          ],
                         ),
                       ),
-                    ),
-                  );
-                },
-                childCount: snapshot.data!.length,
-              ),
-            );
-          }
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 235, 235, 235),
+                            border: Border(
+                                bottom: BorderSide(
+                                    color:
+                                        Color.fromARGB(255, 255, 255, 255)))),
+                        child: ListTile(
+                          title: Text(
+                            categorie.name,
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: snapshot.data!.length,
+                ),
+              );
+            }
+          },
+        ),
+      ]),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+        onPressed: () {
+          _addCateShow(context);
         },
+        child: const Icon(
+          Icons.add,
+          size: AppSizes.iconLarge,
+          color: Colors.white,
+        ),
       ),
-    ]),
-    floatingActionButton: FloatingActionButton(
-      backgroundColor: Color.fromARGB(255, 255, 136, 0),
-      onPressed: () {
-        _addCateShow(context);
-      },
-      child: const Icon(
-        Icons.add,
-        size: AppSizes.iconLarge,
-        color: Colors.white,
-      ),
-    ),
-  );
-}
+    );
+  }
 
 //FENETRE POUR AJOUTER CATEGORIE
   void _addCateShow(BuildContext context) {

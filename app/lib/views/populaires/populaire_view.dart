@@ -17,13 +17,11 @@ class PopulaireView extends StatefulWidget {
 }
 
 class _PopulaireViewState extends State<PopulaireView> {
-
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   DateTime selectedDate = DateTime.now();
   ServicesStats api = ServicesStats();
   final StreamController<List<ProduitBestVendu>> _streamController =
       StreamController();
-
 
   @override
   void initState() {
@@ -75,6 +73,7 @@ class _PopulaireViewState extends State<PopulaireView> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +84,6 @@ class _PopulaireViewState extends State<PopulaireView> {
         onRefresh: _refresh,
         displacement: 50,
         child: CustomScrollView(
-        
           slivers: [
             SliverAppBar(
               backgroundColor: const Color(0xff001c30),
@@ -93,30 +91,65 @@ class _PopulaireViewState extends State<PopulaireView> {
               pinned: true,
               floating: true,
               centerTitle: true,
-               leading: IconButton(
+              leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   icon: Icon(Icons.arrow_back_ios_new,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Les plus achetés", style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color: Colors.white),),
+                title: Text(
+                  "Les plus achetés",
+                  style: GoogleFonts.roboto(
+                      fontSize: AppSizes.fontLarge, color: Colors.white),
+                ),
               ),
             ),
             SliverToBoxAdapter(
-            child:Center(
-              child: StreamBuilder<List<ProduitBestVendu>>(
+              child: Center(
+                child: StreamBuilder<List<ProduitBestVendu>>(
                   stream: _streamController.stream,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
-                      return Text("Erreur : ${snapshot.error}");
+                      return Center(
+                          child: Container(
+                        padding: const EdgeInsets.all(8),
+                        height: 120,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  child: Text(
+                                    "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium),
+                                  )),
+                            ),
+                            const SizedBox(width: 40),
+                            IconButton(
+                                onPressed: () {
+                                  _refresh();
+                                },
+                                icon: Icon(Icons.refresh_outlined,
+                                    size: AppSizes.iconLarge))
+                          ],
+                        ),
+                      ));
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Text("Aucun produit disponible.");
                     } else {
                       final List<ProduitBestVendu> articles = snapshot.data!;
-              
+
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Container(
@@ -166,8 +199,6 @@ class _PopulaireViewState extends State<PopulaireView> {
                               ),
                             ],
                             rows: articles.map((article) {
-                              
-              
                               return DataRow(
                                 cells: [
                                   DataCell(
@@ -203,7 +234,6 @@ class _PopulaireViewState extends State<PopulaireView> {
                                       ),
                                     ),
                                   ),
-                                 
                                 ],
                               );
                             }).toList(),
@@ -213,11 +243,11 @@ class _PopulaireViewState extends State<PopulaireView> {
                     }
                   },
                 ),
-            ),
-        )],
-          ),
-          
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 }

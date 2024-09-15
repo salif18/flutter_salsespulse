@@ -99,92 +99,132 @@ class _VenteViewState extends State<VenteView> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    key: drawerKey,
-    backgroundColor: const Color(0xfff0f1f5),
-    body: RefreshIndicator(
-      backgroundColor: Colors.transparent,
-      color: Colors.grey[100],
-      onRefresh: _refresh,
-      displacement: 50,
-      child: CustomScrollView(
-        slivers: [
-           SliverAppBar(
-                backgroundColor: const Color(0xff001c30),
-                expandedHeight: 100,
-                pinned: true,
-                floating: true,
-                leading: IconButton(onPressed: (){
-                  drawerKey.currentState!.openDrawer();
-                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Ventes",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
-                ),
-              ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: const Color(0xff001c30),
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-        
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const PopulaireView()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                    ),
-                    label: Text("Les plus achetés", style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),),
-                    icon: const Icon(Icons.workspace_premium,color:Color.fromARGB(255, 255, 255, 255), size: 30),
-                  ),
-                   const SizedBox(width: 20,)
-                ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: drawerKey,
+      backgroundColor: const Color(0xfff0f1f5),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              leading: IconButton(
+                  onPressed: () {
+                    drawerKey.currentState!.openDrawer();
+                  },
+                  icon: Icon(Icons.sort,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text("Ventes",
+                    style: GoogleFonts.roboto(
+                        fontSize: AppSizes.fontLarge, color: Colors.white)),
               ),
             ),
-          ),
-          StreamBuilder<List<VentesModel>>(
-            stream: _streamController.stream,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
-                return SliverFillRemaining(
-                  child: Center(
-                    child: Text("Erreur de connexion verifier votre réseau: ${snapshot.error}"),
-                  ),
-                );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: Text("Aucun produit disponible."),
-                  ),
-                );
-              } else {
-                final List<VentesModel> articles = snapshot.data!;
-
-                return SliverToBoxAdapter(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 235, 235, 235),
+            SliverToBoxAdapter(
+              child: Container(
+                color: const Color(0xff001c30),
+                height: 150,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PopulaireView()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
                       ),
-                      child: DataTable(
-                        columnSpacing: 1,
-                        columns: [
+                      label: Text(
+                        "Les plus achetés",
+                        style: GoogleFonts.roboto(
+                            fontSize: AppSizes.fontMedium, color: Colors.white),
+                      ),
+                      icon: const Icon(Icons.workspace_premium,
+                          color: Color.fromARGB(255, 255, 255, 255), size: 30),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            StreamBuilder<List<VentesModel>>(
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return SliverFillRemaining(
+                      child: Center(
+                          child: Container(
+                    padding: const EdgeInsets.all(8),
+                    height: 120,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              child: Text(
+                                "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium),
+                              )),
+                        ),
+                        const SizedBox(width: 40),
+                        IconButton(
+                            onPressed: () {
+                              _refresh();
+                            },
+                            icon: Icon(Icons.refresh_outlined,
+                                size: AppSizes.iconLarge))
+                      ],
+                    ),
+                  )));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text("Aucun produit disponible."),
+                    ),
+                  );
+                } else {
+                  final List<VentesModel> articles = snapshot.data!;
+
+                  return SliverToBoxAdapter(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromARGB(255, 235, 235, 235),
+                        ),
+                        child: DataTable(
+                          columnSpacing: 1,
+                          columns: [
                             DataColumn(
                               label: Expanded(
                                 child: Container(
                                   color: Colors.orange,
                                   constraints: BoxConstraints(
                                     maxWidth: MediaQuery.of(context).size.width,
-                                  
                                   ),
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -192,7 +232,7 @@ Widget build(BuildContext context) {
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -201,31 +241,30 @@ Widget build(BuildContext context) {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Categories",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                           
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Prix de vente",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -234,14 +273,14 @@ Widget build(BuildContext context) {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Quantités",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -250,14 +289,14 @@ Widget build(BuildContext context) {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Date",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -266,116 +305,117 @@ Widget build(BuildContext context) {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Actions",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                        ],
-                        rows: articles.map((article) {
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.nom,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.categories,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    "${article.prixVente} XOF",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    article.qty.toString(),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    DateFormat("dd MMM yyyy")
-                                        .format(article.dateVente),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: AppSizes.fontSmall,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              DataCell(
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Annuler",
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontSmall,
-                                            color: Colors.blue),
+                          ],
+                          rows: articles.map((article) {
+                            return DataRow(
+                              cells: [
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.nom,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
                                       ),
-                                      IconButton(
-                                        icon: const Icon(Icons.move_down_outlined, color: Colors.blue),
-                                        onPressed: () {
-                                          _showAlertDelete(context, article);
-                                        },
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.categories,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      "${article.prixVente} XOF",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      article.qty.toString(),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      DateFormat("dd MMM yyyy")
+                                          .format(article.dateVente),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontSmall,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Annuler",
+                                          style: GoogleFonts.roboto(
+                                              fontSize: AppSizes.fontSmall,
+                                              color: Colors.blue),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.move_down_outlined,
+                                              color: Colors.blue),
+                                          onPressed: () {
+                                            _showAlertDelete(context, article);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Future<bool?> _showAlertDelete(BuildContext context, article) {
     return showDialog<bool>(

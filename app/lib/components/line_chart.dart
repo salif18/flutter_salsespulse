@@ -95,11 +95,12 @@ class LineChartWidget extends StatelessWidget {
                         return touchedSpots.map((touchedSpot) {
                           // final month = data[touchedSpot.spotIndex].month;
                           final year = data[touchedSpot.spotIndex].year;
-                          // final totalVentes = data[touchedSpot.spotIndex].totalVentes;
+                          final totalVentes = data[touchedSpot.spotIndex].totalVentes;
                           final nombreVentes = data[touchedSpot.spotIndex].nombreVentes;
                           return LineTooltipItem(
                             'Année: $year\n'
-                            'Nombre de produits: $nombreVentes\n',
+                            'Nombre de produits: $nombreVentes\n'
+                            'Total : $totalVentes XOF',
                             const TextStyle(color: Color.fromRGBO(255, 167, 51, 1)),
                           );
                         }).toList();

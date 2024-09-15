@@ -161,8 +161,7 @@ class _RapportViewState extends State<RapportView> {
                               borderSide: BorderSide.none,
                             ),
                             prefixIcon: const Icon(Icons.calendar_month_rounded,
-                                color: Colors.white,
-                                size: 28),
+                                color: Colors.white, size: 28),
                           ),
                           hideDefaultSuffixIcon: true,
                           mode: DateTimeFieldPickerMode.date,
@@ -190,7 +189,37 @@ class _RapportViewState extends State<RapportView> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Text("Erreur de connexion verifier votre réseau : ${snapshot.error}");
+                    return Center(
+                        child: Container(
+                      padding: const EdgeInsets.all(8),
+                      height: 120,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(
+                                  "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium),
+                                )),
+                          ),
+                          const SizedBox(width: 40),
+                          IconButton(
+                              onPressed: () {
+                                _refresh();
+                              },
+                              icon: Icon(Icons.refresh_outlined,
+                                  size: AppSizes.iconLarge))
+                        ],
+                      ),
+                    ));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Text("Aucun produit disponible.");
                   } else {
@@ -221,7 +250,6 @@ class _RapportViewState extends State<RapportView> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(255, 235, 235, 235),
@@ -229,14 +257,12 @@ class _RapportViewState extends State<RapportView> {
                         child: DataTable(
                           columnSpacing: 1,
                           columns: [
-                             
                             DataColumn(
                               label: Expanded(
                                 child: Container(
                                   color: Colors.orange,
                                   constraints: BoxConstraints(
                                     maxWidth: MediaQuery.of(context).size.width,
-                                  
                                   ),
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -244,7 +270,7 @@ class _RapportViewState extends State<RapportView> {
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -253,14 +279,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Categories",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -269,14 +295,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Prix d'achat",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -285,14 +311,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Prix de vente",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -301,14 +327,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Quantités",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -317,14 +343,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Somme",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -333,14 +359,14 @@ class _RapportViewState extends State<RapportView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Benefices",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

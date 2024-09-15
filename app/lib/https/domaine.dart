@@ -6,8 +6,8 @@ class Domaine {
 
 
 // class Domaine {
-//   static const String domaineURI = "https://b188-2001-42c0-82a9-fb00-2d5e-72ee-3819-81c.ngrok-free.app";
-//   static const String urlImage = "https://b188-2001-42c0-82a9-fb00-2d5e-72ee-3819-81c.ngrok-free.app";
+//   static const String domaineURI = "https://4a44-2001-42c0-8247-800-75ac-e117-d311-9b44.ngrok-free.app/api";
+  
 // }
 
 

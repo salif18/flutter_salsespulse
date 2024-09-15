@@ -128,6 +128,13 @@ class _FournisseurViewState extends State<FournisseurView> {
     }
   }
 
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      _getfournisseurs();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,9 +169,38 @@ class _FournisseurViewState extends State<FournisseurView> {
                 return const SliverToBoxAdapter(
                     child: Center(child: CircularProgressIndicator()));
               } else if (snapshot.hasError) {
-                return const SliverToBoxAdapter(
+                return SliverToBoxAdapter(
                     child: Center(
-                        child: Text("Erreur de chargement des données")));
+                        child: Container(
+                  padding: const EdgeInsets.all(8),
+                  height: 120,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            child: Text(
+                              "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium),
+                            )),
+                      ),
+                      const SizedBox(width: 40),
+                      IconButton(
+                          onPressed: () {
+                            _refresh();
+                          },
+                          icon: Icon(Icons.refresh_outlined,
+                              size: AppSizes.iconLarge))
+                    ],
+                  ),
+                )));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const SliverToBoxAdapter(
                     child: Center(child: Text("Pas de données disponibles")));

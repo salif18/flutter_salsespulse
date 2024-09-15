@@ -272,7 +272,8 @@ class _StocksViewState extends State<StocksView> {
                       _addStokcs(context);
                     },
                     icon: const Icon(Icons.add,
-                        color:Color.fromARGB(255, 255, 136, 0), size: AppSizes.iconLarge)),
+                        color: Color.fromARGB(255, 255, 136, 0),
+                        size: AppSizes.iconLarge)),
                 IconButton(
                   tooltip: "Categories",
                   onPressed: () {
@@ -281,8 +282,11 @@ class _StocksViewState extends State<StocksView> {
                         MaterialPageRoute(
                             builder: (context) => const CategoriesView()));
                   },
-                  icon: const Icon(Icons.category,
-                      size: AppSizes.iconLarge, color: Color.fromARGB(255, 255, 136, 0),),
+                  icon: const Icon(
+                    Icons.category,
+                    size: AppSizes.iconLarge,
+                    color: Color.fromARGB(255, 255, 136, 0),
+                  ),
                 ),
                 IconButton(
                   tooltip: "Fournisseurs",
@@ -293,7 +297,8 @@ class _StocksViewState extends State<StocksView> {
                             builder: (context) => const FournisseurView()));
                   },
                   icon: const Icon(Icons.airport_shuttle,
-                      color: Color.fromARGB(255, 255, 136, 0), size: AppSizes.iconLarge),
+                      color: Color.fromARGB(255, 255, 136, 0),
+                      size: AppSizes.iconLarge),
                 ),
                 Stack(
                   children: [
@@ -398,13 +403,16 @@ class _StocksViewState extends State<StocksView> {
                           }
                           return null;
                         },
-                         icon: const Icon(
-    Icons.arrow_drop_down, // Icône de flèche
-    color: Color.fromARGB(255, 255, 255, 255),    // Couleur de l'icône
-  ),
+                        icon: const Icon(
+                          Icons.arrow_drop_down, // Icône de flèche
+                          color: Color.fromARGB(
+                              255, 255, 255, 255), // Couleur de l'icône
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     IconButton(
                         onPressed: () {
                           Navigator.push(
@@ -428,11 +436,37 @@ class _StocksViewState extends State<StocksView> {
                   );
                 } else if (snapshot.hasError) {
                   return SliverFillRemaining(
-                    child: Center(
-                      child: Text(
-                          "Erreur de connexion verifier votre réseau : ${snapshot.error}"),
+                      child: Center(
+                          child: Container(
+                    padding: const EdgeInsets.all(8),
+                    height: 120,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              child: Text(
+                                "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontMedium),
+                              )),
+                        ),
+                        const SizedBox(width: 40),
+                        IconButton(
+                            onPressed: () {
+                              _refresh();
+                            },
+                            icon: Icon(Icons.refresh_outlined,
+                                size: AppSizes.iconLarge))
+                      ],
                     ),
-                  );
+                  )));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const SliverFillRemaining(
                     child: Center(child: Text("Aucun produit disponible.")),
@@ -460,14 +494,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Photo",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -479,7 +513,6 @@ class _StocksViewState extends State<StocksView> {
                                   color: Colors.orange,
                                   constraints: BoxConstraints(
                                     maxWidth: MediaQuery.of(context).size.width,
-                                  
                                   ),
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -487,7 +520,7 @@ class _StocksViewState extends State<StocksView> {
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -496,14 +529,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Categories",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -512,14 +545,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Prix d'achat",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -528,14 +561,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Prix de vente",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -544,14 +577,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Quantités",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -560,14 +593,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Date",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -576,14 +609,14 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   color: Colors.orange,
+                                  color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
                                     "Actions",
                                     style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium,
                                       fontWeight: FontWeight.bold,
-                                      color:Colors.white,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

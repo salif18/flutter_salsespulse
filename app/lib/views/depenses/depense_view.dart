@@ -22,7 +22,7 @@ class _DepensesViewState extends State<DepensesView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
   // Clé Key du formulaire
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  DateTime? selectedDate ;
+  DateTime? selectedDate;
   ServicesDepense api = ServicesDepense();
   final StreamController<List<DepensesModel>> _streamController =
       StreamController();
@@ -100,7 +100,8 @@ class _DepensesViewState extends State<DepensesView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const DepensesView()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const DepensesView()));
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
@@ -112,222 +113,268 @@ class _DepensesViewState extends State<DepensesView> {
     }
   }
 
-   int _totalFilter(){ 
-     return filteredDepenses.isEmpty ? 0: filteredDepenses.map((article) => article.montants).reduce((a,b)=> a+b);
-   }
+  int _totalFilter() {
+    return filteredDepenses.isEmpty
+        ? 0
+        : filteredDepenses
+            .map((article) => article.montants)
+            .reduce((a, b) => a + b);
+  }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    key: drawerKey,
-    backgroundColor: const Color(0xfff0f1f5),
-    body: RefreshIndicator(
-      backgroundColor: Colors.transparent,
-      color: Colors.grey[100],
-      onRefresh: _refresh,
-      displacement: 50,
-      child: CustomScrollView(
-        slivers: [
-           SliverAppBar(
-                backgroundColor: const Color(0xff001c30),
-                expandedHeight: 100,
-                pinned: true,
-                floating: true,
-                leading: IconButton(onPressed: (){
-                  drawerKey.currentState!.openDrawer();
-                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Dépenses",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: drawerKey,
+      backgroundColor: const Color(0xfff0f1f5),
+      body: RefreshIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.grey[100],
+        onRefresh: _refresh,
+        displacement: 50,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              leading: IconButton(
+                  onPressed: () {
+                    drawerKey.currentState!.openDrawer();
+                  },
+                  icon: Icon(Icons.sort,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text("Dépenses",
+                    style: GoogleFonts.roboto(
+                        fontSize: AppSizes.fontLarge, color: Colors.white)),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                color: const Color(0xff001c30),
+                height: 150,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Total",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              "${_totalFilter()} XOF",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      constraints:
+                          const BoxConstraints(maxWidth: 250, minHeight: 20),
+                      child: DateTimeFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Choisir pour une date',
+                          hintStyle: GoogleFonts.roboto(
+                              fontSize: 14, color: Colors.white),
+                          fillColor: Color.fromARGB(255, 255, 136, 0),
+                          // Color.fromARGB(255, 82, 119, 175),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(Icons.calendar_month_rounded,
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              size: 28),
+                        ),
+                        hideDefaultSuffixIcon: true,
+                        mode: DateTimeFieldPickerMode.date,
+                        initialValue: null,
+                        onChanged: (DateTime? value) {
+                          if (value != null) {
+                            setState(() {
+                              selectedDate = value;
+                            });
+                          }
+                        },
+                        style: GoogleFonts.roboto(
+                            fontSize: 12, color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-          SliverToBoxAdapter(
-            child: Container(
-              color: const Color(0xff001c30),
-              height: 150,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            "Total",
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )),
-                      Container(
-                          padding: const EdgeInsets.only(left:10 ),
-                          child: Text(
-                            "${_totalFilter()} XOF",
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          )),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    constraints: const BoxConstraints(maxWidth: 250, minHeight: 20),
-                    child: DateTimeFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Choisir pour une date',
-                        hintStyle:GoogleFonts.roboto(fontSize: 14, color: Colors.white),
-                        fillColor: Color.fromARGB(255, 255, 136, 0),
-                        // Color.fromARGB(255, 82, 119, 175),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(
-                            Icons.calendar_month_rounded,
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            size: 28),
-                      ),
-                      hideDefaultSuffixIcon: true,
-                      mode: DateTimeFieldPickerMode.date,
-                      initialValue: null,
-                      onChanged: (DateTime? value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedDate = value;
-                          });
-                        }
-                      },
-                       style: GoogleFonts.roboto(fontSize: 12, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: StreamBuilder<List<DepensesModel>>(
-                stream: _streamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text("Erreur de connexion verifier votre réseau: ${snapshot.error}");
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text("Aucun produit disponible.");
-                  } else {
-                    final List<DepensesModel> depenses = snapshot.data!;
-                    // Filtrer les articles par la date sélectionnée
-                    filteredDepenses = selectedDate == null
-                        ? depenses
-                        : depenses.where((article) {
-                          if( article.date != null && selectedDate != null){
-                            return article.date.year == selectedDate!.year &&
-                                article.date.month == selectedDate!.month &&
-                                article.date.day == selectedDate!.day;
-                          }
-                          return false;
-                          }).toList();
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: filteredDepenses.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        DepensesModel depense = filteredDepenses[index];
-                        return Container(
-                          height: 100,
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 235, 235, 235),
-                            border: const Border(
-                              bottom: BorderSide(
-                                  color: Color.fromARGB(255, 255, 255, 255)),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: StreamBuilder<List<DepensesModel>>(
+                  stream: _streamController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                          child: Container(
+                        padding: const EdgeInsets.all(8),
+                        height: 120,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  child: Text(
+                                    "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontMedium),
+                                  )),
                             ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            depense.motifs,
-                                            style: GoogleFonts.roboto(
-                                              fontSize: AppSizes.fontMedium,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Text(
-                                            "${depense.montants.toString()} XOF", 
-                                            style: GoogleFonts.roboto(
-                                              fontSize: AppSizes.fontMedium,
-                                              color: Colors.grey[500],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    
-                                  ],
-                                ),
+                            const SizedBox(width: 40),
+                            IconButton(
+                                onPressed: () {
+                                  _refresh();
+                                },
+                                icon: Icon(Icons.refresh_outlined,
+                                    size: AppSizes.iconLarge))
+                          ],
+                        ),
+                      ));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text("Aucun produit disponible.");
+                    } else {
+                      final List<DepensesModel> depenses = snapshot.data!;
+                      // Filtrer les articles par la date sélectionnée
+                      filteredDepenses = selectedDate == null
+                          ? depenses
+                          : depenses.where((article) {
+                              if (article.date != null &&
+                                  selectedDate != null) {
+                                return article.date.year ==
+                                        selectedDate!.year &&
+                                    article.date.month == selectedDate!.month &&
+                                    article.date.day == selectedDate!.day;
+                              }
+                              return false;
+                            }).toList();
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: filteredDepenses.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          DepensesModel depense = filteredDepenses[index];
+                          return Container(
+                            height: 100,
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromARGB(255, 235, 235, 235),
+                              border: const Border(
+                                bottom: BorderSide(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                               ),
-                               Padding(
-                                 padding: const EdgeInsets.all(8.0),
-                                 child: Expanded(child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                    Text("Date",style: GoogleFonts.montserrat(fontSize: AppSizes.fontMedium,fontWeight: FontWeight.w600),),
-                                     Text( 
-                                      
-                                      DateFormat("dd MMM yyyy")
-                                                .format(depense.date)
-                                                
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              depense.motifs,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: AppSizes.fontMedium,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${depense.montants.toString()} XOF",
+                                              style: GoogleFonts.roboto(
+                                                fontSize: AppSizes.fontMedium,
+                                                color: Colors.grey[500],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Date",
+                                          style: GoogleFonts.montserrat(
+                                              fontSize: AppSizes.fontMedium,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        Text(DateFormat("dd MMM yyyy")
+                                            .format(depense.date)),
+                                      ],
                                     ),
-                                   ],
-                                 ),),
-                               )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-    floatingActionButton: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+      floatingActionButton: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(255, 255, 136, 0),
+        ),
+        onPressed: () {
+          _addDepenses(context);
+        },
+        child: const Icon(Icons.add,
+            size: AppSizes.iconLarge, color: Colors.white),
       ),
-      onPressed: () {
-        _addDepenses(context);
-      },
-      child: const Icon(
-        Icons.add,
-        size: AppSizes.iconLarge,color:Colors.white
-      ),
-    ),
-  );
-}
-
+    );
+  }
 
   void _addDepenses(BuildContext context) {
     showModalBottomSheet(
