@@ -118,31 +118,42 @@ Future<void> _getProducts() async {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        toolbarHeight: 80,
-        title: Form(
-          key: _formKey,
-          child: TextFormField(
-            controller: searchValue,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.grey[100],
-              prefixIcon: const Icon(Icons.search, size: AppSizes.iconLarge),
-              hintText: "Rechercher",
-              hintStyle: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none,
-              ),
-            ),
-            onFieldSubmitted: _handleSearch,
-          ),
-        ),
-      ),
       body: CustomScrollView(
         slivers: [
+          SliverAppBar(
+             backgroundColor: const Color(0xff001c30),
+            expandedHeight: 80,
+            pinned: true,
+            floating: true,
+            leading: IconButton(onPressed: ()=> Navigator.pop(context),
+             icon: Icon(Icons.arrow_back_ios_new_rounded, size:AppSizes.iconLarge, color:Colors.white)),
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text("Recherche",style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white),)
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+              controller: searchValue,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[100],
+                prefixIcon: const Icon(Icons.search, size: AppSizes.iconLarge),
+                hintText: "Rechercher",
+                hintStyle: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onFieldSubmitted: _handleSearch,
+                        ),
+                      ),
+            ),
+          ),
           SliverToBoxAdapter(
           child: Column(
             children: searchValue.text.isEmpty

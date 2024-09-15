@@ -226,88 +226,121 @@ class _RapportViewState extends State<RapportView> {
                           color: Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
-                          columnSpacing: 10,
+                          columnSpacing: 1,
                           columns: [
+                             
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Name",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                  color: Colors.orange,
+                                  constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width,
+                                  
+                                  ),
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Name",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Categories",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Categories",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Prix d'achat",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Prix d'achat",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Prix de vente",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Prix de vente",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Quantités",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Quantités",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Somme",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Somme",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Benefices",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Benefices",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),

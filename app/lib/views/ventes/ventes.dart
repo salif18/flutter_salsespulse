@@ -173,80 +173,110 @@ Widget build(BuildContext context) {
                         color: Color.fromARGB(255, 235, 235, 235),
                       ),
                       child: DataTable(
-                        columnSpacing: 10,
+                        columnSpacing: 1,
                         columns: [
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Name",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                           
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                  color: Colors.orange,
+                                  constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width,
+                                  
+                                  ),
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Name",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Categories",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Categories",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Prix de vente",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                           
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Prix de vente",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Quantités",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Quantités",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Date",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Date",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                "Actions",
-                                style: GoogleFonts.roboto(
-                                  fontSize: AppSizes.fontMedium,
-                                  fontWeight: FontWeight.bold,
+                            DataColumn(
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Actions",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                         ],
                         rows: articles.map((article) {
                           return DataRow(

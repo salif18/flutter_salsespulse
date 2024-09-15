@@ -254,74 +254,109 @@ class _StocksViewState extends State<StocksView> {
         displacement: 50,
         child: CustomScrollView(
           slivers: [
-             SliverAppBar(
-                backgroundColor: const Color(0xff001c30),
-                expandedHeight: 100,
-                pinned: true,
-                floating: true,
-                leading: IconButton(onPressed: (){
-                  drawerKey.currentState!.openDrawer();
-                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
-                 actions: [
-          Stack(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PanierView(),
+            SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              leading: IconButton(
+                  onPressed: () {
+                    drawerKey.currentState!.openDrawer();
+                  },
+                  icon: Icon(Icons.sort,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              actions: [
+                IconButton(
+                    tooltip: "Ajouter de stocks",
+                    onPressed: () {
+                      _addStokcs(context);
+                    },
+                    icon: const Icon(Icons.add,
+                        color: Colors.white, size: AppSizes.iconLarge)),
+                IconButton(
+                  tooltip: "Categories",
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CategoriesView()));
+                  },
+                  icon: const Icon(Icons.category,
+                      size: AppSizes.iconLarge, color: Colors.white),
+                ),
+                IconButton(
+                  tooltip: "Fournisseurs",
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FournisseurView()));
+                  },
+                  icon: const Icon(Icons.airport_shuttle,
+                      color: Colors.white, size: AppSizes.iconLarge),
+                ),
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PanierView(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        FontAwesomeIcons.cartShopping,
+                        size: AppSizes.iconLarge,
+                        color: Colors.white,
+                      ),
                     ),
-                  );
-                },
-                icon: const Icon(
-                  FontAwesomeIcons.cartShopping,
-                  size: AppSizes.iconLarge,
-                  color: Colors.white,
+                    Consumer<PanierProvider>(
+                      builder: (context, provider, child) {
+                        return FutureBuilder(
+                            future: provider.loadCartFromLocalStorage(),
+                            builder: (context, snaptshot) {
+                              if (provider.myCart.isNotEmpty) {
+                                return Positioned(
+                                  left: 30,
+                                  bottom: 25,
+                                  child: Badge.count(
+                                    count: provider.myCart.length,
+                                    backgroundColor: Colors.amber,
+                                    largeSize: 40 / 2,
+                                    textStyle: GoogleFonts.roboto(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            });
+                      },
+                    ),
+                  ],
                 ),
+                const SizedBox(width: 20)
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                title: AutoSizeText("Stocks",
+                    minFontSize: 16,
+                    style: GoogleFonts.roboto(
+                        fontSize: AppSizes.fontLarge, color: Colors.white)),
               ),
-              Consumer<PanierProvider>(
-                builder: (context, provider, child) {
-                  return FutureBuilder(
-                      future: provider.loadCartFromLocalStorage(),
-                      builder: (context, snaptshot) {
-                        if (provider.myCart.isNotEmpty) {
-                          return Positioned(
-                            left: 30,
-                            bottom: 25,
-                            child: Badge.count(
-                              count: provider.myCart.length,
-                              backgroundColor: Colors.amber,
-                              largeSize: 40 / 2,
-                              textStyle: GoogleFonts.roboto(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      });
-                },
-              ),
-            ],),
-            const SizedBox(width: 20)
-            ],
-                flexibleSpace: FlexibleSpaceBar(
-                  title: AutoSizeText("Stocks",minFontSize: 16,style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
-                ),
-              ),
+            ),
             SliverToBoxAdapter(
               child: Container(
                 color: const Color(0xff001c30),
                 height: 150,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                    
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
                         maxWidth: 250,
@@ -333,7 +368,10 @@ class _StocksViewState extends State<StocksView> {
                           filled: true,
                           fillColor: Color.fromARGB(255, 82, 119, 175),
                           hintText: "Choisir une categorie",
-                          hintStyle: TextStyle(fontFamily: "roboto",fontSize: 14,color: Colors.white),
+                          hintStyle: TextStyle(
+                              fontFamily: "roboto",
+                              fontSize: 14,
+                              color: Colors.white),
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius:
@@ -342,7 +380,10 @@ class _StocksViewState extends State<StocksView> {
                         items: _listCategories.map((categorie) {
                           return DropdownMenuItem<String>(
                             value: categorie.name,
-                            child: Text(categorie.name, style: GoogleFonts.roboto(fontSize: 12),),
+                            child: Text(
+                              categorie.name,
+                              style: GoogleFonts.roboto(fontSize: 12),
+                            ),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -356,8 +397,23 @@ class _StocksViewState extends State<StocksView> {
                           }
                           return null;
                         },
+                         icon: const Icon(
+    Icons.arrow_drop_down, // Icône de flèche
+    color: Color.fromARGB(255, 255, 255, 255),    // Couleur de l'icône
+  ),
                       ),
                     ),
+                    const SizedBox(width: 20,),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SearchPage()));
+                        },
+                        icon: const Icon(Icons.search,
+                            color: Color.fromARGB(255, 207, 232, 252),
+                            size: AppSizes.iconHyperLarge)),
                   ],
                 ),
               ),
@@ -367,8 +423,8 @@ class _StocksViewState extends State<StocksView> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                );
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 } else if (snapshot.hasError) {
                   return SliverFillRemaining(
                     child: Center(
@@ -383,7 +439,8 @@ class _StocksViewState extends State<StocksView> {
                 } else {
                   final articles = snapshot.data!;
                   final filteredArticles = _categorieValue == null
-                      ? articles : articles
+                      ? articles
+                      : articles
                           .where((article) =>
                               article.categories == _categorieValue)
                           .toList();
@@ -398,100 +455,136 @@ class _StocksViewState extends State<StocksView> {
                           color: Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
-                          columnSpacing: 10,
+                          columnSpacing: 1,
                           columns: [
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Photo",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Photo",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Name",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                  color: Colors.orange,
+                                  constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width,
+                                  
+                                  ),
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Name",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Categories",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Categories",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Prix d'achat",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Prix d'achat",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Prix de vente",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Prix de vente",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Quantités",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Quantités",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Date",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Date",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                             DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Actions",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
+                              label: Expanded(
+                                child: Container(
+                                   color: Colors.orange,
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Actions",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                      color:Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -661,55 +754,7 @@ class _StocksViewState extends State<StocksView> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchPage()));
-              },
-              child: const Icon(Icons.search, size: AppSizes.iconLarge)),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
-              onPressed: () {
-                _addStokcs(context);
-              },
-              child: const Icon(Icons.add, size: AppSizes.iconLarge)),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CategoriesView()));
-            },
-            icon: const Icon(Icons.category, size: AppSizes.iconLarge),
-            label: Text(
-              "Categories",
-              style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
-            ),
-          ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 207, 232, 252)),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FournisseurView()));
-            },
-            icon: const Icon(Icons.airport_shuttle, size: AppSizes.iconLarge),
-            label: Text(
-              "Fournisseurs",
-              style: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
-            ),
-          ),
-        ],
+        children: [],
       ),
     );
   }
