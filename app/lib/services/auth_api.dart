@@ -39,7 +39,7 @@ class ServicesAuth{
 
 //fontion de modification de passeword
   postUpdateUser(data,token, userId) async {
-    var uri = "$domaineName/update_password/$userId";
+    var uri = "$domaineName/auth/update_user/$userId";
     return await http.post(
       Uri.parse(uri),
       body: jsonEncode(data),
@@ -54,7 +54,7 @@ class ServicesAuth{
  
   //fontion de modification de passeword
   postUpdatePassword(data,token, userId) async {
-    var uri = "$domaineName/reset/update_password/$userId";
+    var uri = "$domaineName/auth/update_password/$userId";
     return await http.post(
       Uri.parse(uri),
       body: jsonEncode(data),

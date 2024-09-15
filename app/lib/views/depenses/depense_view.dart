@@ -288,10 +288,10 @@ class _DepensesViewState extends State<DepensesView> {
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromARGB(255, 235, 235, 235),
+                              color: Color.fromARGB(255, 250, 250, 250),
                               border: const Border(
                                 bottom: BorderSide(
-                                    color: Color.fromARGB(255, 255, 255, 255)),
+                                    color: Color.fromARGB(255, 230, 230, 230)),
                               ),
                             ),
                             child: Row(

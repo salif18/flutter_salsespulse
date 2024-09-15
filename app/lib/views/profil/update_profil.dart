@@ -24,13 +24,14 @@ class _UpdateProfilState extends State<UpdateProfil> {
   final _name = TextEditingController();
   final _numero = TextEditingController();
   final _email = TextEditingController();
-  
+  final _entreprise = TextEditingController();
 
    @override
   void dispose() {
     _name.dispose();
     _numero.dispose();
     _email.dispose();
+    _entreprise.dispose();
     super.dispose();
   }
 
@@ -40,8 +41,10 @@ class _UpdateProfilState extends State<UpdateProfil> {
     final token = await provider.token;
     var data = {
       "name": _name.text,
-      "phone_number": _numero.text,
-      "email": _email.text,
+        "boutique_name": _entreprise.text,
+        "numero": _numero.text,
+        "email": _email.text,
+        
     };
     try {
       showDialog(
@@ -97,6 +100,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   _textFieldName(
                     context,
                   ),
+                  _textFieldEntreprise(context),
                   _textFieldNumber(context),
                   _textFieldMail(context),
                   const SizedBox(height: 100),
@@ -147,6 +151,27 @@ class _UpdateProfilState extends State<UpdateProfil> {
           filled: true,
           fillColor: Colors.grey[100],
           hintText: "Name",
+          hintStyle:
+              GoogleFonts.aBeeZee(fontSize: AppSizes.fontMedium, fontWeight: FontWeight.w400),
+          prefixIcon: const Icon(Icons.person_2_outlined, size: AppSizes.iconLarge),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none),
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldEntreprise(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: TextFormField(
+         controller: _entreprise,
+        keyboardType: TextInputType.name,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey[100],
+          hintText: "Services bussiness",
           hintStyle:
               GoogleFonts.aBeeZee(fontSize: AppSizes.fontMedium, fontWeight: FontWeight.w400),
           prefixIcon: const Icon(Icons.person_2_outlined, size: AppSizes.iconLarge),
