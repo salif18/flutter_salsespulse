@@ -44,8 +44,8 @@ class _SearchPageState extends State<SearchPage> {
                   item.categories
                   .toLowerCase()
                   .contains(searchValue.text.toLowerCase()) ||
-                  item.stocks == searchValue.text ||
-                  item.prixVente == searchValue.text 
+                  item.stocks.toString() == searchValue.text ||
+                  item.prixVente.toString() == searchValue.text 
                 )
               .toList();
         }

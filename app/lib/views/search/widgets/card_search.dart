@@ -21,7 +21,7 @@ class ResultSearch extends StatelessWidget {
         onTap: () {},
         child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 90,
+            height: 100,
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -69,7 +69,11 @@ class ResultSearch extends StatelessWidget {
                           Text("${item.prixVente} cfa",
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontSmall,
-                                  color: const Color(0xff121212)))
+                                  color: const Color(0xff121212))),
+                           Text("Restant ${item.stocks} ",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontSmall,
+                                  color: Color.fromARGB(255, 228, 123, 3)))
                         ],
                       ),
                     ),
