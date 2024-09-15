@@ -98,10 +98,10 @@ class _CategoriesViewState extends State<CategoriesView> {
         // ignore: use_build_context_synchronously
         Navigator.pop(context); // Fermer le dialog
 
-        if (res.statusCode == 200) {
+        if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-          _getCategories();
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> const CategoriesView()));
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
@@ -115,25 +115,49 @@ class _CategoriesViewState extends State<CategoriesView> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.all(15),
-        child: StreamBuilder<List<CategoriesModel>>(
-          stream: _listCategories.stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text("Error"));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("Pas de données disponibles"));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, int index) {
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: CustomScrollView(slivers: [
+      SliverAppBar(
+        backgroundColor: const Color(0xff001c30),
+        expandedHeight: 80,
+        pinned: true,
+        floating: true,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios_new_outlined,
+                color: Colors.white, size: AppSizes.iconLarge)),
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text(
+            "Liste des catégories",
+            style: GoogleFonts.roboto(
+                fontSize: AppSizes.fontMedium, color: Colors.white),
+          ),
+        ),
+      ),
+      StreamBuilder<List<CategoriesModel>>(
+        stream: _listCategories.stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SliverToBoxAdapter(
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          } else if (snapshot.hasError) {
+            return SliverToBoxAdapter(
+              child: const Center(child: Text("Error")),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return SliverToBoxAdapter(
+              child: const Center(
+                child: Text("Pas de données disponibles"),
+              ),
+            );
+          } else {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
                   CategoriesModel categorie = snapshot.data![index];
                   return Dismissible(
                     key: Key(categorie.id.toString()),
@@ -157,37 +181,40 @@ class _CategoriesViewState extends State<CategoriesView> {
                     ),
                     child: Container(
                       decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 235, 235, 235),
                           border: Border(
                               bottom: BorderSide(
-                                  color: Color.fromARGB(255, 245, 245, 245)))),
+                                  color: Color.fromARGB(255, 255, 255, 255)))),
                       child: ListTile(
                         title: Text(
                           categorie.name,
-                          style:
-                              GoogleFonts.roboto(fontSize: AppSizes.fontMedium),
+                          style: GoogleFonts.roboto(
+                              fontSize: AppSizes.fontMedium),
                         ),
                       ),
                     ),
                   );
                 },
-              );
-            }
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF1D1A30),
-        onPressed: () {
-          _addCateShow(context);
+                childCount: snapshot.data!.length,
+              ),
+            );
+          }
         },
-        child: const Icon(
-          Icons.add,
-          size: AppSizes.iconLarge,
-          color: Colors.white,
-        ),
       ),
-    );
-  }
+    ]),
+    floatingActionButton: FloatingActionButton(
+      backgroundColor: Color.fromARGB(255, 255, 136, 0),
+      onPressed: () {
+        _addCateShow(context);
+      },
+      child: const Icon(
+        Icons.add,
+        size: AppSizes.iconLarge,
+        color: Colors.white,
+      ),
+    ),
+  );
+}
 
 //FENETRE POUR AJOUTER CATEGORIE
   void _addCateShow(BuildContext context) {
@@ -237,7 +264,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1D1A30),
+                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50),
                       ),
                       child: Text(

@@ -31,12 +31,12 @@ class _MyCardState extends State<MyCard> {
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                image: widget.item.image.isEmpty
-                    ? DecorationImage(
+                image: 
+                    DecorationImage(
                         image: NetworkImage(widget.item.image),
                         fit: BoxFit.contain,
                       )
-                    : null, // Vous pouvez ajouter une image par défaut ici
+                    , // Vous pouvez ajouter une image par défaut ici
               ),
             ),
             Expanded(

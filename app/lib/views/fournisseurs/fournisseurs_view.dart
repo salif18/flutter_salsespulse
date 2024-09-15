@@ -110,10 +110,11 @@ class _FournisseurViewState extends State<FournisseurView> {
         // ignore: use_build_context_synchronously
         Navigator.pop(context); // Fermer le dialog
 
-        if (res.statusCode == 200) {
+        if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-          _getfournisseurs();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const FournisseurView()));
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
@@ -131,50 +132,76 @@ class _FournisseurViewState extends State<FournisseurView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.all(15),
-        child: StreamBuilder<List<FournisseurModel>>(
-          stream: _listFournisseurs.stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text("Error"));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("Pas de données disponibles"));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, int index) {
-                  FournisseurModel fournisseur = snapshot.data![index];
-                  return Dismissible(
-                      key: Key(fournisseur.id.toString()),
-                      direction: DismissDirection.endToStart,
-                      onDismissed: (direction) {
-                        _removeFournisseur(fournisseur.id);
-                      },
-                      confirmDismiss: (direction) async {
-                        return await showRemoveFournisseur(context);
-                      },
-                      background: Container(
-                        color: Colors.red,
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(Icons.delete_outline,
-                                color: Colors.white, size: AppSizes.iconLarge),
-                            SizedBox(width: 50),
-                          ],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: const Color(0xff001c30),
+            expandedHeight: 120, // Augmentation de la hauteur
+            pinned: true,
+            floating: true,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_rounded,
+                  size: AppSizes.iconHyperLarge, color: Colors.white),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                "Mes fournisseurs",
+                style: GoogleFonts.roboto(
+                    fontSize: AppSizes.fontLarge, color: Colors.white),
+              ),
+            ),
+          ),
+          // Utiliser un SliverList à la place d'un ListView.builder pour éviter les conflits de défilement
+          StreamBuilder<List<FournisseurModel>>(
+            stream: _listFournisseurs.stream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasError) {
+                return const SliverToBoxAdapter(
+                    child: Center(
+                        child: Text("Erreur de chargement des données")));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const SliverToBoxAdapter(
+                    child: Center(child: Text("Pas de données disponibles")));
+              } else {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      FournisseurModel fournisseur = snapshot.data![index];
+                      return Dismissible(
+                        key: Key(fournisseur.id.toString()),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) {
+                          _removeFournisseur(fournisseur.id);
+                        },
+                        confirmDismiss: (direction) async {
+                          return await showRemoveFournisseur(context);
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(Icons.delete_outline,
+                                  color: Colors.white,
+                                  size: AppSizes.iconLarge),
+                              SizedBox(width: 50),
+                            ],
+                          ),
                         ),
-                      ),
-                      child: Container(
-                        height: 110,
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color:
-                                        Color.fromARGB(255, 245, 245, 245)))),
-                        child: Row(
+                        child: Container(
+                          height: 110,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color:
+                                          Color.fromARGB(255, 245, 245, 245)))),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -182,7 +209,6 @@ class _FournisseurViewState extends State<FournisseurView> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -211,71 +237,29 @@ class _FournisseurViewState extends State<FournisseurView> {
                                           Text(fournisseur.numero.toString(),
                                               style: GoogleFonts.roboto(
                                                   fontSize: AppSizes.fontSmall,
-                                                  color: Colors.grey[500]))
+                                                  color: Colors.grey[500])),
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Numero",
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontMedium,
-                                            fontWeight: FontWeight.w500)),
-                                    Text(fournisseur.numero.toString(),
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontSmall,
-                                            color: Colors.grey[500]))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Address",
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontMedium,
-                                            fontWeight: FontWeight.w500)),
-                                    Text(fournisseur.address,
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontSmall,
-                                            color: Colors.grey[500]))
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Produit",
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontMedium,
-                                            fontWeight: FontWeight.w500)),
-                                    Text(fournisseur.produit,
-                                        style: GoogleFonts.roboto(
-                                            fontSize: AppSizes.fontSmall,
-                                            color: Colors.grey[500]))
-                                  ],
-                                ),
-                              ),
-                            ]),
-                      ));
-                },
-              );
-            }
-          },
-        ),
+                              // Ajouter d'autres détails comme "Numero", "Address", "Produit"
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: snapshot.data!.length,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF1D1A30),
+        backgroundColor: const Color.fromARGB(255, 255, 136, 0),
         onPressed: () {
           _addFournisseurShow(context);
         },
@@ -417,7 +401,7 @@ class _FournisseurViewState extends State<FournisseurView> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1D1A30),
+                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50),
                       ),
                       child: Text(

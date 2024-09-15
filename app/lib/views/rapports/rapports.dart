@@ -147,7 +147,7 @@ class _RapportViewState extends State<RapportView> {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         constraints:
-                            const BoxConstraints(maxWidth: 250, minHeight: 30),
+                            const BoxConstraints(maxWidth: 250, minHeight: 20),
                         child: DateTimeFormField(
                           decoration: InputDecoration(
                             hintText: 'Choisir pour une date',

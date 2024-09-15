@@ -129,14 +129,18 @@ Widget build(BuildContext context) {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
+        
+                  ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const PopulaireView()));
                     },
-                    color: Colors.orange,
-                    tooltip: "Les plus achetés",
-                    icon: const Icon(Icons.workspace_premium, size: 35),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                    ),
+                    label: Text("Les plus achetés", style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium, color:Colors.white),),
+                    icon: const Icon(Icons.workspace_premium,color:Color.fromARGB(255, 255, 255, 255), size: 30),
                   ),
+                   const SizedBox(width: 20,)
                 ],
               ),
             ),

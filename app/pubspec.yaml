@@ -50,6 +50,8 @@ dependencies:
   printing: ^5.13.2
   connectivity_plus: ^6.0.5
   auto_size_text: ^3.0.0
+  flutter_skeleton_ui: ^0.0.6
+  shimmer: ^3.0.0
   
 
 dev_dependencies:

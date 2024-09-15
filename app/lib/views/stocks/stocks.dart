@@ -272,7 +272,7 @@ class _StocksViewState extends State<StocksView> {
                       _addStokcs(context);
                     },
                     icon: const Icon(Icons.add,
-                        color: Colors.white, size: AppSizes.iconLarge)),
+                        color:Color.fromARGB(255, 255, 136, 0), size: AppSizes.iconLarge)),
                 IconButton(
                   tooltip: "Categories",
                   onPressed: () {
@@ -282,7 +282,7 @@ class _StocksViewState extends State<StocksView> {
                             builder: (context) => const CategoriesView()));
                   },
                   icon: const Icon(Icons.category,
-                      size: AppSizes.iconLarge, color: Colors.white),
+                      size: AppSizes.iconLarge, color: Color.fromARGB(255, 255, 136, 0),),
                 ),
                 IconButton(
                   tooltip: "Fournisseurs",
@@ -293,7 +293,7 @@ class _StocksViewState extends State<StocksView> {
                             builder: (context) => const FournisseurView()));
                   },
                   icon: const Icon(Icons.airport_shuttle,
-                      color: Colors.white, size: AppSizes.iconLarge),
+                      color: Color.fromARGB(255, 255, 136, 0), size: AppSizes.iconLarge),
                 ),
                 Stack(
                   children: [
@@ -309,7 +309,7 @@ class _StocksViewState extends State<StocksView> {
                       icon: const Icon(
                         FontAwesomeIcons.cartShopping,
                         size: AppSizes.iconLarge,
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 255, 136, 0),
                       ),
                     ),
                     Consumer<PanierProvider>(
@@ -360,7 +360,7 @@ class _StocksViewState extends State<StocksView> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
                         maxWidth: 250,
-                        minHeight: 30,
+                        minHeight: 20,
                       ),
                       child: DropdownButtonFormField<String>(
                         value: _categorieValue,
@@ -911,7 +911,7 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1D1A30),
+                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _sendNewStocksToServer();
@@ -1088,7 +1088,7 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1D1A30),
+                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _sendUpdateStockToServer(article);

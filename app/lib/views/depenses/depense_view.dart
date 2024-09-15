@@ -100,6 +100,7 @@ class _DepensesViewState extends State<DepensesView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> const DepensesView()));
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
@@ -172,7 +173,7 @@ Widget build(BuildContext context) {
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    constraints: const BoxConstraints(maxWidth: 250, minHeight: 30),
+                    constraints: const BoxConstraints(maxWidth: 250, minHeight: 20),
                     child: DateTimeFormField(
                       decoration: InputDecoration(
                         hintText: 'Choisir pour une date',
@@ -238,14 +239,14 @@ Widget build(BuildContext context) {
                       itemBuilder: (BuildContext context, int index) {
                         DepensesModel depense = filteredDepenses[index];
                         return Container(
-                          height: 110,
+                          height: 100,
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                            color: Color.fromARGB(255, 235, 235, 235),
                             border: const Border(
                               bottom: BorderSide(
-                                  color: Color.fromARGB(255, 235, 235, 235)),
+                                  color: Color.fromARGB(255, 255, 255, 255)),
                             ),
                           ),
                           child: Row(

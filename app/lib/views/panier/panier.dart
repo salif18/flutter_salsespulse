@@ -1,8 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:date_field/date_field.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:salespulse/models/stocks_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/providers/panier_provider.dart';
 import 'package:salespulse/services/panier_api.dart';
@@ -76,46 +79,123 @@ class _PanierViewState extends State<PanierView> {
 
   @override
   Widget build(BuildContext context) {
+    
+ 
+    
     return Scaffold(
-      body: SafeArea(
-        child: Consumer<PanierProvider>(
-          builder: (context, panierProvider, child) {
-            var cart = panierProvider.myCart;
-            return cart.isNotEmpty
-                ? ListView.builder(
-                    itemCount: cart.length,
-                    itemBuilder: (context, int index) {
-                      final item = cart[index];
-                      return Dismissible(
-                        key: Key(item.productId),
-                        direction: DismissDirection.endToStart,
-                        onDismissed: (direction) {
-                          panierProvider.removeToCart(item);
-                        },
-                        confirmDismiss: (direction) async {
-                          return await _showAlertDelete(context);
-                        },
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF1D1A30),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
+     body: CustomScrollView(
+  slivers: [
+    SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back_ios_outlined,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              actions: [
+          
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PanierView(),
                           ),
-                          child: const Icon(Icons.delete_rounded,
-                              size: AppSizes.iconLarge, color: Colors.white),
+                        );
+                      },
+                      icon: const Icon(
+                        FontAwesomeIcons.cartShopping,
+                        size: AppSizes.iconLarge,
+                        color: Color.fromARGB(255, 255, 136, 0),
+                      ),
+                    ),
+                    Consumer<PanierProvider>(
+                      builder: (context, provider, child) {
+                        return FutureBuilder(
+                            future: provider.loadCartFromLocalStorage(),
+                            builder: (context, snaptshot) {
+                              if (provider.myCart.isNotEmpty) {
+                                return Positioned(
+                                  left: 30,
+                                  bottom: 25,
+                                  child: Badge.count(
+                                    count: provider.totalArticle,
+                                    backgroundColor: Colors.amber,
+                                    largeSize: 40 / 2,
+                                    textStyle: GoogleFonts.roboto(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20)
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                title: AutoSizeText("Panier de vente",
+                    minFontSize: 16,
+                    style: GoogleFonts.roboto(
+                        fontSize: AppSizes.fontLarge, color: Colors.white)),
+              ),
+            ),
+    SliverToBoxAdapter(
+      child: Consumer<PanierProvider>(
+        builder: (context, panierProvider, child) {
+          var cart = panierProvider.myCart;
+          return cart.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,  // Ajout pour éviter les problèmes de scroll
+                  physics: NeverScrollableScrollPhysics(),  // Désactiver le défilement du ListView, car il est déjà dans un CustomScrollView
+                  itemCount: cart.length,
+                  itemBuilder: (context, int index) {
+                    final item = cart[index];
+                    return Dismissible(
+                      key: Key(item.productId),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        panierProvider.removeToCart(item);
+                      },
+                      confirmDismiss: (direction) async {
+                        return await _showAlertDelete(context);
+                      },
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF1D1A30),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                          ),
                         ),
-                        child: MyCard(item: item),
-                      );
-                    },
-                  )
-                : const EmptyCart();
-          },
-        ),
+                        child: const Icon(Icons.delete_rounded,
+                            size: AppSizes.iconLarge, color: Colors.white),
+                      ),
+                      child: MyCard(item: item),
+                    );
+                  },
+                )
+              : const EmptyCart();
+        },
       ),
+    ),
+  ],
+),
+
       bottomNavigationBar: Consumer<PanierProvider>(
         builder: (context, panierProvider, child) {
           var cart = panierProvider.myCart;
@@ -215,20 +295,16 @@ class _PanierViewState extends State<PanierView> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: ElevatedButton.icon(
+                        child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1D1A30),
+                            backgroundColor: Color.fromARGB(255, 255, 136, 0),
                             minimumSize: const Size(400, 50),
                           ),
-                          icon: const Icon(
-                            Icons.location_on,
-                            size: AppSizes.iconLarge,
-                            color: Colors.white,
-                          ),
+                         
                           onPressed: () {
                             _sendOrders(context);
                           },
-                          label: Text(
+                          child: Text(
                             "Enregistrer cette vente",
                             style: GoogleFonts.roboto(
                               fontSize: AppSizes.fontMedium,
