@@ -366,7 +366,8 @@ class _StocksViewState extends State<StocksView> {
                         value: _categorieValue,
                         decoration: const InputDecoration(
                           filled: true,
-                          fillColor: Color.fromARGB(255, 82, 119, 175),
+                          fillColor: Color.fromARGB(255, 255, 136, 0),
+                          // Color.fromARGB(255, 82, 119, 175),
                           hintText: "Choisir une categorie",
                           hintStyle: TextStyle(
                               fontFamily: "roboto",
@@ -429,7 +430,7 @@ class _StocksViewState extends State<StocksView> {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
-                          "Erreur lors du chargement des produits : ${snapshot.error}"),
+                          "Erreur de connexion verifier votre réseau : ${snapshot.error}"),
                     ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -449,7 +450,6 @@ class _StocksViewState extends State<StocksView> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(255, 235, 235, 235),

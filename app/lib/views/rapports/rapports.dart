@@ -153,14 +153,15 @@ class _RapportViewState extends State<RapportView> {
                             hintText: 'Choisir pour une date',
                             hintStyle: GoogleFonts.roboto(
                                 fontSize: 14, color: Colors.white),
-                            fillColor: Color.fromARGB(255, 82, 119, 175),
+                            fillColor: Color.fromARGB(255, 255, 136, 0),
+                            // Color.fromARGB(255, 82, 119, 175),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: BorderSide.none,
                             ),
                             prefixIcon: const Icon(Icons.calendar_month_rounded,
-                                color: Color.fromARGB(255, 255, 136, 0),
+                                color: Colors.white,
                                 size: 28),
                           ),
                           hideDefaultSuffixIcon: true,
@@ -189,7 +190,7 @@ class _RapportViewState extends State<RapportView> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Text("Erreur : ${snapshot.error}");
+                    return Text("Erreur de connexion verifier votre réseau : ${snapshot.error}");
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Text("Aucun produit disponible.");
                   } else {
@@ -220,7 +221,7 @@ class _RapportViewState extends State<RapportView> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        padding: const EdgeInsets.all(8),
+                        
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(255, 235, 235, 235),

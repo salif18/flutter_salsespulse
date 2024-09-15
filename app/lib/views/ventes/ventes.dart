@@ -151,7 +151,7 @@ Widget build(BuildContext context) {
               } else if (snapshot.hasError) {
                 return SliverFillRemaining(
                   child: Center(
-                    child: Text("Erreur lors du chargement des produits : ${snapshot.error}"),
+                    child: Text("Erreur de connexion verifier votre réseau: ${snapshot.error}"),
                   ),
                 );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -167,7 +167,6 @@ Widget build(BuildContext context) {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Color.fromARGB(255, 235, 235, 235),
@@ -175,7 +174,6 @@ Widget build(BuildContext context) {
                       child: DataTable(
                         columnSpacing: 1,
                         columns: [
-                           
                             DataColumn(
                               label: Expanded(
                                 child: Container(

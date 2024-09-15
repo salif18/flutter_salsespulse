@@ -173,7 +173,8 @@ Widget build(BuildContext context) {
                       decoration: InputDecoration(
                         hintText: 'Choisir pour une date',
                         hintStyle:GoogleFonts.roboto(fontSize: 14, color: Colors.white),
-                        fillColor: Color.fromARGB(255, 82, 119, 175),
+                        fillColor: Color.fromARGB(255, 255, 136, 0),
+                        // Color.fromARGB(255, 82, 119, 175),
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -181,7 +182,7 @@ Widget build(BuildContext context) {
                         ),
                         prefixIcon: const Icon(
                             Icons.calendar_month_rounded,
-                            color: Color.fromARGB(255, 255, 136, 0),
+                            color: Color.fromARGB(255, 255, 255, 255),
                             size: 28),
                       ),
                       hideDefaultSuffixIcon: true,
@@ -210,7 +211,7 @@ Widget build(BuildContext context) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Text("Erreur : ${snapshot.error}");
+                    return Text("Erreur de connexion verifier votre réseau: ${snapshot.error}");
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Text("Aucun produit disponible.");
                   } else {
@@ -308,12 +309,15 @@ Widget build(BuildContext context) {
       ),
     ),
     floatingActionButton: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+      ),
       onPressed: () {
         _addDepenses(context);
       },
       child: const Icon(
         Icons.add,
-        size: AppSizes.iconLarge,
+        size: AppSizes.iconLarge,color:Colors.white
       ),
     ),
   );
