@@ -25,7 +25,7 @@ class RapportView extends StatefulWidget {
 
 class _RapportViewState extends State<RapportView> {
   final GlobalKey<ScaffoldState> drawerKey = GlobalKey<ScaffoldState>();
-  DateTime selectedDate = DateTime.now() ;
+  DateTime? selectedDate;
   ServicesVentes api = ServicesVentes();
   final StreamController<List<VentesModel>> _streamController =
       StreamController();
@@ -119,18 +119,23 @@ class _RapportViewState extends State<RapportView> {
         displacement: 50,
         child: CustomScrollView(
           slivers: [
-             SliverAppBar(
-                backgroundColor: const Color(0xff001c30),
-                expandedHeight: 100,
-                pinned: true,
-                floating: true,
-                leading: IconButton(onPressed: (){
-                  drawerKey.currentState!.openDrawer();
-                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Rapports",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
-                ),
+            SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              leading: IconButton(
+                  onPressed: () {
+                    drawerKey.currentState!.openDrawer();
+                  },
+                  icon: Icon(Icons.sort,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text("Rapports",
+                    style: GoogleFonts.roboto(
+                        fontSize: AppSizes.fontLarge, color: Colors.white)),
               ),
+            ),
             SliverToBoxAdapter(
               child: Container(
                 color: const Color(0xff001c30),
@@ -145,16 +150,17 @@ class _RapportViewState extends State<RapportView> {
                             const BoxConstraints(maxWidth: 250, minHeight: 30),
                         child: DateTimeFormField(
                           decoration: InputDecoration(
-                            hintText: 'Ajouter une date',
-                            hintStyle: GoogleFonts.roboto(fontSize: 20),
-                            fillColor: Colors.grey[100],
+                            hintText: 'Choisir pour une date',
+                            hintStyle: GoogleFonts.roboto(
+                                fontSize: 14, color: Colors.white),
+                            fillColor: Color.fromARGB(255, 82, 119, 175),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: BorderSide.none,
                             ),
                             prefixIcon: const Icon(Icons.calendar_month_rounded,
-                                color: Color.fromARGB(255, 255, 136, 128),
+                                color: Color.fromARGB(255, 255, 136, 0),
                                 size: 28),
                           ),
                           hideDefaultSuffixIcon: true,
@@ -167,6 +173,8 @@ class _RapportViewState extends State<RapportView> {
                               });
                             }
                           },
+                          style: GoogleFonts.roboto(
+                              fontSize: 12, color: Colors.white),
                         ),
                       );
                     }),
@@ -188,13 +196,20 @@ class _RapportViewState extends State<RapportView> {
                     final List<VentesModel> articles = snapshot.data!;
 
                     // Filtrer les articles par la date sélectionnée
-                     // Filtrer les articles par la date sélectionnée, sinon afficher tous les articles
+                    // Filtrer les articles par la date sélectionnée, sinon afficher tous les articles
                     filteredArticles = selectedDate == null
                         ? articles
                         : articles.where((article) {
-                            return article.dateVente.year == selectedDate.year &&
-                                article.dateVente.month == selectedDate.month &&
-                                article.dateVente.day == selectedDate.day;
+                            // Vérifier si `article.dateVente` n'est pas null également
+                            if (article.dateVente != null &&
+                                selectedDate != null) {
+                              return article.dateVente.year ==
+                                      selectedDate!.year &&
+                                  article.dateVente.month ==
+                                      selectedDate!.month &&
+                                  article.dateVente.day == selectedDate!.day;
+                            }
+                            return false;
                           }).toList();
 
                     if (filteredArticles.isEmpty) {
@@ -208,7 +223,7 @@ class _RapportViewState extends State<RapportView> {
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
                           columnSpacing: 10,
@@ -401,7 +416,7 @@ class _RapportViewState extends State<RapportView> {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           height: 150,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color.fromARGB(255, 248, 248, 248),
               border: Border.all(
                   width: 1, color: const Color.fromARGB(255, 207, 212, 233))),
           child: Row(
@@ -424,7 +439,9 @@ class _RapportViewState extends State<RapportView> {
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                          DateFormat("dd MMM yyyy").format(selectedDate),
+                          selectedDate != null
+                              ? DateFormat("dd MMM yyyy").format(selectedDate!)
+                              : 'general',
                           style: GoogleFonts.roboto(
                               fontSize: AppSizes.fontMedium)),
                     ),
@@ -516,7 +533,7 @@ class _RapportViewState extends State<RapportView> {
       BuildContext context, List<VentesModel> rapport) async {
     final pdf = pw.Document();
     final store = Provider.of<AuthProvider>(context, listen: false).societeName;
-    final date = DateFormat("dd MMM yyyy").format(selectedDate);
+    final date = DateFormat("dd MMM yyyy").format(selectedDate!);
 
     //somme total
     //calcule somme total

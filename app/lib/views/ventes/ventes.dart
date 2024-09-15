@@ -170,7 +170,7 @@ Widget build(BuildContext context) {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 235, 235, 235),
                       ),
                       child: DataTable(
                         columnSpacing: 10,

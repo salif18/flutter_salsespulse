@@ -19,7 +19,9 @@ class Routes extends StatefulWidget {
 class _RoutesState extends State<Routes> {
   int _currentIndex = 0;
 
-   Widget _viewNavigate(int index) {
+  
+
+   Widget _buildScreen(int index) {
     switch (index) {
       case 0:
         return DashboardView();
@@ -32,7 +34,7 @@ class _RoutesState extends State<Routes> {
       case 4:
         return DepensesView();
       default:
-        return const Center(child: Text("Page not found")); // Par défaut, retourne un message ou une vue vide
+        return DashboardView(); // Par défaut, retourne un message ou une vue vide
     }
   }
 
@@ -42,7 +44,7 @@ class _RoutesState extends State<Routes> {
       builder: (context, provider, child) {
         // Si le token est présent, afficher les vues de l'application
         if (provider.token.isNotEmpty) {
-          return _viewNavigate(_currentIndex);
+          return _buildScreen(_currentIndex);
         } else {
           // Si pas de token, afficher la page de connexion
           return const LoginView();

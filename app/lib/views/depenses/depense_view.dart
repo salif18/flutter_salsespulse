@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:salespulse/models/depenses_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
@@ -170,9 +171,9 @@ Widget build(BuildContext context) {
                     constraints: const BoxConstraints(maxWidth: 250, minHeight: 30),
                     child: DateTimeFormField(
                       decoration: InputDecoration(
-                        hintText: 'Ajouter une date',
-                        hintStyle: GoogleFonts.roboto(fontSize: 20),
-                        fillColor: Colors.grey[100],
+                        hintText: 'Choisir pour une date',
+                        hintStyle:GoogleFonts.roboto(fontSize: 14, color: Colors.white),
+                        fillColor: Color.fromARGB(255, 82, 119, 175),
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -180,7 +181,7 @@ Widget build(BuildContext context) {
                         ),
                         prefixIcon: const Icon(
                             Icons.calendar_month_rounded,
-                            color: Color.fromARGB(255, 255, 136, 128),
+                            color: Color.fromARGB(255, 255, 136, 0),
                             size: 28),
                       ),
                       hideDefaultSuffixIcon: true,
@@ -193,6 +194,7 @@ Widget build(BuildContext context) {
                           });
                         }
                       },
+                       style: GoogleFonts.roboto(fontSize: 12, color: Colors.white),
                     ),
                   ),
                 ],
@@ -217,9 +219,12 @@ Widget build(BuildContext context) {
                     filteredDepenses = selectedDate == null
                         ? depenses
                         : depenses.where((article) {
+                          if( article.date != null && selectedDate != null){
                             return article.date.year == selectedDate!.year &&
                                 article.date.month == selectedDate!.month &&
                                 article.date.day == selectedDate!.day;
+                          }
+                          return false;
                           }).toList();
                     return ListView.builder(
                       shrinkWrap: true,
@@ -240,6 +245,7 @@ Widget build(BuildContext context) {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -269,9 +275,25 @@ Widget build(BuildContext context) {
                                         ],
                                       ),
                                     ),
+                                    
                                   ],
                                 ),
                               ),
+                               Padding(
+                                 padding: const EdgeInsets.all(8.0),
+                                 child: Expanded(child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                    Text("Date",style: GoogleFonts.montserrat(fontSize: AppSizes.fontMedium,fontWeight: FontWeight.w600),),
+                                     Text( 
+                                      
+                                      DateFormat("dd MMM yyyy")
+                                                .format(depense.date)
+                                                
+                                    ),
+                                   ],
+                                 ),),
+                               )
                             ],
                           ),
                         );

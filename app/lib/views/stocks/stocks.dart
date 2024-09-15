@@ -272,6 +272,7 @@ class _StocksViewState extends State<StocksView> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
+                    
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       constraints: const BoxConstraints(
                         maxWidth: 250,
@@ -281,8 +282,9 @@ class _StocksViewState extends State<StocksView> {
                         value: _categorieValue,
                         decoration: const InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Categories",
+                          fillColor: Color.fromARGB(255, 82, 119, 175),
+                          hintText: "Choisir une categorie",
+                          hintStyle: TextStyle(fontFamily: "roboto",fontSize: 14,color: Colors.white),
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius:
@@ -291,7 +293,7 @@ class _StocksViewState extends State<StocksView> {
                         items: _listCategories.map((categorie) {
                           return DropdownMenuItem<String>(
                             value: categorie.name,
-                            child: Text(categorie.name),
+                            child: Text(categorie.name, style: GoogleFonts.roboto(fontSize: 12),),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -331,12 +333,11 @@ class _StocksViewState extends State<StocksView> {
                   );
                 } else {
                   final articles = snapshot.data!;
-                  final filteredArticles = _categorieValue != null
-                      ? articles
+                  final filteredArticles = _categorieValue == null
+                      ? articles : articles
                           .where((article) =>
                               article.categories == _categorieValue)
-                          .toList()
-                      : articles;
+                          .toList();
 
                   return SliverToBoxAdapter(
                     child: SingleChildScrollView(
@@ -345,7 +346,7 @@ class _StocksViewState extends State<StocksView> {
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
                           columnSpacing: 10,

@@ -84,136 +84,140 @@ class _PopulaireViewState extends State<PopulaireView> {
         color: Colors.grey[100],
         onRefresh: _refresh,
         displacement: 50,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                color: const Color(0xff001c30),
-                height: 150,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      "assets/logos/logo3.jpg",
-                      width: 100,
-                      height: 100,
-                    ),
-                   
-                  ],
+        child: CustomScrollView(
+        
+          slivers: [
+            SliverAppBar(
+              backgroundColor: const Color(0xff001c30),
+              expandedHeight: 100,
+              pinned: true,
+              floating: true,
+              centerTitle: true,
+               leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back_ios_new,
+                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text("Les plus achetés", style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color: Colors.white),),
+              ),
+            ),
+            SliverToBoxAdapter(
+            child:Center(
+              child: StreamBuilder<List<ProduitBestVendu>>(
+                  stream: _streamController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text("Erreur : ${snapshot.error}");
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text("Aucun produit disponible.");
+                    } else {
+                      final List<ProduitBestVendu> articles = snapshot.data!;
+              
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: DataTable(
+                            columnSpacing: 10,
+                            columns: [
+                              DataColumn(
+                                label: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Name",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Categories",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Text(
+                                    "Nombre d'achat",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            rows: articles.map((article) {
+                              
+              
+                              return DataRow(
+                                cells: [
+                                  DataCell(
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                        article.id.nom,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                        article.id.categories,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                        article.totalVendu.toString(),
+                                        style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                 
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
-              ),
-              StreamBuilder<List<ProduitBestVendu>>(
-                stream: _streamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text("Erreur : ${snapshot.error}");
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Text("Aucun produit disponible.");
-                  } else {
-                    final List<ProduitBestVendu> articles = snapshot.data!;
-
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: DataTable(
-                          columnSpacing: 10,
-                          columns: [
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Name",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Categories",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Container(
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  "Nombre d'achat",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: AppSizes.fontMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: articles.map((article) {
-                            
-
-                            return DataRow(
-                              cells: [
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.id.nom,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.id.categories,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      article.totalVendu.toString(),
-                                      style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                               
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
+            ),
+        )],
           ),
+          
         ),
-      ),);
+      );
   }
 }
