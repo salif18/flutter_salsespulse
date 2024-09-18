@@ -184,40 +184,43 @@ class _StocksViewState extends State<StocksView> {
 
 // Envoie des donnees vers le server
   Future<void> _sendUpdateStockToServer(article) async {
-    if (_globalKey.currentState!.validate()) {
-      if (_articleImage == null || _categoryController == null) {
-        api.showSnackBarErrorPersonalized(
-            context, "Veuillez sélectionner une image et une catégorie.");
-        return;
-      }
-      final token = Provider.of<AuthProvider>(context, listen: false).token;
-      final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    final userId = Provider.of<AuthProvider>(context, listen: false).userId;
 
-      FormData formData = FormData.fromMap({
-        "userId": userId,
-        "nom": _nameController.text,
-        "image": await MultipartFile.fromFile(_articleImage!.path,
-            filename: _articleImage!.path.split("/").last),
-        "categories": _categoryController,
-        "prix_achat": _prixAchatController.text,
-        "prix_vente": _prixVenteController.text,
-        "stocks": _stockController.text,
-        "date_achat": selectedDate.toIso8601String(),
-      });
+    // Créez un map avec les données de base
+    Map<String, dynamic> data = {
+      "userId": userId,
+      "nom": _nameController.text,
+      "categories": _categoryController,
+      "prix_achat": _prixAchatController.text,
+      "prix_vente": _prixVenteController.text,
+      "stocks": _stockController.text,
+      "date_achat": selectedDate.toIso8601String(),
+    };
 
-      try {
-        final res = await api.updateProduct(formData, token, article.productId);
-        if (res.statusCode == 201) {
-          // ignore: use_build_context_synchronously
-          api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-        } else {
-          // ignore: use_build_context_synchronously
-          api.showSnackBarErrorPersonalized(context, res.data["message"]);
-        }
-      } catch (e) {
+    // Ajoutez l'image uniquement si elle est sélectionnée
+    if (_articleImage != null) {
+      data["image"] = await MultipartFile.fromFile(
+        _articleImage!.path,
+        filename: _articleImage!.path.split("/").last,
+      );
+    }
+
+    // Créez le FormData à partir du map
+    FormData formData = FormData.fromMap(data);
+    print(article.productId);
+    try {
+      final res = await api.updateProduct(formData, token, article.productId);
+      if (res.statusCode == 200) {
         // ignore: use_build_context_synchronously
-        api.showSnackBarErrorPersonalized(context, e.toString());
+        api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+      } else {
+        // ignore: use_build_context_synchronously
+        api.showSnackBarErrorPersonalized(context, res.data["message"]);
       }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      api.showSnackBarErrorPersonalized(context, e.toString());
     }
   }
 
@@ -484,7 +487,6 @@ class _StocksViewState extends State<StocksView> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                       
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color.fromARGB(255, 235, 235, 235),
@@ -512,7 +514,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   constraints: BoxConstraints(
                                     maxWidth: MediaQuery.of(context).size.width,
@@ -532,7 +534,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -549,7 +551,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -566,7 +568,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -583,7 +585,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -600,7 +602,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -617,7 +619,7 @@ class _StocksViewState extends State<StocksView> {
                             DataColumn(
                               label: Expanded(
                                 child: Container(
-                                   height: 50,
+                                  height: 50,
                                   color: Colors.orange,
                                   padding: const EdgeInsets.all(5),
                                   child: Text(
@@ -792,11 +794,6 @@ class _StocksViewState extends State<StocksView> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [],
       ),
     );
   }
@@ -1025,12 +1022,6 @@ class _StocksViewState extends State<StocksView> {
                     decoration: const InputDecoration(
                         labelText: "Nom du produit",
                         border: OutlineInputBorder()),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Le nom du produit est requis";
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
@@ -1039,12 +1030,6 @@ class _StocksViewState extends State<StocksView> {
                     decoration: const InputDecoration(
                         labelText: "Prix d'achat",
                         border: OutlineInputBorder()),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "La description est requise";
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
@@ -1053,14 +1038,6 @@ class _StocksViewState extends State<StocksView> {
                     decoration: const InputDecoration(
                         labelText: "Prix de vente",
                         border: OutlineInputBorder()),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Le prix est requis";
-                      } else if (double.tryParse(value) == null) {
-                        return "Veuillez entrer un prix valide";
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
@@ -1069,14 +1046,6 @@ class _StocksViewState extends State<StocksView> {
                     decoration: const InputDecoration(
                         labelText: "Stock du produit",
                         border: OutlineInputBorder()),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Le stock est requis";
-                      } else if (int.tryParse(value) == null) {
-                        return "Veuillez entrer un stock valide";
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
@@ -1092,40 +1061,9 @@ class _StocksViewState extends State<StocksView> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        _categoryController = value!;
+                        _categoryController = value;
                       });
                     },
-                    validator: (value) {
-                      if (value == null) {
-                        return "La catégorie est requise";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: DateTimeFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Ajouter une date',
-                        hintStyle: GoogleFonts.roboto(fontSize: 20),
-                        fillColor: Colors.grey[100],
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(Icons.calendar_month_rounded,
-                            color: Color.fromARGB(255, 255, 136, 128),
-                            size: 28),
-                      ),
-                      hideDefaultSuffixIcon: true,
-                      mode: DateTimeFieldPickerMode.date,
-                      initialValue: DateTime.now(),
-                      onChanged: (DateTime? value) {
-                        selectedDate = value!;
-                      },
-                    ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
