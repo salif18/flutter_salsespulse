@@ -228,12 +228,14 @@ class _StocksViewState extends State<StocksView> {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
     try {
       final res = await api.deleteProduct(article.productId, token);
+      final body = jsonDecode(res.body);
       if (res.statusCode == 200) {
         // ignore: use_build_context_synchronously
+        api.showSnackBarSuccessPersonalized(context, body["message"]);
         Navigator.pop(context);
       } else {
         // ignore: use_build_context_synchronously
-        api.showSnackBarErrorPersonalized(context, res.data["message"]);
+        api.showSnackBarErrorPersonalized(context, body["message"]);
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
