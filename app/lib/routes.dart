@@ -8,6 +8,7 @@ import 'package:salespulse/views/depenses/depense_view.dart';
 import 'package:salespulse/views/rapports/rapports.dart';
 import 'package:salespulse/views/stocks/stocks.dart';
 import 'package:salespulse/views/ventes/ventes.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class Routes extends StatefulWidget {
   const Routes({super.key});
@@ -52,31 +53,25 @@ class _RoutesState extends State<Routes> {
   Widget _buildBottomNavigation() {
     return SizedBox(
       height: 80,
-      child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
+      child: CurvedNavigationBar(
+        index: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        backgroundColor: Colors.white,
-        elevation: 20,
-        selectedItemColor: const Color(0xFF1D1A30),
-        unselectedItemColor: const Color.fromARGB(255, 168, 168, 168),
-        iconSize: AppSizes.iconLarge,
+        letIndexChange: (index) => true,
+        color: Color(0xff001c30),
+        buttonBackgroundColor: Color.fromARGB( 255, 255, 136, 0), //const Color.fromARGB(255, 126, 61, 248),
+        backgroundColor: Colors.transparent,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 600),
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.stacked_bar_chart_rounded),
-              label: "Statistiques"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.view_in_ar_outlined), label: "Stocks"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.clean_hands_rounded), label: "Vente"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.library_books_sharp), label: "Rapports"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.balance_sharp), label: "Depenses"),
+          Icon(Icons.stacked_bar_chart_rounded , size:AppSizes.iconLarge, color: Colors.white,),
+          Icon(Icons.view_in_ar_outlined , size:AppSizes.iconLarge, color: Colors.white),
+          Icon(Icons.clean_hands_rounded , size:AppSizes.iconLarge, color: Colors.white),
+          Icon(Icons.library_books_sharp , size:AppSizes.iconLarge, color: Colors.white),
+          Icon(Icons.balance_sharp , size:AppSizes.iconLarge, color: Colors.white),
         ],
       ),
     );
