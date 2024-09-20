@@ -28,7 +28,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             width: constraints.maxWidth,
             height: constraints.maxHeight * 0.20,
             child: Image.asset(
-              "assets/logos/logo1.jpg",
+              "assets/images/salespulse2.jpg",
               fit: BoxFit.fill,
             ),
           )),

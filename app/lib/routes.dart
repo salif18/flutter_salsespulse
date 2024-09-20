@@ -19,32 +19,20 @@ class Routes extends StatefulWidget {
 class _RoutesState extends State<Routes> {
   int _currentIndex = 0;
 
-  
-
-   Widget _buildScreen(int index) {
-    switch (index) {
-      case 0:
-        return DashboardView();
-      case 1:
-        return StocksView();
-      case 2:
-        return VenteView();
-      case 3:
-        return RapportView();
-      case 4:
-        return DepensesView();
-      default:
-        return DashboardView(); // Par défaut, retourne un message ou une vue vide
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer<AuthProvider>(
       builder: (context, provider, child) {
         // Si le token est présent, afficher les vues de l'application
         if (provider.token.isNotEmpty) {
-          return _buildScreen(_currentIndex);
+          return <Widget>[
+            DashboardView(),
+            StocksView(),
+            VenteView(),
+            RapportView(),
+            DepensesView(),
+            DashboardView()
+          ][_currentIndex];
         } else {
           // Si pas de token, afficher la page de connexion
           return const LoginView();

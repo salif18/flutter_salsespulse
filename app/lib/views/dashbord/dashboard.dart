@@ -313,32 +313,50 @@ class _DashboardViewState extends State<DashboardView> {
                   itemCount: populaireVente.length.clamp(0, 5), // max 4 items
                   itemBuilder: (context, index) {
                     final stock = populaireVente[index];
-                    return ListTile(
-                      title: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            stock.id.nom,
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium,
-                                color: Colors.white),
-                          )),
-                         subtitle: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                           "catego: ${stock.id.categories}",
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium,
-                                color: Colors.white),
-                          )),
-                      trailing: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            stock.totalVendu.toString(),
-                            style: GoogleFonts.roboto(
-                                fontSize: AppSizes.fontMedium,
-                                color: Colors.white),
-                          )),
-                    );
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            width: 100,
+                            alignment: Alignment.centerLeft,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                stock.id.nom,
+                                style: GoogleFonts.roboto(
+                                    fontSize: constraints.maxWidth*0.025,
+                                    color: Colors.white),
+                              )),
+                          ),
+                        ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                               stock.id.categories,
+                                style: GoogleFonts.roboto(
+                                    fontSize: constraints.maxWidth*0.025,
+                                    color: Colors.white),
+                              )),
+                            ),
+                          ),
+                      Flexible(
+                        flex:1,
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              stock.totalVendu.toString(),
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  color: Color.fromARGB(255, 255, 238, 0)),
+                            )),
+                      ),
+          ]);
                   },
                 ),
               ),
@@ -371,13 +389,15 @@ class _DashboardViewState extends State<DashboardView> {
                                 fit: BoxFit.scaleDown,
                                 child: Text(stock.nom,
                                     style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium)),
+                                        fontSize: constraints.maxWidth*0.025)),
                               ),
                               FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(stock.categories,
                                     style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium)),
+                                        fontSize: constraints.maxWidth*0.025,
+                                        color: Color.fromARGB(255, 122, 0, 204)
+                                      )),
                               ),
                             ],
                           );
