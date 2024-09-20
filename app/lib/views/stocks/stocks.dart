@@ -55,7 +55,6 @@ class _StocksViewState extends State<StocksView> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
     _loadProducts(); // Charger les produits au démarrage
     _getCategories();
   }

@@ -26,7 +26,7 @@ class ServicesAuth{
 
 // fonction de creation de compte
   postRegistreUser(data)async{
-     var url = "$domaineName/auth/signup";
+     var url = "$domaineName/auth/registre";
       return await http.post(Uri.parse(url), 
     body:jsonEncode(data), 
       headers: {

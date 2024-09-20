@@ -333,21 +333,19 @@ class _DepensesViewState extends State<DepensesView> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Date",
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: AppSizes.fontMedium,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(DateFormat("dd MMM yyyy")
-                                            .format(depense.date)),
-                                      ],
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Date",
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: AppSizes.fontMedium,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(DateFormat("dd MMM yyyy")
+                                          .format(depense.date)),
+                                    ],
                                   ),
                                 )
                               ],
