@@ -22,5 +22,8 @@
   <string>1.0</string>
   <key>MinimumOSVersion</key>
   <string>12.0</string>
+  <key>NSCameraUsageDescription</key>
+  <string>We need camera access to scan QR codes</string>
+
 </dict>
 </plist>

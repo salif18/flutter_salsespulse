@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:salespulse/models/categories_model.dart';
 import 'package:salespulse/models/stocks_model.dart';
@@ -20,6 +21,7 @@ import 'package:salespulse/utils/app_size.dart';
 import 'package:salespulse/views/categories/categories_view.dart';
 import 'package:salespulse/views/fournisseurs/fournisseurs_view.dart';
 import 'package:salespulse/views/panier/panier.dart';
+import 'package:salespulse/views/qrcode/qr_code.dart';
 import 'package:salespulse/views/search/search_view.dart';
 
 class StocksView extends StatefulWidget {
@@ -207,7 +209,6 @@ class _StocksViewState extends State<StocksView> {
 
     // Créez le FormData à partir du map
     FormData formData = FormData.fromMap(data);
-    print(article.productId);
     try {
       final res = await api.updateProduct(formData, token, article.productId);
       if (res.statusCode == 200) {
@@ -231,6 +232,7 @@ class _StocksViewState extends State<StocksView> {
       if (res.statusCode == 200) {
         // ignore: use_build_context_synchronously
         api.showSnackBarSuccessPersonalized(context, body["message"]);
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
         // ignore: use_build_context_synchronously
@@ -267,7 +269,7 @@ class _StocksViewState extends State<StocksView> {
                   onPressed: () {
                     drawerKey.currentState!.openDrawer();
                   },
-                  icon: Icon(Icons.sort,
+                  icon: const Icon(Icons.sort,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               actions: [
                 IconButton(
@@ -304,6 +306,17 @@ class _StocksViewState extends State<StocksView> {
                       color: Color.fromARGB(255, 255, 136, 0),
                       size: AppSizes.iconLarge),
                 ),
+                IconButton(
+                    tooltip: "Scanner",
+                    onPressed: () {
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QRScannerView()));
+                    },
+                    icon: const Icon(LineIcons.qrcode,
+                        color: Color.fromARGB(255, 255, 136, 0),
+                        size: AppSizes.iconLarge)),
                 Stack(
                   children: [
                     IconButton(

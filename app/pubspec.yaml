@@ -53,11 +53,14 @@ dependencies:
   flutter_skeleton_ui: ^0.0.6
   shimmer: ^3.0.0
   curved_navigation_bar: ^1.0.6
+  qr_code_scanner: ^1.0.1
+  line_icons: ^2.0.3
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^3.0.0
 
 flutter_icons:
   android: true
@@ -71,7 +74,7 @@ flutter_icons:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
