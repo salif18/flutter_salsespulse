@@ -128,7 +128,7 @@ class _RapportViewState extends State<RapportView> {
                   onPressed: () {
                     drawerKey.currentState!.openDrawer();
                   },
-                  icon: Icon(Icons.sort,
+                  icon: const Icon(Icons.sort,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Rapports",
@@ -153,7 +153,7 @@ class _RapportViewState extends State<RapportView> {
                             hintText: 'Choisir pour une date',
                             hintStyle: GoogleFonts.roboto(
                                 fontSize: 14, color: Colors.white),
-                            fillColor: Color.fromARGB(255, 255, 136, 0),
+                            fillColor: const Color.fromARGB(255, 255, 136, 0),
                             // Color.fromARGB(255, 82, 119, 175),
                             filled: true,
                             border: OutlineInputBorder(
@@ -203,11 +203,11 @@ class _RapportViewState extends State<RapportView> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
+                            child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
                                
                                 child: Text(
-                                  "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
+                                  "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer en tirant l'ecrans vers le bas !!",
                                   style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium),
                                 )),

@@ -116,7 +116,7 @@ class _PopulaireViewState extends State<PopulaireView> {
                       return Center(
                           child: Container(
                         padding: const EdgeInsets.all(8),
-                        height: 120,
+                        height: MediaQuery.of(context).size.width * 0.4,
                         width: MediaQuery.of(context).size.width * 0.9,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -126,14 +126,14 @@ class _PopulaireViewState extends State<PopulaireView> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
-                                  child: Text(
-                                    "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer !!",
-                                    style: GoogleFonts.roboto(
-                                        fontSize: AppSizes.fontMedium),
-                                  )),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                               
+                                child: Text(
+                                  "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer en tirant l'ecrans vers le bas!!",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: AppSizes.fontMedium),
+                                ))
                             ),
                             const SizedBox(width: 40),
                             IconButton(
