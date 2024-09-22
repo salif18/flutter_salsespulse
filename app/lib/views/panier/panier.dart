@@ -94,7 +94,7 @@ class _PanierViewState extends State<PanierView> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back_ios_outlined,
+                  icon: const Icon(Icons.arrow_back_ios_outlined,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               actions: [
           
@@ -159,7 +159,7 @@ class _PanierViewState extends State<PanierView> {
           return cart.isNotEmpty
               ? ListView.builder(
                   shrinkWrap: true,  // Ajout pour éviter les problèmes de scroll
-                  physics: NeverScrollableScrollPhysics(),  // Désactiver le défilement du ListView, car il est déjà dans un CustomScrollView
+                  physics: const NeverScrollableScrollPhysics(),  // Désactiver le défilement du ListView, car il est déjà dans un CustomScrollView
                   itemCount: cart.length,
                   itemBuilder: (context, int index) {
                     final item = cart[index];
@@ -261,7 +261,7 @@ class _PanierViewState extends State<PanierView> {
                               ),
                             ),
                             Text(
-                              "${totalArticle}",
+                              "$totalArticle",
                               style: GoogleFonts.roboto(
                                 fontSize: AppSizes.fontSmall,
                                 fontWeight: FontWeight.bold,
@@ -297,7 +297,7 @@ class _PanierViewState extends State<PanierView> {
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 136, 0),
+                            backgroundColor: const Color.fromARGB(255, 255, 136, 0),
                             minimumSize: const Size(400, 50),
                           ),
                          

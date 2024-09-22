@@ -172,16 +172,16 @@ class _StocksViewState extends State<StocksView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
-          print(res.data["message"]);
+         
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
-           print(res.data["message"]);
+           
         }
       } catch (e) {
         // ignore: use_build_context_synchronously
         api.showSnackBarErrorPersonalized(context, e.toString());
-         print(e.toString());
+         
       }
     }
   }
@@ -483,7 +483,7 @@ class _StocksViewState extends State<StocksView> {
                             onPressed: () {
                               _refresh();
                             },
-                            icon: Icon(Icons.refresh_outlined,
+                            icon:const Icon(Icons.refresh_outlined,
                                 size: AppSizes.iconLarge))
                       ],
                     ),
@@ -507,7 +507,7 @@ class _StocksViewState extends State<StocksView> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 235, 235, 235),
+                          color:const Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
                           columnSpacing: 1,
@@ -968,7 +968,7 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+                        backgroundColor: const Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _sendNewStocksToServer();
@@ -1086,7 +1086,7 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+                        backgroundColor: const Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _sendUpdateStockToServer(article);

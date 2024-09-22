@@ -16,7 +16,7 @@ class ServicesStocks{
       uri,
       data: data,
       options: Options(headers: {
-        "Content-Type": "application/json; charset=UTF-8",
+        "Content-Type":  'multipart/form-data',
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
         "Authorization": "Bearer $token"
@@ -31,7 +31,7 @@ class ServicesStocks{
       uri,
       data: data,
       options: Options(headers: {
-        "Content-Type": "application/json; charset=UTF-8",
+        "Content-Type": "multipart/form-data",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
          "Authorization": "Bearer $token"

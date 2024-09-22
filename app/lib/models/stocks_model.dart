@@ -1,5 +1,6 @@
 class StocksModel {
   String productId;
+  String cloudinaryId;
   String userId;
   String image;
   String nom;
@@ -11,6 +12,7 @@ class StocksModel {
 
   StocksModel(
       {required this.productId,
+      required this.cloudinaryId,
       required this.userId,
       required this.image,
       required this.nom,
@@ -23,6 +25,7 @@ class StocksModel {
   factory StocksModel.fromJson(Map<String, dynamic> json) {
     return StocksModel(
         productId: json["_id"],
+        cloudinaryId: json["cloudinaryId"],
         userId: json["userId"],
         image: json["image"],
         nom: json["nom"],
@@ -36,6 +39,7 @@ class StocksModel {
   Map<String, dynamic> toJson() {
     return {
       "_id": productId,
+      "cloudinaryId":cloudinaryId,
       "userId": userId,
       "image": image,
       "nom": nom,

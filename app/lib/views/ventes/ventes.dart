@@ -55,12 +55,12 @@ class _VenteViewState extends State<VenteView> {
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await api.getAllVentes(token, userId);
       final body = jsonDecode(res.body);
-print(body);
+    
       if (res.statusCode == 200) {
         final products = (body["results"] as List)
             .map((json) => VentesModel.fromJson(json))
             .toList();
-print(products);
+       
         if (!_streamController.isClosed) {
           _streamController.add(products); // Ajouter les produits au stream
         } else {
@@ -119,7 +119,7 @@ print(products);
                   onPressed: () {
                     drawerKey.currentState!.openDrawer();
                   },
-                  icon: Icon(Icons.sort,
+                  icon: const Icon(Icons.sort,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Ventes",
@@ -180,22 +180,20 @@ print(products);
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
-                               
                                 child: Text(
                                   "Erreur de chargement des données. Verifier votre réseau de connexion. Réessayer en tirant l'ecrans vers le bas !!",
                                   style: GoogleFonts.roboto(
                                       fontSize: AppSizes.fontMedium),
-                                ))
-                        ),
+                                ))),
                         const SizedBox(width: 40),
                         IconButton(
                             onPressed: () {
                               _refresh();
                             },
-                            icon: Icon(Icons.refresh_outlined,
+                            icon: const Icon(Icons.refresh_outlined,
                                 size: AppSizes.iconLarge))
                       ],
                     ),
@@ -215,7 +213,7 @@ print(products);
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 235, 235, 235),
+                          color: const Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
                           columnSpacing: 1,

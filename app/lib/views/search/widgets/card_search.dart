@@ -39,7 +39,7 @@ class ResultSearch extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                            image: NetworkImage(item.image!),
+                            image: NetworkImage(item.image),
                             fit: BoxFit.contain)),
                   ),
                 ),
@@ -64,7 +64,7 @@ class ResultSearch extends StatelessWidget {
                             style: GoogleFonts.roboto(
                                 fontWeight: FontWeight.w400,
                                 fontSize: AppSizes.fontMedium,
-                                color: Color.fromARGB(255, 82, 82, 82)),
+                                color: const Color.fromARGB(255, 82, 82, 82)),
                           ),
                           Text("${item.prixVente} cfa",
                               style: GoogleFonts.roboto(
@@ -73,7 +73,7 @@ class ResultSearch extends StatelessWidget {
                            Text("Restant ${item.stocks} ",
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontSmall,
-                                  color: Color.fromARGB(255, 228, 123, 3)))
+                                  color: const Color.fromARGB(255, 228, 123, 3)))
                         ],
                       ),
                     ),

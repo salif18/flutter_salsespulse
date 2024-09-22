@@ -100,6 +100,7 @@ class _DepensesViewState extends State<DepensesView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+          // ignore: use_build_context_synchronously
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const DepensesView()));
         } else {
@@ -142,7 +143,7 @@ class _DepensesViewState extends State<DepensesView> {
                   onPressed: () {
                     drawerKey.currentState!.openDrawer();
                   },
-                  icon: Icon(Icons.sort,
+                  icon: const Icon(Icons.sort,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Dépenses",
@@ -190,7 +191,7 @@ class _DepensesViewState extends State<DepensesView> {
                           hintText: 'Choisir pour une date',
                           hintStyle: GoogleFonts.roboto(
                               fontSize: 14, color: Colors.white),
-                          fillColor: Color.fromARGB(255, 255, 136, 0),
+                          fillColor:const Color.fromARGB(255, 255, 136, 0),
                           // Color.fromARGB(255, 82, 119, 175),
                           filled: true,
                           border: OutlineInputBorder(
@@ -255,7 +256,7 @@ class _DepensesViewState extends State<DepensesView> {
                                 onPressed: () {
                                   _refresh();
                                 },
-                                icon: Icon(Icons.refresh_outlined,
+                                icon:const Icon(Icons.refresh_outlined,
                                     size: AppSizes.iconLarge))
                           ],
                         ),
@@ -288,7 +289,7 @@ class _DepensesViewState extends State<DepensesView> {
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color.fromARGB(255, 250, 250, 250),
+                              color:const Color.fromARGB(255, 250, 250, 250),
                               border: const Border(
                                 bottom: BorderSide(
                                     color: Color.fromARGB(255, 230, 230, 230)),
@@ -363,7 +364,7 @@ class _DepensesViewState extends State<DepensesView> {
       ),
       floatingActionButton: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 255, 136, 0),
+          backgroundColor: const Color.fromARGB(255, 255, 136, 0),
         ),
         onPressed: () {
           _addDepenses(context);

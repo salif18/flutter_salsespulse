@@ -102,7 +102,7 @@ class _DashboardViewState extends State<DashboardView> {
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await venteApi.getAllVentes(token, userId);
       final body = jsonDecode(res.body);
-      print(body);
+    
       if (res.statusCode == 200) {
         setState(() {
           totalAchatOfVente = body["totalAchatOfVente"];
@@ -213,7 +213,7 @@ class _DashboardViewState extends State<DashboardView> {
                 floating: true,
                 leading: IconButton(onPressed: (){
                   drawerKey.currentState!.openDrawer();
-                }, icon: Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                }, icon:const Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text("Tableau de bord",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
                 ),
@@ -354,7 +354,7 @@ class _DashboardViewState extends State<DashboardView> {
                               stock.totalVendu.toString(),
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontMedium,
-                                  color: Color.fromARGB(255, 255, 238, 0)),
+                                  color:const Color.fromARGB(255, 255, 238, 0)),
                             )),
                       ),
           ]);
@@ -397,7 +397,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 child: Text(stock.categories,
                                     style: GoogleFonts.roboto(
                                         fontSize: constraints.maxWidth*0.025,
-                                        color: Color.fromARGB(255, 122, 0, 204)
+                                        color:const Color.fromARGB(255, 122, 0, 204)
                                       )),
                               ),
                             ],

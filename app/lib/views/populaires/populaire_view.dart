@@ -95,7 +95,7 @@ class _PopulaireViewState extends State<PopulaireView> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back_ios_new,
+                  icon: const Icon(Icons.arrow_back_ios_new,
                       size: AppSizes.iconHyperLarge, color: Colors.white)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
@@ -140,7 +140,7 @@ class _PopulaireViewState extends State<PopulaireView> {
                                 onPressed: () {
                                   _refresh();
                                 },
-                                icon: Icon(Icons.refresh_outlined,
+                                icon:const Icon(Icons.refresh_outlined,
                                     size: AppSizes.iconLarge))
                           ],
                         ),

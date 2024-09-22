@@ -37,8 +37,8 @@ class _UpdateProfilState extends State<UpdateProfil> {
 
   Future _sendUpdate() async {
     final provider = Provider.of<AuthProvider>(context, listen: false);
-    final userId = await provider.userId;
-    final token = await provider.token;
+    final userId =  provider.userId;
+    final token =  provider.token;
     var data = {
       "name": _name.text,
         "boutique_name": _entreprise.text,

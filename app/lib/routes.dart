@@ -27,12 +27,12 @@ class _RoutesState extends State<Routes> {
         // Si le token est présent, afficher les vues de l'application
         if (provider.token.isNotEmpty) {
           return <Widget>[
-            DashboardView(),
-            StocksView(),
-            VenteView(),
-            RapportView(),
-            DepensesView(),
-            DashboardView()
+            const DashboardView(),
+            const StocksView(),
+            const VenteView(),
+            const RapportView(),
+            const DepensesView(),
+            const DashboardView()
           ][_currentIndex];
         } else {
           // Si pas de token, afficher la page de connexion
@@ -61,8 +61,8 @@ class _RoutesState extends State<Routes> {
           });
         },
         letIndexChange: (index) => true,
-        color: Color(0xff001c30),
-        buttonBackgroundColor: Color.fromARGB( 255, 255, 136, 0), //const Color.fromARGB(255, 126, 61, 248),
+        color: const Color(0xff001c30),
+        buttonBackgroundColor: const Color.fromARGB( 255, 255, 136, 0), //const Color.fromARGB(255, 126, 61, 248),
         backgroundColor: Colors.transparent,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 600),

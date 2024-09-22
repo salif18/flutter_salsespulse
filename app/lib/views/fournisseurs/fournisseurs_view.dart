@@ -113,6 +113,7 @@ class _FournisseurViewState extends State<FournisseurView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+          // ignore: use_build_context_synchronously
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const FournisseurView()));
         } else {
@@ -150,7 +151,7 @@ class _FournisseurViewState extends State<FournisseurView> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.arrow_back_ios_rounded,
+              icon: const Icon(Icons.arrow_back_ios_rounded,
                   size: AppSizes.iconHyperLarge, color: Colors.white),
             ),
             flexibleSpace: FlexibleSpaceBar(
@@ -197,7 +198,7 @@ class _FournisseurViewState extends State<FournisseurView> {
                           onPressed: () {
                             _refresh();
                           },
-                          icon: Icon(Icons.refresh_outlined,
+                          icon: const Icon(Icons.refresh_outlined,
                               size: AppSizes.iconLarge))
                     ],
                   ),
@@ -438,7 +439,7 @@ class _FournisseurViewState extends State<FournisseurView> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+                        backgroundColor:const Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50),
                       ),
                       child: Text(

@@ -132,7 +132,7 @@ Future<void> _getProducts() async {
             pinned: true,
             floating: true,
             leading: IconButton(onPressed: ()=> Navigator.pop(context),
-             icon: Icon(Icons.arrow_back_ios_new_rounded, size:AppSizes.iconLarge, color:Colors.white)),
+             icon:const Icon(Icons.arrow_back_ios_new_rounded, size:AppSizes.iconLarge, color:Colors.white)),
             flexibleSpace: FlexibleSpaceBar(
               title: Text("Recherche",style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white),)
             ),

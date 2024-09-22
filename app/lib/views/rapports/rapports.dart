@@ -217,7 +217,7 @@ class _RapportViewState extends State<RapportView> {
                               onPressed: () {
                                 _refresh();
                               },
-                              icon: Icon(Icons.refresh_outlined,
+                              icon:const Icon(Icons.refresh_outlined,
                                   size: AppSizes.iconLarge))
                         ],
                       ),
@@ -254,7 +254,7 @@ class _RapportViewState extends State<RapportView> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 235, 235, 235),
+                          color:const Color.fromARGB(255, 235, 235, 235),
                         ),
                         child: DataTable(
                           columnSpacing: 1,

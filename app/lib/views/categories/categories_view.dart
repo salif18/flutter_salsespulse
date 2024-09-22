@@ -101,6 +101,7 @@ class _CategoriesViewState extends State<CategoriesView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+          // ignore: use_build_context_synchronously
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CategoriesView()));
         } else {
@@ -139,7 +140,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           floating: true,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new_outlined,
+              icon: const Icon(Icons.arrow_back_ios_new_outlined,
                   color: Colors.white, size: AppSizes.iconLarge)),
           flexibleSpace: FlexibleSpaceBar(
             title: Text(
@@ -153,8 +154,8 @@ class _CategoriesViewState extends State<CategoriesView> {
           stream: _listCategories.stream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return SliverToBoxAdapter(
-                child: const Center(child: CircularProgressIndicator()),
+              return const SliverToBoxAdapter(
+                child: Center(child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return SliverToBoxAdapter(
@@ -184,15 +185,15 @@ class _CategoriesViewState extends State<CategoriesView> {
                           onPressed: () {
                             _refresh();
                           },
-                          icon: Icon(Icons.refresh_outlined,
+                          icon:const Icon(Icons.refresh_outlined,
                               size: AppSizes.iconLarge))
                     ],
                   ),
                 )),
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return SliverToBoxAdapter(
-                child: const Center(
+              return const SliverToBoxAdapter(
+                child: Center(
                   child: Text("Pas de données disponibles"),
                 ),
               );
@@ -246,7 +247,7 @@ class _CategoriesViewState extends State<CategoriesView> {
         ),
       ]),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+        backgroundColor:const Color.fromARGB(255, 255, 136, 0),
         onPressed: () {
           _addCateShow(context);
         },
@@ -307,7 +308,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 136, 0),
+                        backgroundColor:const Color.fromARGB(255, 255, 136, 0),
                         minimumSize: const Size(400, 50),
                       ),
                       child: Text(
