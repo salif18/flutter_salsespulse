@@ -39,7 +39,7 @@ class ResultSearch extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                            image: NetworkImage(item.image),
+                            image: NetworkImage(item.image!),
                             fit: BoxFit.contain)),
                   ),
                 ),

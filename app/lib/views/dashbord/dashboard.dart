@@ -102,6 +102,7 @@ class _DashboardViewState extends State<DashboardView> {
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await venteApi.getAllVentes(token, userId);
       final body = jsonDecode(res.body);
+      print(body);
       if (res.statusCode == 200) {
         setState(() {
           totalAchatOfVente = body["totalAchatOfVente"];

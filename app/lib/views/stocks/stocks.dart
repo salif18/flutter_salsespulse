@@ -172,13 +172,16 @@ class _StocksViewState extends State<StocksView> {
         if (res.statusCode == 201) {
           // ignore: use_build_context_synchronously
           api.showSnackBarSuccessPersonalized(context, res.data["message"]);
+          print(res.data["message"]);
         } else {
           // ignore: use_build_context_synchronously
           api.showSnackBarErrorPersonalized(context, res.data["message"]);
+           print(res.data["message"]);
         }
       } catch (e) {
         // ignore: use_build_context_synchronously
         api.showSnackBarErrorPersonalized(context, e.toString());
+         print(e.toString());
       }
     }
   }

@@ -55,12 +55,12 @@ class _VenteViewState extends State<VenteView> {
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await api.getAllVentes(token, userId);
       final body = jsonDecode(res.body);
-
+print(body);
       if (res.statusCode == 200) {
         final products = (body["results"] as List)
             .map((json) => VentesModel.fromJson(json))
             .toList();
-
+print(products);
         if (!_streamController.isClosed) {
           _streamController.add(products); // Ajouter les produits au stream
         } else {
