@@ -12,7 +12,7 @@ class ServicesStats {
       "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
       "Authorization": "Bearer $token"
-    });
+    }).timeout(const Duration(seconds: 15));
   }
 
   getStatsHebdo(token, userId) async {
@@ -22,7 +22,7 @@ class ServicesStats {
       "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
       "Authorization": "Bearer $token"
-    });
+    }).timeout(const Duration(seconds: 15));
   }
 
   getStatsByMonth(token, userId) async {
@@ -32,6 +32,6 @@ class ServicesStats {
       "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
       "Authorization": "Bearer $token"
-    });
+    }).timeout(const Duration(seconds: 15));
   }
 }

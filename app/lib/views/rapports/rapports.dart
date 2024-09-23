@@ -131,7 +131,7 @@ class _RapportViewState extends State<RapportView> {
                     drawerKey.currentState!.openDrawer();
                   },
                   icon: const Icon(Icons.sort,
-                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+                      size: AppSizes.iconHyperLarge, color: Color.fromARGB(255, 255, 136, 0),)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Rapports",
                     style: GoogleFonts.roboto(

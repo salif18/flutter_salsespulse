@@ -8,7 +8,13 @@ import 'package:salespulse/https/domaine.dart';
    const String domaineName = Domaine.domaineURI;
 
 class ServicesStocks{
-  Dio dio = Dio();
+  Dio dio = Dio(
+  BaseOptions(
+    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+  ),
+);
+
   //ajouter depense
   postNewProduct(data, token) async {
     var uri = "$domaineName/products";
@@ -65,7 +71,7 @@ class ServicesStocks{
         "Accept-Encoding": "gzip, deflate, br",
         "Authorization": "Bearer $token"
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
 
   //messade d'affichage de reponse de la requette recus
@@ -88,7 +94,7 @@ class ServicesStocks{
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message,
           style: GoogleFonts.roboto(fontSize: 16,fontWeight: FontWeight.w400)),
-      backgroundColor: Color.fromARGB(255, 255, 153, 19),
+      backgroundColor: const Color.fromARGB(255, 255, 153, 19),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: "",

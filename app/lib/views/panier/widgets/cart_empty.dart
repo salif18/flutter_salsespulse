@@ -13,6 +13,7 @@ class EmptyCart extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(height: 100),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -46,7 +47,7 @@ class EmptyCart extends StatelessWidget {
                           builder: (context) => const StocksView()));
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1D1A30),
+                    backgroundColor: const Color.fromARGB(255, 255, 115, 0),
                     minimumSize: const Size(400, 50)),
                 child: Text("Voir les articles",
                     style:

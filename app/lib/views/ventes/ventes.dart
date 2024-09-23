@@ -122,7 +122,7 @@ class _VenteViewState extends State<VenteView> {
                     drawerKey.currentState!.openDrawer();
                   },
                   icon: const Icon(Icons.sort,
-                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+                      size: AppSizes.iconHyperLarge, color: Color.fromARGB(255, 255, 136, 0),)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Ventes",
                     style: GoogleFonts.roboto(

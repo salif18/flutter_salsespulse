@@ -16,7 +16,13 @@ import 'package:salespulse/providers/panier_provider.dart';
 const String domaineName = Domaine.domaineURI;
 
 class ServicesPanier {
-  Dio dio = Dio();
+   Dio dio = Dio(
+  BaseOptions(
+    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+  ),
+);
+
   //AJOUTER DES COMMANDES
   Future<Response> postOrders(Map<String, dynamic> data, String token) async {
     var uri = "$domaineName/ventes";

@@ -8,7 +8,14 @@ import 'package:salespulse/https/domaine.dart';
 
 class ServicesFournisseurs{
   
-Dio dio = Dio();
+ Dio dio = Dio(
+  BaseOptions(
+    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+  ),
+);
+
+
    //ajouter de categorie pour formulaire
  postFournisseur(data, token)async{
   
@@ -56,7 +63,7 @@ Dio dio = Dio();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message,
           style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400)),
-      backgroundColor: Color.fromARGB(255, 11, 26, 73),
+      backgroundColor: const Color.fromARGB(255, 11, 26, 73),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
           label: "",

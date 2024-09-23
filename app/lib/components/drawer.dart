@@ -65,6 +65,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Container(
+                         margin: const EdgeInsets.only(top: 25),
                         width: constraints.maxWidth,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -81,9 +82,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               },
                               title: Row(
                                 children: [
-                                  const Icon(LineIcons.userEdit,
-                                      size: AppSizes.iconLarge,
-                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  Container(
+                                   height: 27,   
+                                   width: 27,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: const Color.fromARGB(255, 10, 165, 226),
+                                    ),
+                                    child: const Icon(LineIcons.userEdit,
+                                        size: AppSizes.iconLarge,
+                                        color: Color.fromARGB(255, 255, 255, 255)),
+                                  ),
                                   const SizedBox(width: 20),
                                   AutoSizeText(
                                     "Modifier profil",
@@ -91,8 +100,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.roboto(
                                         fontSize: AppSizes.fontLarge,
-                                        color: const Color.fromARGB(
-                                            255, 20, 20, 20)),
+                                        color: const Color.fromARGB(255, 20, 20, 20)),
                                   )
                                 ],
                               ),
@@ -107,9 +115,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               },
                               title: Row(
                                 children: [
-                                  const Icon(LineIcons.edit,
-                                      size: AppSizes.iconLarge,
-                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  Container(
+                                   height: 27,   
+                                   width: 27,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: const Color.fromARGB(255, 7, 185, 75),
+                                    ),
+                                    
+                                    child: const Icon(LineIcons.edit,
+                                        size: AppSizes.iconLarge,
+                                        color: Color.fromARGB(255, 255, 255, 255)),
+                                  ),
                                   const SizedBox(width: 20),
                                   AutoSizeText(
                                     "Modifier password",
@@ -146,9 +163,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               },
                               title: Row(
                                 children: [
-                                  const Icon(LineIcons.removeUser,
-                                      size: AppSizes.iconLarge,
-                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  Container(
+                                   height: 27,   
+                                   width: 27,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: const Color.fromARGB(255, 255, 180, 17),
+                                    ),
+                                    
+                                    child: const Icon(LineIcons.removeUser,
+                                        size: AppSizes.iconLarge,
+                                        color: Color.fromARGB(255, 255, 255, 255)),
+                                  ),
                                   const SizedBox(width: 20),
                                   AutoSizeText(
                                     "Supprimer",
@@ -170,9 +196,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 },
                                 title: Row(
                                   children: [
-                                    const Icon(LineIcons.alternateSignOut,
-                                        size: AppSizes.iconLarge,
-                                        color: Color.fromARGB(255, 20, 20, 20)),
+                                    Container(
+                                     height: 27,   
+                                     width: 27,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: const Color.fromARGB(255, 165, 10, 226),
+                                    ),
+                                    
+                                      child: const Icon(LineIcons.alternateSignOut,
+                                          size: AppSizes.iconLarge,
+                                          color: Color.fromARGB(255, 255, 255, 255)),
+                                    ),
                                     const SizedBox(width: 20),
                                     AutoSizeText(
                                       "Se deconnecter",
@@ -197,7 +232,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Developper par devSoft",
+                              "Developper par Salif Moctar Konaté ",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  color: const Color.fromARGB(255, 17, 17, 17)),
+                            ),
+                             Text(
+                              "from devSoft ",
                               style: GoogleFonts.roboto(
                                   fontSize: AppSizes.fontMedium,
                                   color: const Color.fromARGB(255, 17, 17, 17)),

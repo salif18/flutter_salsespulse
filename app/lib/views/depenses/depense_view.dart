@@ -146,7 +146,7 @@ class _DepensesViewState extends State<DepensesView> {
                     drawerKey.currentState!.openDrawer();
                   },
                   icon: const Icon(Icons.sort,
-                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+                      size: AppSizes.iconHyperLarge, color: Color.fromARGB(255, 255, 136, 0),)),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("Dépenses",
                     style: GoogleFonts.roboto(
@@ -426,7 +426,7 @@ class _DepensesViewState extends State<DepensesView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1D1A30),
+                        backgroundColor: const Color.fromARGB(255, 255, 115, 0),
                         minimumSize: const Size(400, 50)),
                     onPressed: () {
                       _sendNewDepenseToServer();

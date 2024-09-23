@@ -37,8 +37,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   Future _sendUpdate() async {
     if (_formKey.currentState!.validate()) {
       final provider = Provider.of<AuthProvider>(context, listen: false);
-      final userId = await provider.userId;
-      final token = await provider.token;
+      final userId = provider.userId;
+      final token = provider.token;
       var data = {
         "current_password": _currentPassword.text,
         "new_password": _newPassword.text,
@@ -73,10 +73,12 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1D1A30),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_ios_rounded, size: AppSizes.iconMedium)),
+            icon: const Icon(Icons.arrow_back_ios_rounded, size: AppSizes.iconMedium, color: Colors.white,)),
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -221,7 +223,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           padding: const EdgeInsets.all(5),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1D1A30),
+              backgroundColor: const Color.fromARGB(255, 255, 115, 0),
               elevation: 5,
               fixedSize: const Size(400, 50),
             ),

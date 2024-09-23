@@ -213,7 +213,7 @@ class _DashboardViewState extends State<DashboardView> {
                 floating: true,
                 leading: IconButton(onPressed: (){
                   drawerKey.currentState!.openDrawer();
-                }, icon:const Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Colors.white)),
+                }, icon:const Icon(Icons.sort, size: AppSizes.iconHyperLarge,color:Color.fromARGB(255, 255, 136, 0),)),
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text("Tableau de bord",style:GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color:Colors.white)),
                 ),
@@ -828,17 +828,17 @@ class _DashboardViewState extends State<DashboardView> {
                           fontSize: 18,
                           color: const Color.fromARGB(255, 12, 12, 12))),
                 )),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text("125000 fcfa",
-                    style: GoogleFonts.roboto(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: const Color.fromARGB(255, 5, 5, 5))),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 15),
+            //   child: FittedBox(
+            //     fit: BoxFit.scaleDown,
+            //     child: Text("125000 fcfa",
+            //         style: GoogleFonts.roboto(
+            //             fontWeight: FontWeight.w600,
+            //             fontSize: 18,
+            //             color: const Color.fromARGB(255, 5, 5, 5))),
+            //   ),
+            // ),
             LineChartWidget(data: statsYear),
           ],
         ),

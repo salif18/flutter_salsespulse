@@ -108,7 +108,7 @@ Future<void> _getProducts() async {
     final userId = Provider.of<AuthProvider>(context, listen: false).userId;
     try {
       final res = await api.getAllProducts(token, userId);
-      final body = jsonDecode(res.body);
+      final body = res.data;
       if(res.statusCode == 200){
         setState(() {
             articles =

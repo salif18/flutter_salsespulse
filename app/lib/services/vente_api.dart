@@ -7,7 +7,12 @@ import 'package:salespulse/https/domaine.dart';
 const String domaineName = Domaine.domaineURI;
 
 class ServicesVentes {
-  Dio dio = Dio();
+   Dio dio = Dio(
+  BaseOptions(
+    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+  ),
+);
 
   //obtenir depenses
   getAllVentes(token, userId) async {
@@ -33,7 +38,7 @@ class ServicesVentes {
         "Accept-Encoding": "gzip, deflate, br",
         "Authorization": "Bearer $token"
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
 
   //messade d'affichage de reponse de la requette recus

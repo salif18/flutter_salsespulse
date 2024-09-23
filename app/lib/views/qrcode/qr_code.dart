@@ -24,8 +24,11 @@ class _QRScannerViewState extends State<QRScannerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff001c30),
       appBar: AppBar(
-        title: Text('Scanner QR Code',style: GoogleFonts.roboto(fontSize: AppSizes.fontMedium),),
+        backgroundColor: const Color(0xff001c30),
+        leading: IconButton(onPressed: ()=> Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios_rounded, size:AppSizes.iconLarge, color: Colors.orange,)),
+        title: Text('Scanner QR Code',style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color: Colors.orange),),
       ),
       body: Column(
         children: [
@@ -46,7 +49,7 @@ class _QRScannerViewState extends State<QRScannerView> {
           Expanded(
             flex: 1,
             child: Center(
-              child: Text(qrText != null ? 'Résultat : $qrText' : 'Scanne un code QR'),
+              child: Text(qrText != null ? 'Résultat : $qrText' : 'Scanne un code QR', style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, fontWeight: FontWeight.bold, color: Colors.orange),),
             ),
           ),
         ],

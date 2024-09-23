@@ -67,7 +67,7 @@ class _RoutesState extends State<Routes> {
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 600),
         items: const [
-          Icon(Icons.stacked_bar_chart_rounded , size:AppSizes.iconLarge, color: Colors.white,),
+          Icon(Icons.stacked_bar_chart_rounded , size:AppSizes.iconLarge, color: Colors.white),
           Icon(Icons.view_in_ar_outlined , size:AppSizes.iconLarge, color: Colors.white),
           Icon(Icons.clean_hands_rounded , size:AppSizes.iconLarge, color: Colors.white),
           Icon(Icons.library_books_sharp , size:AppSizes.iconLarge, color: Colors.white),

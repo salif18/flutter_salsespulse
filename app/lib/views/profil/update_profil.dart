@@ -74,14 +74,17 @@ class _UpdateProfilState extends State<UpdateProfil> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        backgroundColor:const Color(0xFF1D1A30),
+        toolbarHeight: 80,
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon:const Icon(Icons.arrow_back_ios_new_rounded, size: AppSizes.iconLarge)),
+            icon:const Icon(Icons.arrow_back_ios_new_rounded, size: AppSizes.iconLarge, color:Colors.white)),
         title: Text(
           "Modification de compte",
           style: GoogleFonts.roboto(
             fontSize: AppSizes.fontLarge,
             fontWeight: FontWeight.w500,
+            color: Colors.white
           ),
         ),
       ),
@@ -233,7 +236,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
             _sendUpdate();
           },
           style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1D1A30),
+              backgroundColor: const Color.fromARGB(255, 255, 115, 0),
               elevation: 5,
               fixedSize: const Size(320, 50)),
           icon: Icon(Icons.edit, size: AppSizes.iconLarge, color: Colors.grey[100]),

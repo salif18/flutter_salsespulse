@@ -275,7 +275,7 @@ class _StocksViewState extends State<StocksView> {
                     drawerKey.currentState!.openDrawer();
                   },
                   icon: const Icon(Icons.sort,
-                      size: AppSizes.iconHyperLarge, color: Colors.white)),
+                      size: AppSizes.iconHyperLarge, color: Color.fromARGB(255, 255, 115, 1))),
               actions: [
                 IconButton(
                     tooltip: "Ajouter de stocks",
@@ -319,7 +319,7 @@ class _StocksViewState extends State<StocksView> {
                         MaterialPageRoute(
                             builder: (context) => const QRScannerView()));
                     },
-                    icon: const Icon(LineIcons.qrcode,
+                    icon: const Icon(Icons.qr_code_scanner_sharp,
                         color: Color.fromARGB(255, 255, 136, 0),
                         size: AppSizes.iconLarge)),
                 Stack(
@@ -389,49 +389,53 @@ class _StocksViewState extends State<StocksView> {
                         maxWidth: 250,
                         minHeight: 20,
                       ),
-                      child: DropdownButtonFormField<String>(
-                        dropdownColor: const Color(0xff001c30),
-                        menuMaxHeight: 300,
-                        borderRadius: BorderRadius.circular(10),
-                        value: _categorieValue,
-                        decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: Color.fromARGB(255, 255, 136, 0),
-                          // Color.fromARGB(255, 82, 119, 175),
-                          hintText: "Choisir une categorie",
-                          hintStyle: TextStyle(
-                              fontFamily: "roboto",
-                              fontSize: 14,
-                              color: Colors.white),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                        ),
-                        items: _listCategories.map((categorie) {
-                          return DropdownMenuItem<String>(
-                            value: categorie.name,
-                            child: Text(
-                              categorie.name,
-                              style: GoogleFonts.roboto(fontSize: 12,color: Colors.white),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _categorieValue = value!;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "La catégorie est requise";
-                          }
-                          return null;
-                        },
-                        icon: const Icon(
-                          Icons.arrow_drop_down, // Icône de flèche
-                          color: Color.fromARGB(
-                              255, 255, 255, 255), // Couleur de l'icône
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField<String>(
+                          isDense: false,
+                          dropdownColor: const Color(0xff001c30),
+                          menuMaxHeight: 200,
+                          borderRadius: BorderRadius.circular(10),
+                          value: _categorieValue,
+                          decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 255, 136, 0),
+                            // Color.fromARGB(255, 82, 119, 175),
+                            hintText: "Choisir une categorie",
+                            hintStyle: TextStyle(
+                                fontFamily: "roboto",
+                                fontSize: 14,
+                                color: Colors.white),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                          ),
+                          items: _listCategories.map((categorie) {
+                            return DropdownMenuItem<String>(
+                              value: categorie.name,
+                              child: Text(
+                                categorie.name,
+                                style: GoogleFonts.roboto(fontSize: 12,color: Colors.white),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _categorieValue = value!;
+                            });
+                          },
+                          validator: (value) {
+                            if (value == null) {
+                              return "La catégorie est requise";
+                            }
+                            return null;
+                          },
+                          icon: const Icon(
+                            Icons.arrow_drop_down, // Icône de flèche
+                            color: Color.fromARGB(
+                                255, 255, 255, 255), // Couleur de l'icône
+                          ),
                         ),
                       ),
                     ),
@@ -924,7 +928,8 @@ class _StocksViewState extends State<StocksView> {
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                      dropdownColor: const Color(0xff001c30),
-                        menuMaxHeight: 300,
+                     isDense: false,
+                        menuMaxHeight: 200,
                         borderRadius: BorderRadius.circular(10),
                     value: _categoryController,
                     decoration: const InputDecoration(

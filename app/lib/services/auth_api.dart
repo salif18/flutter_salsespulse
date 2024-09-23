@@ -11,7 +11,13 @@ import "package:salespulse/https/domaine.dart";
  const String domaineName = Domaine.domaineURI;
 
 class ServicesAuth{
-  Dio dio = Dio();
+   Dio dio = Dio(
+  BaseOptions(
+    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+  ),
+);
+
   // fonction de connection
   postLoginUser(data)async{
     var url = "$domaineName/auth/login";
@@ -21,7 +27,7 @@ class ServicesAuth{
         "Content-Type": "application/json; charset=UTF-8",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
-    });
+    }).timeout(const Duration(seconds: 15));
   }
 
 // fonction de creation de compte
@@ -33,7 +39,7 @@ class ServicesAuth{
         "Content-Type": "application/json; charset=UTF-8",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
-    });
+    }).timeout(const Duration(seconds: 15));
   
   }
 
@@ -49,7 +55,7 @@ class ServicesAuth{
         "Accept-Encoding": "gzip, deflate, br",
         "Authorization": "Bearer $token"
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
  
   //fontion de modification de passeword
@@ -64,7 +70,7 @@ class ServicesAuth{
         "Accept-Encoding": "gzip, deflate, br",
         "Authorization": "Bearer $token"
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
 
   //fontion de reinitialisation de password
@@ -78,7 +84,7 @@ class ServicesAuth{
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
 
   //fontion de validation de mot de password reinitialiser
@@ -92,7 +98,7 @@ class ServicesAuth{
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
       },
-    );
+    ).timeout(const Duration(seconds: 15));
   }
 
 
@@ -101,7 +107,7 @@ class ServicesAuth{
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message,
           style: GoogleFonts.roboto(fontSize: 16,fontWeight: FontWeight.w400)),
-      backgroundColor: Color.fromARGB(255, 255, 157, 11),
+      backgroundColor: const Color.fromARGB(255, 255, 157, 11),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: "",
