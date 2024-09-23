@@ -42,14 +42,14 @@ class ServicesStocks{
   //obtenir depenses
   getAllProducts(token,userId) async {
     var uri = "$domaineName/products/$userId";
-    return await http.get(
-      Uri.parse(uri),
-     headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-        "Accept": "*/*",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Authorization": "Bearer $token"
-      });
+       return await dio.get(uri,
+     options:Options(headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Accept":"*/*",
+            "Accept-Encoding":"gzip, deflate, br",
+             "Authorization": "Bearer $token"
+          },
+    ));
   }
 
 

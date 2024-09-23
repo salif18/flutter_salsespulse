@@ -7,12 +7,14 @@ class AuthProvider extends ChangeNotifier {
   late String _userId;
   late String _userName;
   late String _societeName;
+  late String _societeNumber;
 
   // Accesseurs pour récupérer les valeurs
   String get token => _token;
   String get userId => _userId;
   String get userName => _userName;
   String get societeName => _societeName;
+  String get societeNumber => _societeNumber;
 
   // Initialisation des variables
   AuthProvider() {
@@ -20,6 +22,7 @@ class AuthProvider extends ChangeNotifier {
     _userId = "";
     _userName = "";
     _societeName = "";
+    _societeNumber ="";
 
     // Chargement des données au démarrage
     _loadUserData();
@@ -32,7 +35,7 @@ class AuthProvider extends ChangeNotifier {
     _userId = localStorage.getString("userId") ?? "";
     _userName = localStorage.getString("userName") ?? "";
     _societeName = localStorage.getString("societeName") ?? "";
-    
+    _societeNumber = localStorage.getString("societeNumber") ?? "";
     // Notifier les listeners après avoir chargé les données
     notifyListeners();
   }
@@ -50,15 +53,17 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Fonction de login : sauvegarde les données utilisateur
-  void loginButton(String userToken, String userUserId, String userName , String entreprise) {
+  void loginButton(String userToken, String userUserId, String userName , String entreprise, String number) {
     _token = userToken;
     _userId = userUserId;
     _userName =userName;
     _societeName = entreprise;
+    _societeNumber = number;
     saveToLocalStorage("token", _token);
     saveToLocalStorage("userId", _userId);
     saveToLocalStorage("userName", _userName);
     saveToLocalStorage("societeName", _societeName);
+    saveToLocalStorage("societeNumber", _societeNumber);
     notifyListeners();
   }
   // Fonction de déconnexion : efface les données utilisateur
@@ -67,10 +72,12 @@ class AuthProvider extends ChangeNotifier {
     _userId = "";
     _userName = "";
     _societeName = "";
+    _societeNumber = "";
     removeFromLocalStorage("token");
     removeFromLocalStorage("userId");
     removeFromLocalStorage("userName");
     removeFromLocalStorage("societeName");
+    removeFromLocalStorage("societeNumber");
     notifyListeners();
   }
 }

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:salespulse/components/drawer.dart';
 import 'package:salespulse/models/ventes_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/vente_api.dart';
@@ -50,7 +51,7 @@ class _RapportViewState extends State<RapportView> {
       final token = Provider.of<AuthProvider>(context, listen: false).token;
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await api.getAllVentes(token, userId);
-      final body = jsonDecode(res.body);
+      final body = res.data;
 
       if (res.statusCode == 200) {
         final products = (body["results"] as List)
@@ -111,6 +112,7 @@ class _RapportViewState extends State<RapportView> {
 
     return Scaffold(
       key: drawerKey,
+       drawer: const DrawerWidget(),
       backgroundColor: const Color(0xfff0f1f5),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,

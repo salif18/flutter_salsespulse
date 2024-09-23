@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:salespulse/models/cart_item_model.dart';
@@ -43,7 +44,7 @@ class PanierProvider extends ChangeNotifier {
     }
 
     newQty = 0;
-    print(_cart);
+
     saveCartToLocalStorage();
     notifyListeners();
   }
@@ -113,13 +114,13 @@ class PanierProvider extends ChangeNotifier {
   // Calculate total price
   int calculateNombreArticel() {
     if (_cart.isNotEmpty) {
-      _total = _cart
+      _totalArticle = _cart
           .map((cartItem) => cartItem.qty)
           .reduce((a, b) => a + b);
     } else {
-      _total = 0;
+      _totalArticle = 0;
     }
-    return _total;
+    return _totalArticle;
   }
 
 

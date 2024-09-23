@@ -71,7 +71,7 @@ class _RegistreViewState extends State<RegistreView> {
 
         if (response.statusCode == 201) {
           provider.loginButton(body['token'], body["userId"].toString(),
-              body["userName"], body["entreprise"]);
+              body["userName"], body["entreprise"],body["userNumber"]);
 
           Navigator.pushReplacement(
               // ignore: use_build_context_synchronously

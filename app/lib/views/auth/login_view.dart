@@ -57,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
         Navigator.pop(context); // Fermer le dialog
 
         if (response.statusCode == 200) {
-          providerAuth.loginButton(body['token'], body["userId"].toString(), body["userName"], body["entreprise"]);
+          providerAuth.loginButton(body['token'], body["userId"].toString(), body["userName"], body["entreprise"], body["userNumber"]);
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Routes()));
         } else {

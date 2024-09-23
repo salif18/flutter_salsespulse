@@ -60,7 +60,7 @@ class _DashboardViewState extends State<DashboardView> {
       final token = Provider.of<AuthProvider>(context, listen: false).token;
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await stockApi.getAllProducts(token, userId);
-      final body = jsonDecode(res.body);
+      final body = res.data;
       if (res.statusCode == 200) {
         // Ajouter les produits au stream
         setState(() {
@@ -101,7 +101,7 @@ class _DashboardViewState extends State<DashboardView> {
       final token = Provider.of<AuthProvider>(context, listen: false).token;
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await venteApi.getAllVentes(token, userId);
-      final body = jsonDecode(res.body);
+      final body = res.data;
     
       if (res.statusCode == 200) {
         setState(() {

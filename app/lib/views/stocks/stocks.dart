@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:salespulse/components/drawer.dart';
 import 'package:salespulse/models/categories_model.dart';
 import 'package:salespulse/models/stocks_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
@@ -88,7 +89,7 @@ class _StocksViewState extends State<StocksView> {
       final token = Provider.of<AuthProvider>(context, listen: false).token;
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
       final res = await api.getAllProducts(token, userId);
-      final body = jsonDecode(res.body);
+      final body = res.data;
 
       if (res.statusCode == 200) {
         final products = (body["produits"] as List)
@@ -255,6 +256,7 @@ class _StocksViewState extends State<StocksView> {
 
     return Scaffold(
       key: drawerKey,
+       drawer: const DrawerWidget(),
       backgroundColor: const Color(0xfff0f1f5),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,
@@ -388,6 +390,9 @@ class _StocksViewState extends State<StocksView> {
                         minHeight: 20,
                       ),
                       child: DropdownButtonFormField<String>(
+                        dropdownColor: const Color(0xff001c30),
+                        menuMaxHeight: 300,
+                        borderRadius: BorderRadius.circular(10),
                         value: _categorieValue,
                         decoration: const InputDecoration(
                           filled: true,
@@ -408,7 +413,7 @@ class _StocksViewState extends State<StocksView> {
                             value: categorie.name,
                             child: Text(
                               categorie.name,
-                              style: GoogleFonts.roboto(fontSize: 12),
+                              style: GoogleFonts.roboto(fontSize: 12,color: Colors.white),
                             ),
                           );
                         }).toList(),
@@ -918,6 +923,9 @@ class _StocksViewState extends State<StocksView> {
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
+                     dropdownColor: const Color(0xff001c30),
+                        menuMaxHeight: 300,
+                        borderRadius: BorderRadius.circular(10),
                     value: _categoryController,
                     decoration: const InputDecoration(
                         labelText: "Catégorie du produit",
@@ -925,7 +933,7 @@ class _StocksViewState extends State<StocksView> {
                     items: _listCategories.map((category) {
                       return DropdownMenuItem<String>(
                         value: category.name,
-                        child: Text(category.name),
+                        child: Text(category.name , style: GoogleFonts.roboto(fontSize: 12,color: Colors.white)),
                       );
                     }).toList(),
                     onChanged: (value) {

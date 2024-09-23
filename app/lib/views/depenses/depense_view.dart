@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:salespulse/components/drawer.dart';
 import 'package:salespulse/models/depenses_model.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/services/depense_api.dart';
@@ -126,6 +127,7 @@ class _DepensesViewState extends State<DepensesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: drawerKey,
+       drawer: const DrawerWidget(),
       backgroundColor: const Color(0xfff0f1f5),
       body: RefreshIndicator(
         backgroundColor: Colors.transparent,

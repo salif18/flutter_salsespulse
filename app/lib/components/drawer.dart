@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:salespulse/providers/auth_provider.dart';
 import 'package:salespulse/utils/app_size.dart';
@@ -18,95 +19,200 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
+    // Utiliser Consumer pour récupérer les données du panier
+    final store = Provider.of<AuthProvider>(context, listen: false).societeName;
+    final number =
+        Provider.of<AuthProvider>(context, listen: false).societeNumber;
     return Drawer(
-      backgroundColor: const Color(0xff001c30),
-      child: LayoutBuilder(builder: (context, constraints) {
-      return ListView(
-        children: [
-          DrawerHeader(
-              child: Container(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight * 0.20,
-            child: Image.asset(
-              "assets/images/salespulse2.jpg",
-              fit: BoxFit.fill,
-            ),
-          )),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const UpdateProfil()));
-            },
-            title: Row(
-              children: [
-                const Icon(Icons.edit, size: AppSizes.iconLarge,color: Color.fromARGB(255, 58, 174, 228)),
-                const SizedBox(width:20),
-                AutoSizeText(
-                  "Modifier profil",
-                  minFontSize: 14,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, color: Colors.white),
-                )
-              ],
-            ),
-          ),
-         
-        ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const UpdatePassword()));
-            },
-            title: Row(
-              children: [
-                const Icon(Icons.password, size: AppSizes.iconLarge,color: Color.fromARGB(255, 2, 156, 27)),
-                const SizedBox(width:20),
-                AutoSizeText(
-                  "Modifier password",
-                  minFontSize: 14,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge,color: Colors.white),
-                )
-              ],
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ViewCustomScroll()));
-            },
-            title: Row(
-              children: [
-                const Icon(Icons.person_off_outlined, size: AppSizes.iconLarge,color: const Color.fromARGB(255, 228, 58, 58)),
-                const SizedBox(width:20),
-                AutoSizeText(
-                  "Supprimer",
-                  minFontSize: 14,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge,color: const Color.fromARGB(255, 228, 58, 58)),
-                )
-              ],
-            ),
-          ),
-         
-          Consumer<AuthProvider>(builder: (context, provider, child) {
-            return ListTile(
-              onTap: () {
-                provider.logoutButton();
-              },
-              title: Row(
-                children: [
-                  AutoSizeText("Se deconnecter",style: GoogleFonts.roboto(fontSize:AppSizes.fontLarge,color: Colors.white),)],
-              ),
-            );
-          }),
-        ],
-      );
-    }));
+        backgroundColor: const Color(0xff001c30),
+        child: LayoutBuilder(builder: (context, constraints) {
+          return ListView(
+            children: [
+              DrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: Color(0xff001c30),
+                    border: Border(
+                      bottom: BorderSide(width: 2, color: Colors.orange)
+                    )
+                    ),
+                  child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Center(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            store,
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontLarge,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.orange),
+                          ),
+                          Text(
+                            number,
+                            style: GoogleFonts.roboto(
+                                fontSize: AppSizes.fontMedium,
+                                color:
+                                    const Color.fromARGB(255, 231, 231, 231)),
+                          ),
+                        ],
+                      )))),
+              Container(
+                  color: const Color.fromARGB(255, 238, 238, 238),
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Container(
+                        width: constraints.maxWidth,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 255, 255, 255)),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UpdateProfil()));
+                              },
+                              title: Row(
+                                children: [
+                                  const Icon(LineIcons.userEdit,
+                                      size: AppSizes.iconLarge,
+                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  const SizedBox(width: 20),
+                                  AutoSizeText(
+                                    "Modifier profil",
+                                    minFontSize: 14,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontLarge,
+                                        color: const Color.fromARGB(
+                                            255, 20, 20, 20)),
+                                  )
+                                ],
+                              ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const UpdatePassword()));
+                              },
+                              title: Row(
+                                children: [
+                                  const Icon(LineIcons.edit,
+                                      size: AppSizes.iconLarge,
+                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  const SizedBox(width: 20),
+                                  AutoSizeText(
+                                    "Modifier password",
+                                    minFontSize: 14,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontLarge,
+                                        color: const Color.fromARGB(
+                                            255, 20, 20, 20)),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: constraints.maxWidth,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromARGB(255, 255, 255, 255)),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewCustomScroll()));
+                              },
+                              title: Row(
+                                children: [
+                                  const Icon(LineIcons.removeUser,
+                                      size: AppSizes.iconLarge,
+                                      color: Color.fromARGB(255, 20, 20, 20)),
+                                  const SizedBox(width: 20),
+                                  AutoSizeText(
+                                    "Supprimer",
+                                    minFontSize: 14,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                        fontSize: AppSizes.fontLarge,
+                                        color: const Color.fromARGB(
+                                            255, 20, 20, 20)),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Consumer<AuthProvider>(
+                                builder: (context, provider, child) {
+                              return ListTile(
+                                onTap: () {
+                                  provider.logoutButton();
+                                },
+                                title: Row(
+                                  children: [
+                                    const Icon(LineIcons.alternateSignOut,
+                                        size: AppSizes.iconLarge,
+                                        color: Color.fromARGB(255, 20, 20, 20)),
+                                    const SizedBox(width: 20),
+                                    AutoSizeText(
+                                      "Se deconnecter",
+                                      style: GoogleFonts.roboto(
+                                          fontSize: AppSizes.fontLarge,
+                                          color: const Color.fromARGB(
+                                              255, 20, 20, 20)),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 100),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Developper par devSoft",
+                              style: GoogleFonts.roboto(
+                                  fontSize: AppSizes.fontMedium,
+                                  color: const Color.fromARGB(255, 17, 17, 17)),
+                            ),
+                            Text("v 1.0.0",
+                                style: GoogleFonts.roboto(
+                                    fontSize: AppSizes.fontSmall,
+                                    color: Colors.grey))
+                          ],
+                        ),
+                      ),
+                    )
+                  ]))
+            ],
+          );
+        }));
   }
 }
