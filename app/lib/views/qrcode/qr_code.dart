@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:salespulse/utils/app_size.dart';
+import 'package:salespulse/views/qrcode/genered_qr.dart';
 
 
 class QRScannerView extends StatefulWidget {
@@ -49,7 +50,16 @@ class _QRScannerViewState extends State<QRScannerView> {
           Expanded(
             flex: 1,
             child: Center(
-              child: Text(qrText != null ? 'Résultat : $qrText' : 'Scanne un code QR', style: GoogleFonts.roboto(fontSize: AppSizes.fontLarge, fontWeight: FontWeight.bold, color: Colors.orange),),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(qrText != null ? 'Résultat : $qrText' : 'Scanne un code QR', style: GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.orange),),
+                  const SizedBox(width: 20),
+                  TextButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const GeneredQRCode()));
+                  }, child: Text("Créer un code QR",style: GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.orange)))
+                ]
+              ),
             ),
           ),
         ],
@@ -66,6 +76,9 @@ class _QRScannerViewState extends State<QRScannerView> {
         qrText = scanData.code;
       });
     });
+
+    // Arrêter le scan après la première détection pour éviter les doublons
+    controller.pauseCamera();
   }
 
 }
