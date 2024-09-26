@@ -40,7 +40,7 @@ class ServicesStocks{
         "Content-Type": "multipart/form-data",
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate, br",
-         "Authorization": "Bearer $token"
+        "Authorization": "Bearer $token"
       },)
     );
   }
@@ -53,7 +53,7 @@ class ServicesStocks{
             "Content-Type": "application/json; charset=UTF-8",
             "Accept":"*/*",
             "Accept-Encoding":"gzip, deflate, br",
-             "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token"
           },
     ));
   }

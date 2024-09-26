@@ -9,8 +9,8 @@ const String domaineName = Domaine.domaineURI;
 class ServicesVentes {
    Dio dio = Dio(
   BaseOptions(
-    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
-    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    connectTimeout: const Duration(milliseconds: 60000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 60000),  // 15 secondes
   ),
 );
 
@@ -22,7 +22,7 @@ class ServicesVentes {
             "Content-Type": "application/json; charset=UTF-8",
             "Accept":"*/*",
             "Accept-Encoding":"gzip, deflate, br",
-             "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token"
           },
     ));
   }

@@ -26,7 +26,7 @@ class ServicesFournisseurs{
             "Content-Type": "application/json; charset=UTF-8",
             "Accept":"*/*",
             "Accept-Encoding":"gzip, deflate, br",
-             "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token"
           },
     ));
   }
@@ -38,7 +38,7 @@ class ServicesFournisseurs{
             "Content-Type": "application/json; charset=UTF-8",
             "Accept":"*/*",
             "Accept-Encoding":"gzip, deflate, br",
-             "Authorization": "Bearer $token"
+            "Authorization": "Bearer $token"
           },
     ));
   }

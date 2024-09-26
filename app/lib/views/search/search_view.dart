@@ -148,7 +148,7 @@ Future<void> _getProducts() async {
                 filled: true,
                 fillColor: Colors.grey[100],
                 prefixIcon: const Icon(Icons.search, size: AppSizes.iconLarge),
-                hintText: "Rechercher",
+                hintText: "Que cherches-tu ?",
                 hintStyle: GoogleFonts.roboto(fontSize: AppSizes.fontSmall),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

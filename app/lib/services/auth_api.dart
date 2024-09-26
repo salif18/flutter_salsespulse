@@ -13,8 +13,8 @@ import "package:salespulse/https/domaine.dart";
 class ServicesAuth{
    Dio dio = Dio(
   BaseOptions(
-    connectTimeout: const Duration(milliseconds: 15000),  // 15 secondes
-    receiveTimeout: const Duration(milliseconds: 15000),  // 15 secondes
+    connectTimeout: const Duration(milliseconds: 60000),  // 15 secondes
+    receiveTimeout: const Duration(milliseconds: 60000),  // 15 secondes
   ),
 );
 

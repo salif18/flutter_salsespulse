@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -51,12 +52,13 @@ class _VenteViewState extends State<VenteView> {
 
   // Fonction pour récupérer les produits depuis le serveur et ajouter au stream
   Future<void> _loadProducts() async {
-    try {
-      final token = Provider.of<AuthProvider>(context, listen: false).token;
+     final token = Provider.of<AuthProvider>(context, listen: false).token;
       final userId = Provider.of<AuthProvider>(context, listen: false).userId;
+    
+    try {
+     
       final res = await api.getAllVentes(token, userId);
       final body = res.data;
-    
       if (res.statusCode == 200) {
         final products = (body["results"] as List)
             .map((json) => VentesModel.fromJson(json))
@@ -72,9 +74,10 @@ class _VenteViewState extends State<VenteView> {
           _streamController.addError("Failed to load products");
         }
       }
-    } catch (e) {
+    
+   } catch (e) {
       if (!_streamController.isClosed) {
-        _streamController.addError("Error loading products");
+        _streamController.addError("Erreur lors de la requête : $e");
       }
     }
   }
@@ -169,6 +172,7 @@ class _VenteViewState extends State<VenteView> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 } else if (snapshot.hasError) {
+                   print("Erreur: ${snapshot.error}");
                   return SliverFillRemaining(
                       child: Center(
                           child: Container(
